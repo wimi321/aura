@@ -5,80 +5,51 @@
 <h1 align="center">Aura</h1>
 
 <p align="center">
-  <strong>On-device Tavern-style roleplay for mobile.</strong>
+  <strong>On-device AI roleplay engine for mobile — Tavern cards, worldbooks, and scene progression, running locally on your phone.</strong>
 </p>
 
 <p align="center">
-  Aura is built for story cards, worldbooks, and scene progression on your phone, not generic chatbot Q&amp;A.
-</p>
-
-<p align="center">
-  <a href="https://github.com/wimi321/aura/releases/download/v0.1.1/Aura-android-arm64-v0.1.1.apk"><strong>Download APK</strong></a>
-  ·
-  <a href="https://github.com/wimi321/aura/releases/tag/v0.1.1"><strong>Latest Release</strong></a>
-  ·
+  <a href="https://github.com/wimi321/aura/releases/latest"><strong>Download APK</strong></a>
+  &nbsp;·&nbsp;
+  <a href="https://github.com/wimi321/aura/releases"><strong>All Releases</strong></a>
+  &nbsp;·&nbsp;
+  <a href="CHANGELOG.md"><strong>Changelog</strong></a>
+  &nbsp;·&nbsp;
   <a href="README.zh-CN.md"><strong>简体中文</strong></a>
 </p>
 
 <p align="center">
-  <img alt="GitHub Release" src="https://img.shields.io/github/v/release/wimi321/aura?display_name=tag&sort=semver">
-  <img alt="License" src="https://img.shields.io/github/license/wimi321/aura">
-  <img alt="Platform" src="https://img.shields.io/badge/platform-Android%20%7C%20iOS-0F172A">
-  <img alt="On-device inference" src="https://img.shields.io/badge/inference-on--device-10B981">
-  <img alt="Tavern compatible" src="https://img.shields.io/badge/Tavern-compatible-F97316">
+  <a href="https://github.com/wimi321/aura/releases/latest"><img alt="GitHub Release" src="https://img.shields.io/github/v/release/wimi321/aura?display_name=tag&sort=semver&style=flat-square"></a>
+  <a href="https://github.com/wimi321/aura/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/wimi321/aura/ci.yml?branch=main&style=flat-square&label=CI"></a>
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/github/license/wimi321/aura?style=flat-square"></a>
+  <img alt="Platform" src="https://img.shields.io/badge/platform-Android%20%7C%20iOS-0F172A?style=flat-square">
+  <img alt="Flutter" src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter">
+  <img alt="On-device" src="https://img.shields.io/badge/inference-100%25%20on--device-10B981?style=flat-square">
+  <img alt="Tavern" src="https://img.shields.io/badge/Tavern-compatible-F97316?style=flat-square">
+  <img alt="Languages" src="https://img.shields.io/badge/i18n-EN%20%7C%20ZH%20%7C%20JA%20%7C%20KO-6366F1?style=flat-square">
 </p>
 
-## Why People Try Aura
+---
 
-A lot of local LLM apps still feel like engineering demos.
-They surface model jargon, ship chat UIs that look like debugging tools, make Tavern cards feel like raw files, and often ask people to download installers that are far too large for casual mobile use.
+## What is Aura?
 
-Aura goes in the opposite direction:
+Aura is an open-source, privacy-first AI roleplay app that runs **entirely on your phone**. No cloud, no API keys, no data leaves your device.
 
-- story-first UX instead of assistant-style chrome
-- on-device inference after the model is downloaded
-- Tavern card and worldbook workflows that stay focused on scene progression
-- a smaller installer with first-run model download inside the app
-- mobile flows written for regular users instead of backend-heavy terminology
+Import any Tavern/SillyTavern character card, load a local Gemma 4 model, and start a scene — all offline after the initial model download.
 
-## What Makes Aura Different
+### Key Features
 
-| If you want... | Aura currently gives you... |
-| --- | --- |
-| Tavern-style roleplay on mobile | PNG and JSON character-card import with embedded worldbook support |
-| A private default path | On-device inference after model download |
-| A smaller install | A lightweight APK plus first-run model chooser |
-| Story progression instead of generic Q&A | A scene-first chat page and one-tap continue flow |
-| Less tool noise | Consumer-facing copy instead of backend-heavy labels |
-| Session control that feels usable on mobile | New conversation, session history, and long-press edit/delete |
+- **100% On-Device Inference** — Gemma 4 models via Google LiteRT-LM, with GPU/NPU acceleration
+- **Tavern Card Ecosystem** — Import PNG (steganography) and JSON character cards, worldbooks, lorebooks
+- **Story-First UX** — Scene continuation, whisper directives, emotion expressions, session branching
+- **Privacy by Design** — Zero network requests during normal use; all data stays on device
+- **Premium Dark Theme** — OLED-optimized with ambient glow effects and Material 3 semantics
+- **4 Languages** — English, Chinese (简体中文), Japanese (日本語), Korean (한국어)
+- **Accessible** — Full screen reader support, reduce-motion compliance
 
-## Built-in Story Preview
+---
 
-Aura's built-in library is already leaning toward scenario cards, not generic character chat.
-
-<table>
-  <tr>
-    <td align="center">
-      <img src="assets/images/characters/palace-consort.png" alt="Palace intrigue cover" width="220" />
-      <br />
-      <strong>Palace intrigue</strong>
-    </td>
-    <td align="center">
-      <img src="assets/images/characters/deskmate.png" alt="Campus romance cover" width="220" />
-      <br />
-      <strong>Campus slow-burn</strong>
-    </td>
-    <td align="center">
-      <img src="assets/images/characters/instance-monitor.png" alt="Rule-based horror cover" width="220" />
-      <br />
-      <strong>Rule-based horror</strong>
-    </td>
-  </tr>
-</table>
-
-## Real App Preview
-
-These are screenshots from a running Aura build, not concept mockups.
+## Screenshots
 
 <p align="center">
   <img src="docs/readme/quick-start.gif" alt="Aura quick start flow" width="780" />
@@ -87,197 +58,204 @@ These are screenshots from a running Aura build, not concept mockups.
 <table>
   <tr>
     <td align="center">
-      <img src="docs/readme/story-library.png" alt="Aura story library" width="220" />
-      <br />
-      <strong>Story library</strong>
+      <img src="docs/readme/story-library.png" alt="Story library" width="220" />
+      <br /><strong>Story Library</strong><br />
+      <sub>Search, import, or create characters</sub>
     </td>
     <td align="center">
-      <img src="docs/readme/model-setup.png" alt="Aura first-run model setup" width="220" />
-      <br />
-      <strong>First-run model choice</strong>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="docs/readme/chat-scene.png" alt="Aura chat scene" width="220" />
-      <br />
-      <strong>Scene-reading chat view</strong>
+      <img src="docs/readme/model-setup.png" alt="Model setup" width="220" />
+      <br /><strong>Model Setup</strong><br />
+      <sub>Choose E2B (fast) or E4B (quality)</sub>
     </td>
     <td align="center">
-      <img src="docs/readme/import-flow.png" alt="Aura import flow" width="220" />
-      <br />
-      <strong>Import flow</strong>
+      <img src="docs/readme/chat-scene.png" alt="Chat scene" width="220" />
+      <br /><strong>Scene Chat</strong><br />
+      <sub>Immersive roleplay with continue/reroll</sub>
+    </td>
+    <td align="center">
+      <img src="docs/readme/import-flow.png" alt="Import flow" width="220" />
+      <br /><strong>Card Import</strong><br />
+      <sub>Tavern PNG/JSON with worldbook preview</sub>
     </td>
   </tr>
 </table>
 
-## Install in a Minute
+### Built-in Story Cards
 
-### Android
+<table>
+  <tr>
+    <td align="center">
+      <img src="assets/images/characters/palace-consort.png" alt="Palace intrigue" width="200" />
+      <br /><strong>Palace Intrigue</strong>
+    </td>
+    <td align="center">
+      <img src="assets/images/characters/deskmate.png" alt="Campus romance" width="200" />
+      <br /><strong>Campus Slow-Burn</strong>
+    </td>
+    <td align="center">
+      <img src="assets/images/characters/instance-monitor.png" alt="Rule-based horror" width="200" />
+      <br /><strong>Rule-Based Horror</strong>
+    </td>
+  </tr>
+</table>
 
-1. Download the latest APK from [GitHub Releases](https://github.com/wimi321/aura/releases) or use the direct [APK link](https://github.com/wimi321/aura/releases/download/v0.1.1/Aura-android-arm64-v0.1.1.apk).
-2. Open Aura.
-3. Choose `Gemma 4 E2B` or `Gemma 4 E4B`.
-4. Wait for the download to finish.
-5. Start a built-in story card or import your own Tavern card.
+---
 
-iOS source is included in this repo, but Android remains the primary public install path right now.
+## Quick Start
 
-## Why the App Is Smaller Now
+### Install (Android)
 
-Aura no longer ships a full multi-GB model inside the APK.
-Instead, the app starts with a lightweight installer and lets the user download the story core they want on first launch.
+1. Download the latest APK from [GitHub Releases](https://github.com/wimi321/aura/releases/latest)
+2. Open Aura and choose a story core (E2B for speed, E4B for quality)
+3. Wait for the ~2.5 GB model download
+4. Pick a built-in story or import your own Tavern card
 
-That means:
+> **APK size**: ~155 MB (model downloads separately on first launch)
 
-- the installer is practical to download and share
-- GitHub Releases can host the public Android build cleanly
-- first-time setup stays understandable for regular users
-- people choose between a quicker start and a higher-quality model inside the app
+### Build from Source
 
-Current public Android arm64 APK:
+```bash
+git clone https://github.com/wimi321/aura.git
+cd aura
+flutter pub get
+flutter run
+```
 
-- about `126.8MB`
+See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed build instructions including iOS.
 
-Earlier bundled-model direction:
+---
 
-- about `2.2GB`
+## Architecture
+
+```
+┌─────────────────────────────────────────────┐
+│                Flutter UI                    │
+│         (Pages, Widgets, Theme)              │
+├─────────────────────────────────────────────┤
+│            AppStateProvider                  │
+│      (Central ChangeNotifier + Provider)     │
+├─────────────────────────────────────────────┤
+│           Backend Services                   │
+│  (Bootstrap, Platform Channels, Stores)      │
+├─────────────────────────────────────────────┤
+│              aura_core                       │
+│    (Pure Dart: Domain → Orchestration)       │
+│                                              │
+│  ┌──────────┐ ┌──────────────┐ ┌──────────┐ │
+│  │  Domain   │ │ Application  │ │  Infra   │ │
+│  │ Models &  │ │ AuraEngine   │ │ Parsers  │ │
+│  │  Policy   │ │ Orchestrator │ │ Persist  │ │
+│  └──────────┘ └──────────────┘ └──────────┘ │
+├─────────────────────────────────────────────┤
+│          LiteRT Native Bridge                │
+│   Android (LiteRT-LM)  │  iOS (XCFramework) │
+│         GPU / NNAPI     │    CoreML / CPU    │
+└─────────────────────────────────────────────┘
+```
+
+### How a Message Flows
+
+```
+User input → AppStateProvider → AuraEngine → ChatOrchestrator
+  → prompt assembly (system prompt + lorebook injection + whisper)
+  → InferenceGateway → Native Bridge → Gemma 4 on-device
+  → StreamDelta (text + emotion signals) → UI render
+```
+
+---
 
 ## Tavern Compatibility
 
-Aura is built for scenario roleplay and scene progression, not ordinary assistant chat.
+| Format | Status |
+|--------|--------|
+| Tavern PNG (steganography, `tEXt`/`iTXt` chunks) | Supported |
+| Tavern / SillyTavern JSON cards | Supported |
+| Embedded `character_book` | Supported |
+| Standalone lorebook / worldbook JSON | Supported |
+| Alternate greetings | Supported |
+| `{{char}}` / `{{user}}` macros | Supported |
+| Expression packs (ZIP) | Supported |
 
-Supported today:
+Aura strips wrapper tags (`<gametxt>`, `<options>`, etc.), removes hidden blocks (`<thinking>`, `<UpdateVariable>`), and normalizes `<START>` tags automatically.
 
-- Tavern / SillyTavern PNG character cards
-- Tavern / SillyTavern JSON character cards
-- embedded `character_book`
-- standalone lorebook / worldbook JSON
-- imported PNG portraits shown in the library UI
+---
 
-In practice, Aura is meant for:
+## Models
 
-- scenario roleplay
-- scene continuation
-- worldbook-aware progression
-- mobile reading and writing flows that feel less like an IM client
+| Model | Size | RAM | Best For |
+|-------|------|-----|----------|
+| Gemma 4 E2B | ~2.5 GB | 6 GB+ | Fast start, lighter devices |
+| Gemma 4 E4B | ~3.6 GB | 8 GB+ | Richer vocabulary, longer scenes |
 
-## FAQ
+Models are downloaded from HuggingFace with SHA256 verification and resume support. After download, **all inference is 100% local**.
 
-### Does the APK already contain the full model?
-
-No.
-Aura now ships as a smaller installer and downloads the selected model inside the app on first launch.
-
-### Is inference local after the download finishes?
-
-Yes.
-The intended product path is on-device inference after the chosen model is stored on the device.
-
-### Can I import Tavern PNG cards directly?
-
-Yes.
-Aura supports Tavern-style PNG cards, Tavern / SillyTavern JSON cards, and embedded card metadata.
-
-### Does Aura support worldbooks?
-
-Yes.
-Embedded `character_book` data is supported, and standalone lorebook / worldbook JSON can also be imported.
-
-### Is iOS included?
-
-Yes.
-The iOS project is part of this repository, and local iOS build scripts are included below.
-The large generated native runtime framework is rebuilt locally instead of being stored in Git history.
-
-## Current Validation
-
-Validated in this workspace on April 18, 2026:
-
-```bash
-flutter analyze
-flutter test
-./scripts/build_release_android_arm64.sh
-./scripts/build_ios_simulator.sh
-./scripts/build_ios_device_no_codesign.sh
-./tooling/readme/capture_readme_assets.sh
-```
-
-What this covers today:
-
-- static analysis passes
-- unit and widget tests pass
-- Android arm64 release build works
-- iOS simulator build works
-- iOS device no-codesign build flow works
-- README media assets are generated from a running app build
-
-## Developer Quick Start
-
-```bash
-flutter pub get
-flutter analyze
-flutter test
-```
-
-### Android arm64 release
-
-```bash
-./scripts/build_release_android_arm64.sh
-```
-
-Output:
-
-- `build/app/outputs/flutter-apk/app-release.apk`
-
-### iOS simulator
-
-```bash
-./scripts/build_ios_simulator.sh
-```
-
-Output:
-
-- `build/ios/iphonesimulator/Runner.app`
-
-### iOS device build without codesign
-
-```bash
-./scripts/build_ios_device_no_codesign.sh
-```
-
-Output:
-
-- `build/ios/iphoneos/Runner.app`
-
-### iOS XCFramework note
-
-If Flutter reports that iOS is not configured correctly, make sure your machine points at the full Xcode developer directory instead of Command Line Tools:
-
-```bash
-export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
-```
-
-If the native LiteRT runtime framework is missing locally, rebuild it with:
-
-```bash
-./tooling/ios/build_litert_native_xcframework.sh
-```
-
-More context:
-
-- [ios/Frameworks/README.md](ios/Frameworks/README.md)
+---
 
 ## Roadmap
 
-- improve Tavern card import compatibility across more wild-format cards
-- keep expanding built-in scenario cards with stronger genre variety
-- polish model download recovery for flaky networks and interrupted setups
-- keep validating layout and flows on more phones and tablets
-- keep reducing tool-like language in user-facing surfaces
+- [x] On-device Gemma 4 inference (E2B + E4B)
+- [x] Tavern PNG/JSON card import with worldbook
+- [x] Session history and branching
+- [x] Whisper directives and emotion system
+- [x] 4-language UI (EN/ZH/JA/KO)
+- [x] Premium OLED dark theme
+- [x] Message copy, timestamps, haptic feedback
+- [x] Accessibility (Semantics + reduce-motion)
+- [ ] Wider Tavern card format compatibility
+- [ ] More built-in story genres
+- [ ] Tablet-optimized layouts
+- [ ] Model download recovery for flaky networks
+- [ ] Community card sharing
 
-## Contributing / Feedback
+---
 
-If you hit an import compatibility issue, device-specific UI problem, model download failure, or a roleplay flow regression, please open an [issue](https://github.com/wimi321/aura/issues).
+## FAQ
 
-If you want to contribute code, content polish, or device validation feedback, pull requests are welcome.
+<details>
+<summary><strong>Is inference really local?</strong></summary>
+Yes. After the one-time model download, Aura makes zero network requests. All generation happens on-device via LiteRT-LM.
+</details>
+
+<details>
+<summary><strong>What devices are supported?</strong></summary>
+Android devices with 6 GB+ RAM (for E2B) or 8 GB+ (for E4B). iOS builds from source. Hardware acceleration uses GPU on Android and CoreML on iOS.
+</details>
+
+<details>
+<summary><strong>Can I import my existing Tavern cards?</strong></summary>
+Yes. Aura reads Tavern PNG cards (with embedded metadata via steganography), JSON cards, and standalone worldbook files. Embedded lorebooks are preserved automatically.
+</details>
+
+<details>
+<summary><strong>Is my data private?</strong></summary>
+Yes. Conversations, character cards, and all user data stay on your device. There is no analytics, no telemetry, no cloud sync.
+</details>
+
+<details>
+<summary><strong>Why is the APK ~155 MB?</strong></summary>
+The APK contains the Flutter app and LiteRT-LM runtime but not the model weights. Models (~2.5–3.6 GB) download on first launch so the installer stays shareable.
+</details>
+
+---
+
+## Contributing
+
+We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for setup instructions, code style, and PR process.
+
+- **Bug reports**: Use the [bug report template](https://github.com/wimi321/aura/issues/new?template=bug_report.md)
+- **Feature ideas**: Use the [feature request template](https://github.com/wimi321/aura/issues/new?template=feature_request.md)
+- **Security issues**: See [SECURITY.md](SECURITY.md)
+
+---
+
+## License
+
+[MIT](LICENSE) — use it, fork it, build on it.
+
+---
+
+<p align="center">
+  <sub>Built with Flutter, powered by Gemma 4 on-device via Google LiteRT-LM.</sub>
+  <br />
+  <sub>If Aura is useful to you, consider giving it a <a href="https://github.com/wimi321/aura">star</a>.</sub>
+</p>

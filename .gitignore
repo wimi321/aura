@@ -57,6 +57,15 @@ tmp*.xml
 flutter_*.log
 docs/readme/raw/
 
+# Secrets and signing
+*.env
+.env*
+*.jks
+*.keystore
+*.p12
+*.mobileprovision
+key.properties
+
 # Symbolication related
 app.*.symbols
 

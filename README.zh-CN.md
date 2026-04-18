@@ -5,282 +5,256 @@
 <h1 align="center">Aura</h1>
 
 <p align="center">
-  <strong>面向 Tavern 剧情卡的本地移动端沉浸式角色扮演应用。</strong>
+  <strong>端侧 AI 角色扮演引擎 — Tavern 角色卡、世界书、场景推进，全部在手机本地运行。</strong>
 </p>
 
 <p align="center">
-  Aura 不是通用聊天机器人壳子，而是为剧情推进、角色卡、世界书和手机端本地推理而做的产品形态。
-</p>
-
-<p align="center">
-  <a href="https://github.com/wimi321/aura/releases/download/v0.1.1/Aura-android-arm64-v0.1.1.apk"><strong>下载 APK</strong></a>
-  ·
-  <a href="https://github.com/wimi321/aura/releases/tag/v0.1.1"><strong>最新版本</strong></a>
-  ·
+  <a href="https://github.com/wimi321/aura/releases/latest"><strong>下载 APK</strong></a>
+  &nbsp;·&nbsp;
+  <a href="https://github.com/wimi321/aura/releases"><strong>所有版本</strong></a>
+  &nbsp;·&nbsp;
+  <a href="CHANGELOG.md"><strong>更新日志</strong></a>
+  &nbsp;·&nbsp;
   <a href="README.md"><strong>English</strong></a>
 </p>
 
 <p align="center">
-  <img alt="GitHub Release" src="https://img.shields.io/github/v/release/wimi321/aura?display_name=tag&sort=semver">
-  <img alt="License" src="https://img.shields.io/github/license/wimi321/aura">
-  <img alt="Platform" src="https://img.shields.io/badge/platform-Android%20%7C%20iOS-0F172A">
-  <img alt="On-device inference" src="https://img.shields.io/badge/inference-on--device-10B981">
-  <img alt="Tavern compatible" src="https://img.shields.io/badge/Tavern-compatible-F97316">
+  <a href="https://github.com/wimi321/aura/releases/latest"><img alt="GitHub Release" src="https://img.shields.io/github/v/release/wimi321/aura?display_name=tag&sort=semver&style=flat-square"></a>
+  <a href="https://github.com/wimi321/aura/actions/workflows/ci.yml"><img alt="CI" src="https://img.shields.io/github/actions/workflow/status/wimi321/aura/ci.yml?branch=main&style=flat-square&label=CI"></a>
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/github/license/wimi321/aura?style=flat-square"></a>
+  <img alt="Platform" src="https://img.shields.io/badge/platform-Android%20%7C%20iOS-0F172A?style=flat-square">
+  <img alt="Flutter" src="https://img.shields.io/badge/Flutter-3.x-02569B?style=flat-square&logo=flutter">
+  <img alt="端侧推理" src="https://img.shields.io/badge/推理-100%25%20端侧-10B981?style=flat-square">
+  <img alt="Tavern" src="https://img.shields.io/badge/Tavern-兼容-F97316?style=flat-square">
+  <img alt="Languages" src="https://img.shields.io/badge/i18n-EN%20%7C%20ZH%20%7C%20JA%20%7C%20KO-6366F1?style=flat-square">
 </p>
 
-## 为什么会有人装 Aura
+---
 
-很多本地大模型 App 看起来还是像“技术演示器”：
+## Aura 是什么？
 
-- 页面像调试面板
-- 术语太工程化
-- 角色卡像在导文件，不像在进剧情
-- 安装包大得离谱，普通用户根本不想碰
+Aura 是一款开源、隐私优先的 AI 角色扮演应用，**完全在手机端侧运行**。不需要云端，不需要 API Key，没有任何数据离开你的设备。
 
-Aura 走的是相反的路线：
+导入任何 Tavern / SillyTavern 角色卡，加载一个本地 Gemma 4 模型，直接开始剧情 — 模型下载完成后完全离线可用。
 
-- 先把剧情体验做好，而不是先把技术名词摆出来
-- 模型下载完成后走端侧本地推理
-- 角色卡、世界书、会话推进都围绕“进戏”展开
-- 安装包先变轻，首启再在 App 内选模型下载
-- 文案尽量面向普通用户，而不是面向开发者
+### 核心特性
 
-## Aura 有什么不一样
+- **100% 端侧推理** — 通过 Google LiteRT-LM 运行 Gemma 4，支持 GPU/NPU 加速
+- **Tavern 生态兼容** — 导入 PNG（隐写术）和 JSON 角色卡、世界书、设定集
+- **剧情优先 UX** — 场景续写、耳语指令、表情系统、会话分支
+- **隐私即设计** — 正常使用期间零网络请求，所有数据留在设备上
+- **顶级暗色主题** — OLED 深黑优化，环境光效果，Material 3 语义化配色
+- **四语言界面** — 英文、简体中文、日本語、한국어
+- **无障碍** — 完整屏幕阅读器支持，尊重系统减弱动画设置
 
-| 你想要什么 | Aura 现在真实提供什么 |
-| --- | --- |
-| 手机上直接跑 Tavern 剧情卡 | 支持 Tavern / SillyTavern PNG 与 JSON 角色卡导入 |
-| 更私密的默认路径 | 模型下载后默认走本地推理 |
-| 安装包别太夸张 | 轻量 APK + 首启双模型选择 |
-| 更像剧情阅读，不像聊天工具 | 聊天页按场景沉浸去设计，并支持继续当前剧情 |
-| 少一点工程味 | 用户向文案，不把后端术语怼到首页 |
-| 会话管理别太原始 | 新建会话、历史会话、长按编辑/删除都已接通 |
+---
 
-## 内置题材预览
-
-内置剧情卡已经在往“题材入口”而不是“聊天对象列表”这条路上走。
-
-<table>
-  <tr>
-    <td align="center">
-      <img src="assets/images/characters/palace-consort.png" alt="宫廷悬局封面" width="220" />
-      <br />
-      <strong>宫廷悬局</strong>
-    </td>
-    <td align="center">
-      <img src="assets/images/characters/deskmate.png" alt="校园恋爱封面" width="220" />
-      <br />
-      <strong>校园慢热恋爱</strong>
-    </td>
-    <td align="center">
-      <img src="assets/images/characters/instance-monitor.png" alt="规则怪谈封面" width="220" />
-      <br />
-      <strong>规则怪谈</strong>
-    </td>
-  </tr>
-</table>
-
-## 真实 App 预览
-
-下面这些都是 Aura 真实运行中的页面截图，不是设计稿拼图。
+## 应用截图
 
 <p align="center">
-  <img src="docs/readme/quick-start.gif" alt="Aura 快速上手流程" width="780" />
+  <img src="docs/readme/quick-start.gif" alt="Aura 快速上手" width="780" />
 </p>
 
 <table>
   <tr>
     <td align="center">
-      <img src="docs/readme/story-library.png" alt="Aura 剧本库页面" width="220" />
-      <br />
-      <strong>剧本库</strong>
+      <img src="docs/readme/story-library.png" alt="剧本库" width="220" />
+      <br /><strong>剧本库</strong><br />
+      <sub>搜索、导入或创建角色</sub>
     </td>
     <td align="center">
-      <img src="docs/readme/model-setup.png" alt="Aura 首启模型选择页" width="220" />
-      <br />
-      <strong>首启模型选择</strong>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="docs/readme/chat-scene.png" alt="Aura 剧情聊天页" width="220" />
-      <br />
-      <strong>沉浸式剧情页</strong>
+      <img src="docs/readme/model-setup.png" alt="模型选择" width="220" />
+      <br /><strong>模型选择</strong><br />
+      <sub>E2B（更快）或 E4B（更强）</sub>
     </td>
     <td align="center">
-      <img src="docs/readme/import-flow.png" alt="Aura 导入流程页" width="220" />
-      <br />
-      <strong>导入流程</strong>
+      <img src="docs/readme/chat-scene.png" alt="剧情聊天" width="220" />
+      <br /><strong>沉浸式剧情</strong><br />
+      <sub>续写 / 重新生成 / 耳语指令</sub>
+    </td>
+    <td align="center">
+      <img src="docs/readme/import-flow.png" alt="导入流程" width="220" />
+      <br /><strong>卡片导入</strong><br />
+      <sub>Tavern PNG/JSON + 世界书预览</sub>
     </td>
   </tr>
 </table>
 
-## 一分钟安装
+### 内置剧情卡
 
-### Android
+<table>
+  <tr>
+    <td align="center">
+      <img src="assets/images/characters/palace-consort.png" alt="宫廷悬局" width="200" />
+      <br /><strong>宫廷悬局</strong>
+    </td>
+    <td align="center">
+      <img src="assets/images/characters/deskmate.png" alt="校园慢热" width="200" />
+      <br /><strong>校园慢热</strong>
+    </td>
+    <td align="center">
+      <img src="assets/images/characters/instance-monitor.png" alt="规则怪谈" width="200" />
+      <br /><strong>规则怪谈</strong>
+    </td>
+  </tr>
+</table>
 
-1. 去 [GitHub Releases](https://github.com/wimi321/aura/releases) 下载最新版，或者直接点这个 [APK 链接](https://github.com/wimi321/aura/releases/download/v0.1.1/Aura-android-arm64-v0.1.1.apk)。
-2. 打开 Aura。
-3. 在首启页选择 `Gemma 4 E2B` 或 `Gemma 4 E4B`。
-4. 等模型下载完成。
-5. 进入内置剧情卡，或者导入你自己的 Tavern 角色卡。
+---
 
-当前公开安装路径仍以 Android 为主；iOS 工程已经在仓库中，构建说明放在后面。
+## 快速开始
 
-## 为什么包体现在更小
+### 安装（Android）
 
-Aura 不再把完整大模型直接塞进 APK。
-现在的路径是先发一个轻量安装包，第一次打开时再在 App 内下载你想用的模型。
+1. 从 [GitHub Releases](https://github.com/wimi321/aura/releases/latest) 下载最新 APK
+2. 打开 Aura，选择剧情引擎（E2B 更快启动，E4B 品质更高）
+3. 等待约 2.5 GB 模型下载完成
+4. 选一个内置剧情，或导入你自己的 Tavern 角色卡
 
-这样做的价值很直接：
+> **APK 大小**：约 155 MB（模型在首次启动时单独下载）
 
-- 安装包更容易下载和分发
-- GitHub Release 可以直接承接公开发布
-- 普通用户第一次打开就能看懂要做什么
-- “更快开始” 和 “更高质量” 两条模型路线可以在 App 内自己选
+### 从源码构建
 
-当前公开 Android arm64 APK 体积：
+```bash
+git clone https://github.com/wimi321/aura.git
+cd aura
+flutter pub get
+flutter run
+```
 
-- 约 `126.8MB`
+详细构建指南（含 iOS）请参阅 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
-此前把模型一起打包时的大致体积：
+---
 
-- 约 `2.2GB`
+## 架构
+
+```
+┌─────────────────────────────────────────────┐
+│                Flutter UI                    │
+│           (页面、组件、主题)                    │
+├─────────────────────────────────────────────┤
+│            AppStateProvider                  │
+│       (中央 ChangeNotifier + Provider)        │
+├─────────────────────────────────────────────┤
+│              后端服务层                        │
+│     (启动引导、平台通道、持久化存储)                │
+├─────────────────────────────────────────────┤
+│              aura_core                       │
+│      (纯 Dart：领域模型 → 编排逻辑)              │
+│                                              │
+│  ┌──────────┐ ┌──────────────┐ ┌──────────┐ │
+│  │ 领域模型  │ │  应用编排层    │ │ 基础设施  │ │
+│  │ 策略对象  │ │ AuraEngine   │ │ 解析/持久 │ │
+│  └──────────┘ └──────────────┘ └──────────┘ │
+├─────────────────────────────────────────────┤
+│          LiteRT 原生桥接层                    │
+│   Android (LiteRT-LM)  │  iOS (XCFramework) │
+│       GPU / NNAPI       │    CoreML / CPU    │
+└─────────────────────────────────────────────┘
+```
+
+### 消息处理流程
+
+```
+用户输入 → AppStateProvider → AuraEngine → ChatOrchestrator
+  → 提示词组装（系统提示 + 世界书注入 + 耳语指令）
+  → InferenceGateway → 原生桥接 → Gemma 4 端侧推理
+  → StreamDelta（文本 + 情绪信号）→ UI 渲染
+```
+
+---
 
 ## Tavern 兼容性
 
-Aura 是按“剧情代入 / 场景推进”来做的，不是普通问答壳子。
+| 格式 | 状态 |
+|------|------|
+| Tavern PNG（隐写术，`tEXt`/`iTXt` 块） | 已支持 |
+| Tavern / SillyTavern JSON 角色卡 | 已支持 |
+| 内嵌 `character_book` | 已支持 |
+| 独立 lorebook / worldbook JSON | 已支持 |
+| 备用开场白（alternate greetings） | 已支持 |
+| `{{char}}` / `{{user}}` 宏替换 | 已支持 |
+| 表情包（ZIP） | 已支持 |
 
-当前支持：
+Aura 自动清理包裹标签（`<gametxt>`、`<options>` 等）、隐藏块（`<thinking>`、`<UpdateVariable>`），并规范化 `<START>` 标记。
 
-- Tavern / SillyTavern PNG 角色卡
-- Tavern / SillyTavern JSON 角色卡
-- 内嵌 `character_book`
-- 独立 lorebook / worldbook JSON
-- 导入 PNG 卡后把头像直接展示到剧本库里
+---
 
-更适合的玩法是：
+## 模型
 
-- 剧情代入
-- 角色扮演
-- 世界书驱动设定展开
-- 在手机上持续推进场景，而不是只做一轮一问一答
+| 模型 | 大小 | 内存要求 | 适用场景 |
+|------|------|----------|----------|
+| Gemma 4 E2B | ~2.5 GB | 6 GB+ | 快速启动，轻量设备 |
+| Gemma 4 E4B | ~3.6 GB | 8 GB+ | 更丰富的词汇，更长的场景 |
 
-## 常见问题
+模型从 HuggingFace 下载，支持 SHA256 校验和断点续传。下载完成后，**所有推理 100% 本地运行**。
 
-### APK 里面已经自带完整模型了吗？
-
-没有。
-Aura 现在走的是“小包体 + 首启应用内下载模型”的方案。
-
-### 模型下载完成以后，是本地推理吗？
-
-是。
-Aura 的目标产品路径是模型下载到设备之后在本地完成推理。
-
-### 能直接导入 Tavern 的 PNG 卡吗？
-
-可以。
-Aura 支持 Tavern 风格 PNG 卡、Tavern / SillyTavern JSON 卡，以及卡里带的嵌入式元数据。
-
-### 世界书支持吗？
-
-支持。
-内嵌 `character_book` 可以识别，独立 lorebook / worldbook JSON 也支持导入。
-
-### iOS 有吗？
-
-有。
-仓库已经包含 iOS 工程和本地构建脚本，只是体积较大的原生运行时框架改成按需本地生成，没有直接塞进 Git 历史。
-
-## 当前验证
-
-这份仓库在 2026 年 4 月 18 日已验证通过：
-
-```bash
-flutter analyze
-flutter test
-./scripts/build_release_android_arm64.sh
-./scripts/build_ios_simulator.sh
-./scripts/build_ios_device_no_codesign.sh
-./tooling/readme/capture_readme_assets.sh
-```
-
-当前可确认的结果：
-
-- 静态检查通过
-- 单元测试与组件测试通过
-- Android arm64 Release 构建通过
-- iOS Simulator 构建通过
-- iOS 设备无签名构建链路通过
-- README 用到的截图和 GIF 来自真实运行中的 Aura 构建
-
-## 开发者快速开始
-
-```bash
-flutter pub get
-flutter analyze
-flutter test
-```
-
-### Android arm64 Release
-
-```bash
-./scripts/build_release_android_arm64.sh
-```
-
-产物：
-
-- `build/app/outputs/flutter-apk/app-release.apk`
-
-### iOS Simulator
-
-```bash
-./scripts/build_ios_simulator.sh
-```
-
-产物：
-
-- `build/ios/iphonesimulator/Runner.app`
-
-### iOS 设备无签名构建
-
-```bash
-./scripts/build_ios_device_no_codesign.sh
-```
-
-产物：
-
-- `build/ios/iphoneos/Runner.app`
-
-### iOS XCFramework 说明
-
-如果 Flutter 提示 iOS 环境没配好，通常是因为系统当前指向的是 Command Line Tools，而不是完整 Xcode：
-
-```bash
-export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
-```
-
-如果本地缺少原生 LiteRT 运行时框架，可以用下面的脚本重新生成：
-
-```bash
-./tooling/ios/build_litert_native_xcframework.sh
-```
-
-补充说明：
-
-- [ios/Frameworks/README.md](ios/Frameworks/README.md)
+---
 
 ## 路线图
 
-- 继续提升对野生 Tavern 卡格式的兼容性
-- 继续扩充更像剧情入口的内置题材卡
-- 继续打磨弱网、断点恢复和下载失败后的体验
-- 持续补更多手机和平板设备上的真实验证
-- 继续把用户可见界面的工程味往下压
+- [x] 端侧 Gemma 4 推理（E2B + E4B）
+- [x] Tavern PNG/JSON 角色卡导入 + 世界书
+- [x] 会话历史与分支管理
+- [x] 耳语指令与表情系统
+- [x] 四语言界面（EN/ZH/JA/KO）
+- [x] 顶级 OLED 暗色主题
+- [x] 消息复制、时间戳、触觉反馈
+- [x] 无障碍（语义化标签 + 减弱动画）
+- [ ] 更广泛的 Tavern 卡格式兼容
+- [ ] 更多内置剧情题材
+- [ ] 平板适配布局
+- [ ] 弱网环境下载恢复
+- [ ] 社区卡片分享
 
-## 反馈与贡献
+---
 
-如果你遇到角色卡导入兼容问题、机型适配问题、模型下载问题，或者剧情流出现明显回退，欢迎提 [issue](https://github.com/wimi321/aura/issues)。
+## 常见问题
 
-如果你愿意一起补代码、补设备验证、补内容打磨，也欢迎直接发 PR。
+<details>
+<summary><strong>推理真的是本地的吗？</strong></summary>
+是的。模型下载完成后，Aura 不会发起任何网络请求。所有文本生成都在设备端通过 LiteRT-LM 完成。
+</details>
+
+<details>
+<summary><strong>支持哪些设备？</strong></summary>
+6 GB+ 内存的 Android 设备（E2B）或 8 GB+（E4B）。iOS 可从源码构建。硬件加速在 Android 上使用 GPU，iOS 上使用 CoreML。
+</details>
+
+<details>
+<summary><strong>能导入已有的 Tavern 角色卡吗？</strong></summary>
+可以。Aura 支持 Tavern PNG 卡（通过隐写术读取嵌入元数据）、JSON 卡，以及独立的世界书文件。内嵌的 lorebook 会自动保留。
+</details>
+
+<details>
+<summary><strong>数据安全吗？</strong></summary>
+安全。对话记录、角色卡和所有用户数据都留在设备上。没有数据分析、没有遥测、没有云同步。
+</details>
+
+<details>
+<summary><strong>为什么 APK 约 155 MB？</strong></summary>
+APK 包含 Flutter 应用和 LiteRT-LM 运行时，但不含模型权重。模型（约 2.5–3.6 GB）在首次启动时下载，这样安装包才方便分享。
+</details>
+
+---
+
+## 参与贡献
+
+欢迎贡献！请参阅 [CONTRIBUTING.md](CONTRIBUTING.md) 了解开发环境搭建、代码规范和 PR 流程。
+
+- **Bug 报告**：使用 [Bug 模板](https://github.com/wimi321/aura/issues/new?template=bug_report.md)
+- **功能建议**：使用 [功能请求模板](https://github.com/wimi321/aura/issues/new?template=feature_request.md)
+- **安全问题**：请参阅 [SECURITY.md](SECURITY.md)
+
+---
+
+## 许可证
+
+[MIT](LICENSE) — 自由使用、Fork、在此基础上构建。
+
+---
+
+<p align="center">
+  <sub>基于 Flutter 构建，由 Gemma 4 端侧推理驱动（Google LiteRT-LM）。</sub>
+  <br />
+  <sub>如果 Aura 对你有用，欢迎给个 <a href="https://github.com/wimi321/aura">Star</a>。</sub>
+</p>
