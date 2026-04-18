@@ -139,10 +139,11 @@ class JsonCharacterCardParser {
       ),
       avatarPath: avatarPath,
       lorebook: _parseLorebook(source['character_book']),
-      extensions: <String, Object?>{
-        ...map,
-        if (data.isNotEmpty) 'data': data,
-      },
+      extensions: sourceExtensions,
+      tags: _readTagsList(source['tags']),
+      characterVersion: source['character_version']?.toString(),
+      spec: map['spec']?.toString(),
+      specVersion: map['spec_version']?.toString(),
     );
   }
 
@@ -256,6 +257,23 @@ class JsonCharacterCardParser {
       extensions: extensions,
       applyPromptRegex: applyPromptRegex,
     );
+  }
+
+  List<String> _readTagsList(Object? value) {
+    if (value is List) {
+      return value
+          .map((Object? item) => item?.toString() ?? '')
+          .where((String item) => item.trim().isNotEmpty)
+          .toList(growable: false);
+    }
+    if (value is String && value.trim().isNotEmpty) {
+      return value
+          .split(',')
+          .map((String item) => item.trim())
+          .where((String item) => item.isNotEmpty)
+          .toList(growable: false);
+    }
+    return const <String>[];
   }
 
   String? _firstNonBlankString(List<Object?> values) {

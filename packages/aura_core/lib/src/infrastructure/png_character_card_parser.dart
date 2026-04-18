@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import '../domain/character_card.dart';
@@ -80,16 +81,30 @@ class PngCharacterCardParser {
   }
 
   _IntlTextChunk _parseInternationalText(Uint8List payload) {
-    int index = payload.indexOf(0);
-    final String keyword = utf8.decode(payload.sublist(0, index));
-    final int compressionFlag = payload[index + 1];
-    index += 3;
-    index = payload.indexOf(0, index) + 1;
-    index = payload.indexOf(0, index) + 1;
+    final int keywordEnd = payload.indexOf(0);
+    if (keywordEnd < 0) {
+      throw const FormatException('Malformed iTXt chunk: missing keyword null separator.');
+    }
+    final String keyword = utf8.decode(payload.sublist(0, keywordEnd));
+    final int compressionFlag = payload[keywordEnd + 1];
+    // Skip compression flag and compression method bytes.
+    int index = keywordEnd + 3;
+    // Skip language tag (null-terminated).
+    final int langEnd = payload.indexOf(0, index);
+    if (langEnd < 0) {
+      throw const FormatException('Malformed iTXt chunk: missing language tag null separator.');
+    }
+    index = langEnd + 1;
+    // Skip translated keyword (null-terminated).
+    final int translatedEnd = payload.indexOf(0, index);
+    if (translatedEnd < 0) {
+      throw const FormatException('Malformed iTXt chunk: missing translated keyword null separator.');
+    }
+    index = translatedEnd + 1;
     final Uint8List textBytes = payload.sublist(index);
     if (compressionFlag != 0) {
-      throw const FormatException(
-          'Compressed iTXt chunks are not supported yet.');
+      final List<int> decompressed = ZLibDecoder().convert(textBytes);
+      return _IntlTextChunk(keyword: keyword, text: utf8.decode(decompressed));
     }
     return _IntlTextChunk(keyword: keyword, text: utf8.decode(textBytes));
   }

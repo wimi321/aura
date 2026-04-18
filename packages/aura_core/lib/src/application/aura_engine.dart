@@ -35,6 +35,7 @@ class AuraEngine {
   final Summarizer _summarizer;
   final DeviceProfileResolver _deviceProfileResolver;
   final ModelManager _modelManager;
+  DeviceProfile? _deviceProfile;
 
   ModelManager get modelManager => _modelManager;
 
@@ -50,6 +51,7 @@ class AuraEngine {
     required DeviceProfile deviceProfile,
     ModelManifest? initialModel,
   }) async {
+    _deviceProfile = deviceProfile;
     final RuntimeOptions options =
         _deviceProfileResolver.resolveRuntimeOptions(deviceProfile);
     await _gateway.initialize(options: options);
@@ -200,6 +202,7 @@ class AuraEngine {
       card: card,
       input: turnInput,
       preset: preset,
+      isLowMemoryDevice: _deviceProfile?.isLowMemoryDevice ?? false,
     );
 
     final ChatSession preparedSession =
@@ -244,6 +247,7 @@ class AuraEngine {
       card: card,
       input: turnInput,
       preset: preset,
+      isLowMemoryDevice: _deviceProfile?.isLowMemoryDevice ?? false,
     );
 
     final ChatSession preparedSession =
@@ -317,27 +321,53 @@ class AuraEngine {
         ? _gateway.streamAudio(prompt: envelope, audioFrames: audioFrames)
         : _gateway.streamText(prompt: envelope);
 
-    await for (final String chunk in rawStream) {
-      final StreamDelta delta = _orchestrator.processModelTextDelta(
-        chunk,
-        assistantLabel: envelope.assistantLabel,
-        userLabel: envelope.userLabel,
-        localeTag: localeTag,
-        characterExtensions: card.extensions,
-      );
-      if (delta.emotions.isNotEmpty) {
-        detectedEmotions.addAll(delta.emotions);
-        pendingEmotions.addAll(delta.emotions);
+    try {
+      await for (final String chunk in rawStream) {
+        final StreamDelta delta = _orchestrator.processModelTextDelta(
+          chunk,
+          assistantLabel: envelope.assistantLabel,
+          userLabel: envelope.userLabel,
+          localeTag: localeTag,
+          characterExtensions: card.extensions,
+        );
+        if (delta.emotions.isNotEmpty) {
+          detectedEmotions.addAll(delta.emotions);
+          pendingEmotions.addAll(delta.emotions);
+        }
+        if (delta.visibleText.isEmpty) {
+          continue;
+        }
+        assembled.write(delta.visibleText);
+        yield StreamDelta(
+          visibleText: delta.visibleText,
+          emotions: List<EmotionSignal>.unmodifiable(pendingEmotions),
+        );
+        pendingEmotions.clear();
       }
-      if (delta.visibleText.isEmpty) {
-        continue;
-      }
-      assembled.write(delta.visibleText);
-      yield StreamDelta(
-        visibleText: delta.visibleText,
-        emotions: List<EmotionSignal>.unmodifiable(pendingEmotions),
+    } catch (e) {
+      final String partial = assembled.toString().trim();
+      final String content = partial.isNotEmpty
+          ? partial
+          : '[Generation failed: $e]';
+      final ChatMessage errorMessage = ChatMessage(
+        id: _messageId('assistant'),
+        role: ChatRole.assistant,
+        content: content,
+        createdAt: DateTime.now(),
+        metadata: <String, Object?>{
+          'character_id': card.id,
+          'generation_error': true,
+        },
       );
-      pendingEmotions.clear();
+      await _sessionRepository.put(
+        session.copyWith(
+          messages: <ChatMessage>[...session.messages, errorMessage],
+          updatedAt: DateTime.now(),
+        ),
+      );
+      // Persist partial/error message so the session is not left inconsistent,
+      // then re-throw so callers (e.g. chat page) can trigger recovery flows.
+      rethrow;
     }
 
     final String finalVisibleText = RoleplayTextFormatter.sanitizeModelOutput(

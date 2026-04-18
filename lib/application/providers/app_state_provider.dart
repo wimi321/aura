@@ -208,10 +208,28 @@ class AppStateProvider extends ChangeNotifier {
     _notifyListenersSafely();
   }
 
+  bool isDeletableCharacter(CharacterCard card) {
+    return card.extensions['imported'] == true ||
+        card.extensions['user_created'] == true;
+  }
+
+  Future<void> deleteCharacter(String characterId) async {
+    final List<CharacterCard> imported =
+        await _characterLibraryStore.loadImported();
+    await _characterLibraryStore.deleteCharacter(characterId,
+        existing: imported);
+    await refreshCharacters();
+  }
+
   Future<void> refreshPresets() async {
     final List<Preset> imported = await _presetLibraryStore.loadPresets();
+    final Preset? savedDefault = imported
+        .where((Preset preset) => preset.id == 'default-roleplay')
+        .isEmpty
+        ? null
+        : imported.firstWhere((Preset preset) => preset.id == 'default-roleplay');
     _availablePresets = <Preset>[
-      const Preset.defaultRoleplay(),
+      savedDefault ?? const Preset.defaultRoleplay(),
       ...imported.where((Preset preset) => preset.id != 'default-roleplay'),
     ];
     if (!_availablePresets
@@ -242,7 +260,7 @@ class AppStateProvider extends ChangeNotifier {
     final Preset saved = await _presetLibraryStore.savePreset(
       preset,
       existing: _availablePresets
-          .where((Preset item) => item.id != 'default-roleplay')
+          .where((Preset item) => item.id != preset.id)
           .toList(growable: false),
     );
     await refreshPresets();
@@ -427,6 +445,37 @@ class AppStateProvider extends ChangeNotifier {
     );
   }
 
+  /// Removes the last assistant message and returns the session along with
+  /// the preceding user message text so the caller can re-send.
+  Future<({ChatSession session, String? lastUserText})> rerollLastMessage(
+    String sessionId,
+  ) async {
+    final ChatSession? session = await engine.getSession(sessionId);
+    if (session == null) {
+      throw StateError('Session not found: $sessionId');
+    }
+    final List<ChatMessage> messages =
+        List<ChatMessage>.from(session.messages);
+    // Remove trailing assistant message
+    if (messages.isNotEmpty &&
+        messages.last.role == ChatRole.assistant) {
+      messages.removeLast();
+    }
+    // Find last user message text
+    String? lastUserText;
+    for (int i = messages.length - 1; i >= 0; i--) {
+      if (messages[i].role == ChatRole.user) {
+        lastUserText = messages[i].content;
+        break;
+      }
+    }
+    final ChatSession updated = await engine.replaceSessionMessages(
+      sessionId: sessionId,
+      messages: messages,
+    );
+    return (session: updated, lastUserText: lastUserText);
+  }
+
   Future<CharacterCard> saveCharacter(CharacterCard character) async {
     final bool explicitBuiltInCustomization =
         character.extensions['user_customized'] == true;
@@ -552,6 +601,13 @@ class AppStateProvider extends ChangeNotifier {
       await engine.initialize(deviceProfile: deviceProfile);
       await refreshModels();
       await refreshRuntimeStatus();
+      // Auto-load the first installed model so the app is ready to chat.
+      if (activeModel == null && hasInstalledModels) {
+        final ModelManifest firstInstalled = _availableModels.firstWhere(
+          (ModelManifest m) => _installedModelIds[m.id] == true,
+        );
+        await _attemptModelSwitch(firstInstalled);
+      }
     } catch (error) {
       _errorMessage = _presentableError(error);
       _modelState = AppModelState.error;
@@ -585,8 +641,13 @@ class AppStateProvider extends ChangeNotifier {
       for (final ModelManifest manifest in storedModels) manifest.id: manifest,
     };
 
+    final Set<String> curatedIds =
+        _curatedModels.map((ModelManifest m) => m.id).toSet();
+
     final List<ModelManifest> ordered = <ModelManifest>[
       for (final ModelManifest manifest in _curatedModels) merged[manifest.id]!,
+      for (final ModelManifest manifest in storedModels)
+        if (!curatedIds.contains(manifest.id)) manifest,
     ];
 
     for (final ModelManifest manifest in ordered) {
@@ -749,6 +810,22 @@ class AppStateProvider extends ChangeNotifier {
       await _downloadManager.cancel(modelId);
     } catch (_) {}
     _notifyListenersSafely();
+  }
+
+  Future<bool> deleteInstalledModel(ModelManifest manifest) async {
+    if (activeModel?.id == manifest.id) {
+      return false;
+    }
+    if (_downloadingModelId == manifest.id) {
+      return false;
+    }
+    final File modelFile = File(manifest.localPath);
+    if (await modelFile.exists()) {
+      await modelFile.delete();
+    }
+    _installedModelIds[manifest.id] = false;
+    _notifyListenersSafely();
+    return true;
   }
 
   void _handleState(ModelLoadState state) {

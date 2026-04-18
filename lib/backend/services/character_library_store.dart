@@ -117,6 +117,21 @@ class CharacterLibraryStore {
     return stored;
   }
 
+  Future<void> deleteCharacter(String characterId,
+      {List<CharacterCard> existing = const <CharacterCard>[]}) async {
+    final List<CharacterCard> next = <CharacterCard>[
+      ...existing.where((CharacterCard card) => card.id != characterId),
+    ];
+    await _save(next);
+    final String avatarGlob = '${_assetDirectory.path}/$characterId';
+    for (final String ext in const <String>['.png', '.jpg', '.jpeg', '.webp']) {
+      final File avatarFile = File('$avatarGlob$ext');
+      if (await avatarFile.exists()) {
+        await avatarFile.delete();
+      }
+    }
+  }
+
   Future<void> _save(List<CharacterCard> cards) async {
     await _catalogFile.parent.create(recursive: true);
     await _catalogFile.writeAsString(

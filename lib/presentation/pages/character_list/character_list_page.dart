@@ -11,15 +11,38 @@ import '../../widgets/character_cover_art.dart';
 import '../../widgets/import_preview_dialog.dart';
 import '../../widgets/session_history_sheet.dart';
 
-class CharacterListPage extends StatelessWidget {
+class CharacterListPage extends StatefulWidget {
   const CharacterListPage({super.key});
+
+  @override
+  State<CharacterListPage> createState() => _CharacterListPageState();
+}
+
+class _CharacterListPageState extends State<CharacterListPage> {
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  List<CharacterCard> _filteredCharacters(List<CharacterCard> characters) {
+    if (_searchQuery.isEmpty) return characters;
+    final String query = _searchQuery.toLowerCase();
+    return characters
+        .where((CharacterCard c) => c.name.toLowerCase().contains(query))
+        .toList(growable: false);
+  }
 
   @override
   Widget build(BuildContext context) {
     final AppLocalizations? l10n = AppLocalizations.of(context);
     final AppStateProvider appState = context.watch<AppStateProvider>();
     final ModelManifest? activeModel = appState.activeModel;
-    final List<CharacterCard> characters = appState.availableCharacters;
+    final List<CharacterCard> allCharacters = appState.availableCharacters;
+    final List<CharacterCard> characters = _filteredCharacters(allCharacters);
     final bool needsModelDownload = appState.needsModelDownload;
 
     return Scaffold(
@@ -56,11 +79,54 @@ class CharacterListPage extends StatelessWidget {
                 )
               ],
             ),
-            const SizedBox(height: 20),
-            for (final CharacterCard character in characters) ...[
-              _PremiumCharacterCard(character: character),
-              const SizedBox(height: 24),
+            if (allCharacters.length > 5) ...[
+              const SizedBox(height: 16),
+              TextField(
+                controller: _searchController,
+                onChanged: (String value) =>
+                    setState(() => _searchQuery = value.trim()),
+                decoration: InputDecoration(
+                  hintText:
+                      l10n?.searchCharactersHint ?? 'Search characters...',
+                  prefixIcon: const Icon(Icons.search_rounded,
+                      size: 20, color: AppTheme.textMuted),
+                  suffixIcon: _searchQuery.isNotEmpty
+                      ? IconButton(
+                          onPressed: () {
+                            _searchController.clear();
+                            setState(() => _searchQuery = '');
+                          },
+                          icon: const Icon(Icons.close,
+                              size: 18, color: AppTheme.textMuted),
+                        )
+                      : null,
+                  isDense: true,
+                  contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16, vertical: 12),
+                ),
+              ),
             ],
+            const SizedBox(height: 20),
+            if (allCharacters.isEmpty)
+              _buildEmptyState(context, l10n)
+            else if (characters.isEmpty && _searchQuery.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 48),
+                child: Center(
+                  child: Text(
+                    l10n?.searchNoResults ?? 'No characters match your search.',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(color: AppTheme.textMuted),
+                  ),
+                ),
+              )
+            else
+              for (final CharacterCard character in characters) ...[
+                _PremiumCharacterCard(character: character),
+                const SizedBox(height: 24),
+              ],
             const SizedBox(height: 48),
             _buildModelCenterCard(
               context,
@@ -69,6 +135,54 @@ class CharacterListPage extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context, AppLocalizations? l10n) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 64),
+      child: Column(
+        children: [
+          Icon(Icons.auto_stories_outlined,
+              size: 56, color: AppTheme.textMuted.withValues(alpha: 0.5)),
+          const SizedBox(height: 20),
+          Text(
+            l10n?.emptyLibraryTitle ?? 'Your story library is empty',
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(color: AppTheme.textSecondary),
+          ),
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Text(
+              l10n?.emptyLibraryDescription ??
+                  'Import a Tavern character card or create one from scratch to begin.',
+              textAlign: TextAlign.center,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium
+                  ?.copyWith(color: AppTheme.textMuted, height: 1.5),
+            ),
+          ),
+          const SizedBox(height: 24),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FilledButton(
+                onPressed: () => _showImportDialog(context),
+                child: Text(l10n?.importCharacter ?? 'Import'),
+              ),
+              const SizedBox(width: 12),
+              OutlinedButton(
+                onPressed: () => _showImportDialog(context),
+                child: Text(l10n?.createCharacterButton ?? 'Create'),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -321,10 +435,10 @@ class _PremiumCharacterCard extends StatelessWidget {
       return '';
     }
     final String firstSentence = _firstSentence(raw);
-    if (firstSentence.length <= 72) {
+    if (firstSentence.length <= 150) {
       return firstSentence;
     }
-    return '${firstSentence.substring(0, 72).trimRight()}...';
+    return '${firstSentence.substring(0, 150).trimRight()}...';
   }
 
   String _firstSentence(String input) {
@@ -384,6 +498,50 @@ class _PremiumCharacterCard extends StatelessWidget {
     );
   }
 
+  Future<void> _confirmAndDelete(BuildContext context) async {
+    final AppStateProvider appState = context.read<AppStateProvider>();
+    final AppLocalizations? l10n = AppLocalizations.of(context);
+    if (!appState.isDeletableCharacter(character)) return;
+
+    final bool? confirmed = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: AppTheme.bgElevated,
+          title: Text(l10n?.deleteCharacterTitle ?? 'Delete Character'),
+          content: Text(
+            l10n?.deleteCharacterConfirm(character.name) ??
+                'Remove ${character.name} from your library? This cannot be undone.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(l10n?.cancelButton ?? 'Cancel'),
+            ),
+            FilledButton(
+              style: FilledButton.styleFrom(
+                backgroundColor: AppTheme.statusDanger,
+              ),
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(l10n?.deleteButton ?? 'Delete'),
+            ),
+          ],
+        );
+      },
+    );
+    if (confirmed != true || !context.mounted) return;
+    await appState.deleteCharacter(character.id);
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          l10n?.characterDeletedMessage(character.name) ??
+              '${character.name} has been removed.',
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final AppStateProvider appState = context.watch<AppStateProvider>();
@@ -395,6 +553,7 @@ class _PremiumCharacterCard extends StatelessWidget {
         appState.modelState == AppModelState.ready &&
         !appState.isRecoveringModel &&
         !isConversationBusy;
+    final bool canDelete = appState.isDeletableCharacter(character);
 
     final String? availabilityLabel = needsModelDownload
         ? (l10n?.storyCoreDownloadPrompt ?? 'Download a story core to begin.')
@@ -417,12 +576,14 @@ class _PremiumCharacterCard extends StatelessWidget {
                 : AppTheme.textMuted;
     final String sceneHookExcerpt = _sceneHookExcerpt();
 
-    return Container(
+    return Semantics(
+      label: 'Character: ${character.name}',
+      button: true,
+      child: Container(
       key: ValueKey<String>('character-card-${character.id}'),
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.circular(20), // Tighter borders for premium feel
+        borderRadius: BorderRadius.circular(20),
         color: AppTheme.bgCard,
         border: Border.all(color: AppTheme.borderSubtle),
       ),
@@ -445,7 +606,7 @@ class _PremiumCharacterCard extends StatelessWidget {
               children: [
                 CharacterCoverArt(
                   character: character,
-                  height: 440, // Epic, full-bleed poster ratio
+                  height: 440,
                   borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(20),
                   ),
@@ -607,25 +768,41 @@ class _PremiumCharacterCard extends StatelessWidget {
                   ),
                 ),
                 Container(width: 1, height: 20, color: AppTheme.borderSubtle),
-                Tooltip(
-                  message: l10n?.clearHistoryButton ?? 'Clear History',
-                  child: IconButton(
-                    key: ValueKey<String>(
-                      'character-clear-history-${character.id}',
+                if (canDelete)
+                  Tooltip(
+                    message:
+                        l10n?.deleteCharacterTitle ?? 'Delete Character',
+                    child: IconButton(
+                      key: ValueKey<String>(
+                        'character-delete-${character.id}',
+                      ),
+                      onPressed: () => _confirmAndDelete(context),
+                      visualDensity: VisualDensity.compact,
+                      icon: const Icon(Icons.delete_outline_rounded),
+                      color: AppTheme.statusDanger,
                     ),
-                    onPressed: isChatReady
-                        ? () => _confirmAndClearHistory(context)
-                        : null,
-                    visualDensity: VisualDensity.compact,
-                    icon: const Icon(Icons.delete_outline_rounded),
-                    color: AppTheme.textSecondary,
                   ),
-                ),
+                if (!canDelete)
+                  Tooltip(
+                    message: l10n?.clearHistoryButton ?? 'Clear History',
+                    child: IconButton(
+                      key: ValueKey<String>(
+                        'character-clear-history-${character.id}',
+                      ),
+                      onPressed: isChatReady
+                          ? () => _confirmAndClearHistory(context)
+                          : null,
+                      visualDensity: VisualDensity.compact,
+                      icon: const Icon(Icons.delete_outline_rounded),
+                      color: AppTheme.textSecondary,
+                    ),
+                  ),
               ],
             ),
           ),
         ],
       ),
+    ),
     );
   }
 }

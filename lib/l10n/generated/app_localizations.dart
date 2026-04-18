@@ -1421,6 +1421,361 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Something went wrong. Please try again.'**
   String get modelErrorGeneric;
+
+  /// No description provided for @modelSetupE2bSpeedChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Fast inference'**
+  String get modelSetupE2bSpeedChip;
+
+  /// No description provided for @modelSetupE4bQualityChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Richer vocabulary, longer scenes'**
+  String get modelSetupE4bQualityChip;
+
+  /// No description provided for @splashInitializingEngine.
+  ///
+  /// In en, this message translates to:
+  /// **'Initializing Engine'**
+  String get splashInitializingEngine;
+
+  /// No description provided for @splashRetryButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get splashRetryButton;
+
+  /// No description provided for @splashPreparingRuntime.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparing runtime...'**
+  String get splashPreparingRuntime;
+
+  /// No description provided for @splashLoadingCore.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading story core...'**
+  String get splashLoadingCore;
+
+  /// No description provided for @splashGoToSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Settings'**
+  String get splashGoToSettings;
+
+  /// No description provided for @splashDownloadCore.
+  ///
+  /// In en, this message translates to:
+  /// **'Download a Core'**
+  String get splashDownloadCore;
+
+  /// No description provided for @splashTryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get splashTryAgain;
+
+  /// No description provided for @importEmbeddedWorldbookCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Embedded Worldbook {count}'**
+  String importEmbeddedWorldbookCount(Object count);
+
+  /// No description provided for @importAltGreetingsCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Alt Greetings {count}'**
+  String importAltGreetingsCount(Object count);
+
+  /// No description provided for @importCardMainPromptTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Card Main Prompt'**
+  String get importCardMainPromptTag;
+
+  /// No description provided for @importPostHistoryNoteTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Post-History Note'**
+  String get importPostHistoryNoteTag;
+
+  /// No description provided for @importPreservedFieldsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Imported As-Is'**
+  String get importPreservedFieldsTitle;
+
+  /// No description provided for @importPreservedFieldsContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Opening message / alternate greetings / scenario / persona / embedded worldbook / main prompt override / post-history rules'**
+  String get importPreservedFieldsContent;
+
+  /// No description provided for @importNoPersonalityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'This card does not include a dedicated personality field.'**
+  String get importNoPersonalityLabel;
+
+  /// No description provided for @importNoScenarioLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'This card does not include a scenario field.'**
+  String get importNoScenarioLabel;
+
+  /// No description provided for @importCreatorNotesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Creator Notes'**
+  String get importCreatorNotesTitle;
+
+  /// No description provided for @importAltGreetingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Alternate Greetings'**
+  String get importAltGreetingsTitle;
+
+  /// No description provided for @importStandaloneWorldbookTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Standalone Worldbook'**
+  String get importStandaloneWorldbookTitle;
+
+  /// No description provided for @importWorldbookEntriesCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} entries'**
+  String importWorldbookEntriesCount(Object count);
+
+  /// No description provided for @importWorldbookHelperNew.
+  ///
+  /// In en, this message translates to:
+  /// **'Aura recognized this file as a standalone worldbook. Pick a role card and attach it directly.'**
+  String get importWorldbookHelperNew;
+
+  /// No description provided for @importWorldbookHelperMerge.
+  ///
+  /// In en, this message translates to:
+  /// **'Aura recognized this file as a standalone worldbook. It will merge with the role card lore instead of overwriting it.'**
+  String get importWorldbookHelperMerge;
+
+  /// No description provided for @importWorldbookAttachTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Attach To'**
+  String get importWorldbookAttachTo;
+
+  /// No description provided for @importWorldbookNoCharacters.
+  ///
+  /// In en, this message translates to:
+  /// **'No role cards are available yet.'**
+  String get importWorldbookNoCharacters;
+
+  /// No description provided for @importWorldbookChooseCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose Role Card'**
+  String get importWorldbookChooseCard;
+
+  /// No description provided for @importWorldbookMergeResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Merge Result'**
+  String get importWorldbookMergeResult;
+
+  /// No description provided for @importWorldbookMergeDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Current role has {existing} entries, this file has {incoming}, and the merged card will keep about {merged} entries.'**
+  String importWorldbookMergeDetails(
+      Object existing, Object incoming, Object merged);
+
+  /// No description provided for @importWorldbookDescriptionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get importWorldbookDescriptionTitle;
+
+  /// No description provided for @importWorldbookEntryPreviewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Worldbook Entry Preview'**
+  String get importWorldbookEntryPreviewTitle;
+
+  /// No description provided for @importWorldbookChooseCharacterError.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a role card before attaching the worldbook.'**
+  String get importWorldbookChooseCharacterError;
+
+  /// No description provided for @importPngNoMetadataError.
+  ///
+  /// In en, this message translates to:
+  /// **'This PNG does not contain character card metadata. If it came from Photos, try importing the original Tavern PNG from Files.'**
+  String get importPngNoMetadataError;
+
+  /// No description provided for @starterCharacterName.
+  ///
+  /// In en, this message translates to:
+  /// **'New Character'**
+  String get starterCharacterName;
+
+  /// No description provided for @starterCharacterDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Write the role, relationship, and dramatic hook for this character.'**
+  String get starterCharacterDescription;
+
+  /// No description provided for @starterCharacterPersonality.
+  ///
+  /// In en, this message translates to:
+  /// **'Stay in character, keep the scene moving, and respond with concrete actions and emotions.'**
+  String get starterCharacterPersonality;
+
+  /// No description provided for @starterCharacterScenario.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe the opening scene, location, conflict, and the relationship with the player.'**
+  String get starterCharacterScenario;
+
+  /// No description provided for @starterCharacterFirstMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'The footsteps outside are getting closer. Now that you are here, there is no easy way back.'**
+  String get starterCharacterFirstMessage;
+
+  /// No description provided for @starterCharacterAltGreeting.
+  ///
+  /// In en, this message translates to:
+  /// **'You arrived sooner than I expected.'**
+  String get starterCharacterAltGreeting;
+
+  /// No description provided for @searchCharactersHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search characters...'**
+  String get searchCharactersHint;
+
+  /// No description provided for @searchNoResults.
+  ///
+  /// In en, this message translates to:
+  /// **'No characters match your search.'**
+  String get searchNoResults;
+
+  /// No description provided for @emptyLibraryTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your story library is empty'**
+  String get emptyLibraryTitle;
+
+  /// No description provided for @emptyLibraryDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Import a Tavern character card or create one from scratch to begin your first scene.'**
+  String get emptyLibraryDescription;
+
+  /// No description provided for @deleteCharacterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Character'**
+  String get deleteCharacterTitle;
+
+  /// No description provided for @deleteCharacterConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete {characterName}? This cannot be undone.'**
+  String deleteCharacterConfirm(Object characterName);
+
+  /// No description provided for @characterDeletedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'{characterName} has been deleted.'**
+  String characterDeletedMessage(Object characterName);
+
+  /// No description provided for @copyToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy to clipboard'**
+  String get copyToClipboard;
+
+  /// No description provided for @copiedToClipboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get copiedToClipboard;
+
+  /// No description provided for @messageTimeJustNow.
+  ///
+  /// In en, this message translates to:
+  /// **'just now'**
+  String get messageTimeJustNow;
+
+  /// No description provided for @messageTimeMinutesAgo.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} min ago'**
+  String messageTimeMinutesAgo(Object count);
+
+  /// No description provided for @rerollButtonTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Regenerate response'**
+  String get rerollButtonTooltip;
+
+  /// No description provided for @characterDetailsSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Character Details'**
+  String get characterDetailsSheetTitle;
+
+  /// No description provided for @errorGoToSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Go to Settings'**
+  String get errorGoToSettings;
+
+  /// No description provided for @errorRetryMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get errorRetryMessage;
+
+  /// No description provided for @coreReconnectedToast.
+  ///
+  /// In en, this message translates to:
+  /// **'Core reconnected. You can send again.'**
+  String get coreReconnectedToast;
+
+  /// No description provided for @storyCoresTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Story Cores'**
+  String get storyCoresTitle;
+
+  /// No description provided for @deleteModelTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Model'**
+  String get deleteModelTitle;
+
+  /// No description provided for @deleteModelConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {modelName}? You can re-download it later.'**
+  String deleteModelConfirm(Object modelName);
+
+  /// No description provided for @modelDeletedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'{modelName} has been deleted.'**
+  String modelDeletedMessage(Object modelName);
+
+  /// No description provided for @diskSpaceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Disk'**
+  String get diskSpaceLabel;
 }
 
 class _AppLocalizationsDelegate

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:aura_core/aura_core.dart';
 import 'package:aura_app/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
@@ -11,6 +12,8 @@ import '../../widgets/character_cover_art.dart';
 import '../../widgets/session_history_sheet.dart';
 
 enum _ChatMenuAction { history, newConversation, clearHistory }
+
+enum _ChatErrorType { timeout, recoveryFailed, generic }
 
 class ChatPage extends StatefulWidget {
   const ChatPage({
@@ -42,7 +45,10 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   bool _isBootstrapping = true;
   bool _isSending = false;
   String? _error;
+  _ChatErrorType? _errorType;
+  Timer? _errorDismissTimer;
   int _generationEpoch = 0;
+  String? _whisperInstruction;
 
   late AnimationController _ambientGlowController;
 
@@ -59,8 +65,14 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     _ambientGlowController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 4),
-    )..repeat(reverse: true);
-    WidgetsBinding.instance.addPostFrameCallback((_) => _bootstrapSession());
+    );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted &&
+          !MediaQuery.of(context).disableAnimations) {
+        _ambientGlowController.repeat(reverse: true);
+      }
+      _bootstrapSession();
+    });
   }
 
   Future<void> _bootstrapSession({String? preferredSessionId}) async {
@@ -96,10 +108,18 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   }
 
   Future<void> _sendMessage() async {
+    HapticFeedback.lightImpact();
+    final String? whisper = _whisperInstruction;
     await _submitTurn(
       text: _messageController.text.trim(),
       clearComposer: true,
+      whisperInstruction: whisper,
     );
+    if (mounted) {
+      setState(() {
+        _whisperInstruction = null;
+      });
+    }
   }
 
   Future<void> _continueScene() async {
@@ -112,11 +132,111 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     );
   }
 
+  Future<void> _openWhisperSheet() async {
+    final AppLocalizations? l10n = AppLocalizations.of(context);
+    final TextEditingController whisperController =
+        TextEditingController(text: _whisperInstruction ?? '');
+    final String? result = await showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: AppTheme.bgElevated,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+      builder: (BuildContext sheetContext) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 20,
+            right: 20,
+            top: 16,
+            bottom: MediaQuery.of(sheetContext).viewInsets.bottom + 20,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: AppTheme.borderStrong,
+                    borderRadius: BorderRadius.circular(999),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 14),
+              Text(
+                l10n?.whisperSheetTitle ?? 'Whisper Instruction',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(
+                l10n?.whisperSheetDescription ??
+                    'Influence the character\'s next turn from behind the scenes without breaking the story text.',
+                style: const TextStyle(
+                  color: AppTheme.textSecondary,
+                  height: 1.45,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                l10n?.whisperSheetExample ??
+                    'Example: Reply more softly and hide concern under confidence.',
+                style: const TextStyle(
+                  color: AppTheme.textMuted,
+                  fontSize: 12,
+                  height: 1.45,
+                ),
+              ),
+              const SizedBox(height: 14),
+              TextField(
+                controller: whisperController,
+                autofocus: true,
+                maxLines: 3,
+                decoration: InputDecoration(
+                  hintText: l10n?.whisperHint ??
+                      'Whisper instruction (next turn only)...',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide:
+                        const BorderSide(color: AppTheme.borderSubtle),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 14),
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  onPressed: () => Navigator.of(sheetContext)
+                      .pop(whisperController.text.trim()),
+                  child: Text(l10n?.applyWhisper ?? 'Apply Whisper'),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+    if (!mounted) {
+      return;
+    }
+    if (result != null) {
+      setState(() {
+        _whisperInstruction = result.isEmpty ? null : result;
+      });
+    }
+  }
+
   Future<void> _submitTurn({
     required String text,
     bool showUserBubble = true,
     bool clearComposer = false,
     Map<String, Object?> userMetadata = const <String, Object?>{},
+    String? whisperInstruction,
   }) async {
     final AppLocalizations? l10n = AppLocalizations.of(context);
     final AppStateProvider appState = context.read<AppStateProvider>();
@@ -195,6 +315,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
         card: _character,
         message: text,
         userMetadata: userMetadata,
+        whisper: whisperInstruction,
         localeTag: appState.effectiveLocaleTag,
         preset: appState.activePreset,
       )
@@ -250,9 +371,11 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
         });
       }
       String? errorMessage;
+      _ChatErrorType errorType = _ChatErrorType.generic;
       if (wasCancelled) {
         errorMessage = null;
       } else if (timedOut) {
+        errorType = _ChatErrorType.timeout;
         errorMessage = l10n?.chatGenerationTimedOut ??
             'Aura response timed out. You can send again or retry after stopping.';
       } else {
@@ -260,17 +383,29 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
         if (!mounted || generationEpoch != _generationEpoch) {
           return;
         }
-        errorMessage = recovered
-            ? (l10n?.chatRuntimeRecovered ??
-                'Aura recovered the local core. You can send again.')
-            : (l10n?.chatRuntimeRecoveryFailed ??
-                'Aura hit a runtime error and recovery failed. Please reactivate the model in settings.');
+        if (recovered) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                l10n?.coreReconnectedToast ??
+                    'Core reconnected. You can send again.',
+              ),
+              duration: const Duration(seconds: 3),
+            ),
+          );
+          errorMessage = null;
+        } else {
+          errorType = _ChatErrorType.recoveryFailed;
+          errorMessage = l10n?.chatRuntimeRecoveryFailed ??
+              'Aura hit a runtime error and recovery failed. Please reactivate the model in settings.';
+        }
       }
       await _syncSessionFromStore(
         sessionId: currentSessionId,
         generationEpoch: generationEpoch,
         clearPendingAssistant: true,
         errorMessage: errorMessage,
+        errorType: errorType,
       );
     }
   }
@@ -279,6 +414,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     if (!_isSending) {
       return;
     }
+    HapticFeedback.lightImpact();
     final String? activeSessionId = _sessionId;
     final int cancelledEpoch = ++_generationEpoch;
     if (mounted) {
@@ -326,6 +462,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     required int generationEpoch,
     bool clearPendingAssistant = false,
     String? errorMessage,
+    _ChatErrorType errorType = _ChatErrorType.generic,
   }) async {
     final ChatSession? persisted =
         await context.read<AppStateProvider>().engine.getSession(sessionId);
@@ -339,11 +476,13 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
         : (clearPendingAssistant
             ? _sessionWithoutPendingAssistant(persisted)
             : persisted);
-    setState(() {
-      _session = nextSession;
-      _isSending = false;
-      _error = errorMessage;
-    });
+    _session = nextSession;
+    _isSending = false;
+    if (errorMessage != null) {
+      _setError(errorMessage, type: errorType);
+    } else {
+      _setError(null);
+    }
     _scrollToBottomSoon();
   }
 
@@ -368,6 +507,39 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
       _error = null;
     });
     _scrollToBottomSoon();
+  }
+
+  Future<void> _rerollLastMessage() async {
+    final String? sessionId = _sessionId;
+    if (sessionId == null || _isSending) {
+      return;
+    }
+    final AppStateProvider appState = context.read<AppStateProvider>();
+    try {
+      final ({ChatSession session, String? lastUserText}) result =
+          await appState.rerollLastMessage(sessionId);
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _session = result.session;
+        _error = null;
+      });
+      final String? userText = result.lastUserText;
+      if (userText != null && userText.isNotEmpty) {
+        await _submitTurn(
+          text: userText,
+          showUserBubble: false,
+        );
+      }
+    } catch (error) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _error = error.toString();
+      });
+    }
   }
 
   Future<void> _clearConversationHistory() async {
@@ -440,7 +612,8 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     if (_isSending || _sessionId == null) {
       return;
     }
-    final bool? shouldEdit = await showModalBottomSheet<bool>(
+    HapticFeedback.lightImpact();
+    final String? action = await showModalBottomSheet<String>(
       context: context,
       backgroundColor: AppTheme.bgElevated,
       shape: const RoundedRectangleBorder(
@@ -465,6 +638,13 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                 ),
                 const SizedBox(height: 14),
                 ListTile(
+                  leading: const Icon(Icons.copy_rounded),
+                  title: Text(
+                    l10n?.copyToClipboard ?? 'Copy to clipboard',
+                  ),
+                  onTap: () => Navigator.of(context).pop('copy'),
+                ),
+                ListTile(
                   leading: const Icon(Icons.edit_outlined),
                   title: Text(
                     l10n?.editMessageActionTitle ?? 'Edit this message',
@@ -473,7 +653,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                     l10n?.editMessageActionDescription ??
                         'Keep the story and revise this turn only.',
                   ),
-                  onTap: () => Navigator.of(context).pop(true),
+                  onTap: () => Navigator.of(context).pop('edit'),
                 ),
                 ListTile(
                   leading: const Icon(
@@ -488,7 +668,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                     l10n?.deleteMessageActionDescription ??
                         'Remove this turn from the current session.',
                   ),
-                  onTap: () => Navigator.of(context).pop(false),
+                  onTap: () => Navigator.of(context).pop('delete'),
                 ),
               ],
             ),
@@ -496,14 +676,28 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
         );
       },
     );
-    if (!mounted || shouldEdit == null) {
+    if (!mounted || action == null) {
       return;
     }
-    if (shouldEdit) {
-      await _editMessage(message);
-      return;
+    switch (action) {
+      case 'copy':
+        await Clipboard.setData(ClipboardData(text: message.content));
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                AppLocalizations.of(context)?.copiedToClipboard ??
+                    'Copied to clipboard',
+              ),
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        }
+      case 'edit':
+        await _editMessage(message);
+      case 'delete':
+        await _deleteMessage(message);
     }
-    await _deleteMessage(message);
   }
 
   Future<void> _editMessage(ChatMessage message) async {
@@ -662,8 +856,29 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     });
   }
 
+  void _setError(String? message,
+      {_ChatErrorType type = _ChatErrorType.generic}) {
+    _errorDismissTimer?.cancel();
+    _errorDismissTimer = null;
+    setState(() {
+      _error = message;
+      _errorType = message == null ? null : type;
+    });
+    if (message != null && type == _ChatErrorType.timeout) {
+      _errorDismissTimer = Timer(const Duration(seconds: 8), () {
+        if (mounted) {
+          setState(() {
+            _error = null;
+            _errorType = null;
+          });
+        }
+      });
+    }
+  }
+
   @override
   void dispose() {
+    _errorDismissTimer?.cancel();
     _messageController.dispose();
     _scrollController.dispose();
     _ambientGlowController.dispose();
@@ -675,14 +890,151 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
         message.metadata['hidden_action']?.toString() == _hiddenContinueAction;
   }
 
+  bool _showRerollButton(List<ChatMessage> messages) {
+    if (_isSending || _isBootstrapping || messages.isEmpty) {
+      return false;
+    }
+    return messages.last.role == ChatRole.assistant &&
+        messages.last.content.trim().isNotEmpty;
+  }
+
   String _continueScenePrompt(BuildContext context) {
     return AppLocalizations.of(context)?.continueScenePrompt ??
         'Continue the current scene naturally. Advance the tension, clues, or emotions without resetting the relationship or breaking character.';
   }
 
+  void _showCharacterDetails() {
+    final AppLocalizations? l10n = AppLocalizations.of(context);
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: AppTheme.bgElevated,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+      ),
+      builder: (BuildContext sheetContext) {
+        return DraggableScrollableSheet(
+          initialChildSize: 0.55,
+          minChildSize: 0.3,
+          maxChildSize: 0.85,
+          expand: false,
+          builder: (BuildContext context, ScrollController scrollController) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: ListView(
+                controller: scrollController,
+                children: [
+                  const SizedBox(height: 12),
+                  Center(
+                    child: Container(
+                      width: 40,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: AppTheme.borderStrong,
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    l10n?.characterDetailsSheetTitle ?? 'Character Details',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  if (_character.scenario.trim().isNotEmpty) ...[
+                    Text(
+                      l10n?.characterScenarioLabel ?? 'Scenario',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.brandAura,
+                        letterSpacing: 0.8,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      _character.scenario,
+                      style: const TextStyle(
+                        color: AppTheme.textSecondary,
+                        height: 1.6,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+                  if (_character.description.trim().isNotEmpty) ...[
+                    Text(
+                      l10n?.characterDescriptionLabel ?? 'Description',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.brandAura,
+                        letterSpacing: 0.8,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      _character.description,
+                      style: const TextStyle(
+                        color: AppTheme.textSecondary,
+                        height: 1.6,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+                  if (_character.personality.trim().isNotEmpty) ...[
+                    Text(
+                      l10n?.characterPersonalityLabel ?? 'Personality',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: AppTheme.brandAura,
+                        letterSpacing: 0.8,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      _character.personality,
+                      style: const TextStyle(
+                        color: AppTheme.textSecondary,
+                        height: 1.6,
+                      ),
+                    ),
+                  ],
+                  const SizedBox(height: 24),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _retryLastMessage() async {
+    _setError(null);
+    final ChatSession? session = _session;
+    if (session == null || session.messages.isEmpty) {
+      return;
+    }
+    final Iterable<ChatMessage> userMessages = session.messages
+        .where((ChatMessage m) => m.role == ChatRole.user);
+    if (userMessages.isEmpty) {
+      return;
+    }
+    final ChatMessage lastUser = userMessages.last;
+    await _submitTurn(
+      text: lastUser.content,
+      showUserBubble: false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final AppStateProvider appState = context.watch<AppStateProvider>();
+    final AppLocalizations? l10n = AppLocalizations.of(context);
     final List<ChatMessage> messages =
         (_session?.messages ?? const <ChatMessage>[])
             .where((ChatMessage message) => !_isHiddenContinueMessage(message))
@@ -731,8 +1083,27 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                         controller: _scrollController,
                         padding: const EdgeInsets.only(
                             top: 24, bottom: 24, left: 16, right: 16),
-                        itemCount: messages.length,
+                        itemCount: messages.length + (_showRerollButton(messages) ? 1 : 0),
                         itemBuilder: (BuildContext context, int index) {
+                          // Reroll button after last message
+                          if (index == messages.length && _showRerollButton(messages)) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 16),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: IconButton(
+                                  key: const ValueKey<String>('chat-reroll-button'),
+                                  onPressed: _rerollLastMessage,
+                                  tooltip: l10n?.rerollButtonTooltip ?? 'Regenerate response',
+                                  icon: const Icon(
+                                    Icons.refresh_rounded,
+                                    size: 20,
+                                    color: AppTheme.textSecondary,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
                           final ChatMessage message = messages[index];
                           // Do not render empty assistant messages unless it's the last one (currently generating)
                           if (message.content.isEmpty &&
@@ -766,9 +1137,86 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(color: const Color(0x55FF6B6B)),
                     ),
-                    child: Text(_error!,
-                        style: const TextStyle(
-                            color: Color(0xFFFF9B9B), fontSize: 13)),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(_error!,
+                            style: const TextStyle(
+                                color: Color(0xFFFF9B9B), fontSize: 13)),
+                        if (_errorType == _ChatErrorType.timeout ||
+                            _errorType == _ChatErrorType.recoveryFailed) ...[
+                          const SizedBox(height: 8),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (_errorType == _ChatErrorType.timeout)
+                                TextButton.icon(
+                                  onPressed: _retryLastMessage,
+                                  icon: const Icon(Icons.refresh_rounded,
+                                      size: 16),
+                                  label: Text(l10n?.errorRetryMessage ??
+                                      'Retry'),
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: const Color(0xFFFF9B9B),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    minimumSize: Size.zero,
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
+                                  ),
+                                ),
+                              if (_errorType == _ChatErrorType.recoveryFailed)
+                                TextButton.icon(
+                                  onPressed: () => context.go('/settings'),
+                                  icon: const Icon(Icons.settings_outlined,
+                                      size: 16),
+                                  label: Text(l10n?.errorGoToSettings ??
+                                      'Go to Settings'),
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: const Color(0xFFFF9B9B),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    minimumSize: Size.zero,
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
+              if (_whisperInstruction != null)
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.auto_awesome,
+                          size: 12, color: AppTheme.brandCoral),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          '${l10n?.nextWhisperLabel ?? 'Next whisper'}: $_whisperInstruction',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: AppTheme.brandCoral,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => setState(() {
+                          _whisperInstruction = null;
+                        }),
+                        child: const Icon(Icons.close,
+                            size: 14, color: AppTheme.brandCoral),
+                      ),
+                    ],
                   ),
                 ),
               _buildInputArea(context, appState),
@@ -904,14 +1352,26 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
             ],
           ),
           const SizedBox(height: 12),
-          Text(
-            _character.scenario,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: Theme.of(context)
-                .textTheme
-                .bodySmall
-                ?.copyWith(color: AppTheme.textSecondary),
+          GestureDetector(
+            onTap: _showCharacterDetails,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    _character.scenario,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodySmall
+                        ?.copyWith(color: AppTheme.textSecondary),
+                  ),
+                ),
+                const SizedBox(width: 4),
+                const Icon(Icons.expand_more_rounded,
+                    size: 16, color: AppTheme.textMuted),
+              ],
+            ),
           ),
           if (appState.isRecoveringModel ||
               isConversationResetting ||
@@ -995,7 +1455,20 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
               color: canContinue ? AppTheme.brandAura : AppTheme.textMuted,
             ),
           ),
-          const SizedBox(width: 8),
+          IconButton(
+            key: const ValueKey<String>('chat-whisper-button'),
+            onPressed: controlsLocked ? null : _openWhisperSheet,
+            tooltip:
+                l10n?.chatWhisperButtonTooltip ?? 'Open whisper instruction',
+            icon: Icon(
+              Icons.auto_awesome,
+              size: 20,
+              color: _whisperInstruction != null
+                  ? AppTheme.brandCoral
+                  : (controlsLocked ? AppTheme.textMuted : AppTheme.textSecondary),
+            ),
+          ),
+          const SizedBox(width: 4),
           Expanded(
             child: Container(
               decoration: BoxDecoration(
@@ -1079,6 +1552,18 @@ class _MessageBubble extends StatelessWidget {
   final bool isGenerating;
   final VoidCallback? onLongPress;
 
+  String _formatTimestamp(DateTime time, AppLocalizations? l10n) {
+    final Duration diff = DateTime.now().difference(time);
+    if (diff.inMinutes < 1) {
+      return l10n?.messageTimeJustNow ?? 'just now';
+    }
+    if (diff.inHours < 1) {
+      return l10n?.messageTimeMinutesAgo(diff.inMinutes) ??
+          '${diff.inMinutes} min ago';
+    }
+    return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
+  }
+
   @override
   Widget build(BuildContext context) {
     final AppLocalizations? l10n = AppLocalizations.of(context);
@@ -1090,9 +1575,14 @@ class _MessageBubble extends StatelessWidget {
       userAlias: isUser ? null : null,
       extensions: characterExtensions,
     );
+    final String? timestamp = message.createdAt != null
+        ? _formatTimestamp(message.createdAt!, l10n)
+        : null;
 
     if (!isUser) {
-      return GestureDetector(
+      return Semantics(
+        label: '$characterName: $visibleContent',
+        child: GestureDetector(
         key: ValueKey<String>('chat-message-${message.id}'),
         onLongPress: onLongPress,
         behavior: HitTestBehavior.opaque,
@@ -1120,6 +1610,14 @@ class _MessageBubble extends StatelessWidget {
                           fontWeight: FontWeight.w700),
                     ),
                   ),
+                  if (!isGenerating && timestamp != null)
+                    Text(
+                      timestamp,
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: AppTheme.textMuted,
+                            fontSize: 10,
+                          ),
+                    ),
                 ],
               ),
               const SizedBox(height: 12),
@@ -1137,11 +1635,14 @@ class _MessageBubble extends StatelessWidget {
             ],
           ),
         ),
-      );
+      ),
+    );
     }
 
     // User Bubble
-    return GestureDetector(
+    return Semantics(
+      label: 'You: $visibleContent',
+      child: GestureDetector(
       key: ValueKey<String>('chat-message-${message.id}'),
       onLongPress: onLongPress,
       behavior: HitTestBehavior.opaque,
@@ -1162,9 +1663,20 @@ class _MessageBubble extends StatelessWidget {
                     height: 1.6, fontSize: 15, color: AppTheme.textSecondary),
               ),
             ),
+            if (timestamp != null) ...[
+              const SizedBox(height: 4),
+              Text(
+                timestamp,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: AppTheme.textMuted,
+                      fontSize: 10,
+                    ),
+              ),
+            ],
           ],
         ),
       ),
+    ),
     );
   }
 }
@@ -1197,24 +1709,48 @@ class _TypingIndicatorState extends State<_TypingIndicator>
 
   @override
   Widget build(BuildContext context) {
+    final bool reduceMotion = MediaQuery.of(context).disableAnimations;
+    if (reduceMotion) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: List<Widget>.generate(3, (int index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 2.0),
+            child: Container(
+              width: 6,
+              height: 6,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppTheme.brandAura,
+              ),
+            ),
+          );
+        }),
+      );
+    }
     return AnimatedBuilder(
       animation: _controller,
-      builder: (context, child) {
+      builder: (BuildContext context, Widget? child) {
         return Row(
           mainAxisSize: MainAxisSize.min,
-          children: List.generate(3, (index) {
+          children: List<Widget>.generate(3, (int index) {
             final double offset = index * 0.2;
             final double value = (_controller.value - offset) % 1.0;
             final double opacity = (value < 0.5) ? value * 2 : (1 - value) * 2;
+            final double bounce =
+                (value < 0.5) ? -3.0 * (1 - (value * 2 - 1).abs()) : 0.0;
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 2.0),
-              child: Container(
-                width: 6,
-                height: 6,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppTheme.brandAura
-                      .withValues(alpha: opacity.clamp(0.2, 1.0)),
+              child: Transform.translate(
+                offset: Offset(0, bounce),
+                child: Container(
+                  width: 6,
+                  height: 6,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppTheme.brandAura
+                        .withValues(alpha: opacity.clamp(0.2, 1.0)),
+                  ),
                 ),
               ),
             );

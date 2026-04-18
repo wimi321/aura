@@ -255,6 +255,15 @@ void main() {
       await tester.pump();
       await tester.pumpAndSettle();
 
+      // Preview is now shown; confirm the import.
+      final Finder confirmButton =
+          find.widgetWithText(FilledButton, 'Confirm Import');
+      expect(confirmButton, findsOneWidget);
+      await tester.ensureVisible(confirmButton);
+      await tester.tap(confirmButton);
+      await tester.pump();
+      await tester.pumpAndSettle();
+
       expect(importedCharacter, isNotNull);
       expect(importedCharacter!.name, 'Delayed Firefly');
     });
@@ -354,10 +363,17 @@ void main() {
       });
       await tester.pumpAndSettle();
 
+      // Preview is now shown; confirm the import.
+      expect(find.text('Confirm Import'), findsOneWidget);
+      final Finder confirmButton =
+          find.widgetWithText(FilledButton, 'Confirm Import');
+      await tester.ensureVisible(confirmButton);
+      await tester.tap(confirmButton);
+      await tester.pump();
+      await tester.pumpAndSettle();
+
       expect(importedCharacter, isNotNull, reason: _visibleTextDump(tester));
       expect(importedCharacter!.name, 'Firefly');
-      expect(find.text('Confirm Import'), findsNothing);
-      expect(find.textContaining('firefly.json'), findsNothing);
     });
 
     testWidgets('recognizes a standalone worldbook and offers an attach action',

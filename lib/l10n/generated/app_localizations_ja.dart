@@ -571,7 +571,8 @@ class AppLocalizationsJa extends AppLocalizations {
       'Files から Tavern PNG、JSON カード、単独ワールドブックを選びます。';
 
   @override
-  String get importWorldbookHint => '単独のワールドブックはここではなく、キャラクター編集から取り込みます。';
+  String get importWorldbookHint =>
+      'ここで単独のワールドブック JSON を選ぶこともできます。次のステップでキャラクターカードに接続できます。';
 
   @override
   String get importErrorTitle => 'このファイルは取り込めません';
@@ -590,7 +591,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get importWorldbookErrorMessage =>
-      'このファイルは単独のワールドブックです。キャラクターを開き、ロアブック欄から取り込んでください。';
+      'このファイルは単独のワールドブックです。取り込みフローからそのままキャラクターカードに接続できます。';
 
   @override
   String get importUnsupportedFileMessage =>
@@ -722,4 +723,208 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get modelErrorGeneric => '問題が発生しました。しばらくしてからもう一度お試しください。';
+
+  @override
+  String get modelSetupE2bSpeedChip => '高速推論';
+
+  @override
+  String get modelSetupE4bQualityChip => 'より豊かな語彙、より長いシーン';
+
+  @override
+  String get splashInitializingEngine => 'エンジンを初期化しています';
+
+  @override
+  String get splashRetryButton => '再試行';
+
+  @override
+  String get splashPreparingRuntime => 'ランタイムを準備中...';
+
+  @override
+  String get splashLoadingCore => 'ストーリーコアを読み込み中...';
+
+  @override
+  String get splashGoToSettings => '設定へ';
+
+  @override
+  String get splashDownloadCore => 'コアをダウンロード';
+
+  @override
+  String get splashTryAgain => '再試行';
+
+  @override
+  String importEmbeddedWorldbookCount(Object count) {
+    return '内蔵ロアブック $count';
+  }
+
+  @override
+  String importAltGreetingsCount(Object count) {
+    return '追加の導入文 $count';
+  }
+
+  @override
+  String get importCardMainPromptTag => 'カード内メイン指示';
+
+  @override
+  String get importPostHistoryNoteTag => '返信後ルール';
+
+  @override
+  String get importPreservedFieldsTitle => 'そのまま取り込み';
+
+  @override
+  String get importPreservedFieldsContent =>
+      '開始メッセージ / 追加の導入文 / シナリオ / ペルソナ / 内蔵ロアブック / メインプロンプト上書き / 返信後ルール';
+
+  @override
+  String get importNoPersonalityLabel => 'このカードには専用の性格フィールドがありません。';
+
+  @override
+  String get importNoScenarioLabel => 'このカードにはシナリオフィールドがありません。';
+
+  @override
+  String get importCreatorNotesTitle => '作者メモ';
+
+  @override
+  String get importAltGreetingsTitle => '追加の導入文';
+
+  @override
+  String get importStandaloneWorldbookTitle => '独立ワールドブック';
+
+  @override
+  String importWorldbookEntriesCount(Object count) {
+    return '$count 件';
+  }
+
+  @override
+  String get importWorldbookHelperNew =>
+      'このファイルは独立ワールドブックです。キャラクターカードを選び、直接接続できます。';
+
+  @override
+  String get importWorldbookHelperMerge =>
+      'このファイルは独立ワールドブックです。既存のロアブックとマージし、上書きしません。';
+
+  @override
+  String get importWorldbookAttachTo => '接続先';
+
+  @override
+  String get importWorldbookNoCharacters => '接続可能なカードがまだありません。';
+
+  @override
+  String get importWorldbookChooseCard => 'カードを選択';
+
+  @override
+  String get importWorldbookMergeResult => 'マージ結果';
+
+  @override
+  String importWorldbookMergeDetails(
+      Object existing, Object incoming, Object merged) {
+    return '現在のカードに $existing 件、このファイルに $incoming 件あり、マージ後は約 $merged 件になります。';
+  }
+
+  @override
+  String get importWorldbookDescriptionTitle => '概要';
+
+  @override
+  String get importWorldbookEntryPreviewTitle => 'ワールドブック項目プレビュー';
+
+  @override
+  String get importWorldbookChooseCharacterError =>
+      'ワールドブックを接続する前に、カードを選択してください。';
+
+  @override
+  String get importPngNoMetadataError =>
+      'この PNG にはキャラクターカードのメタデータが含まれていません。写真から取り込んだ場合は、元の Tavern PNG をファイルから取り込んでください。';
+
+  @override
+  String get starterCharacterName => '新しいキャラクター';
+
+  @override
+  String get starterCharacterDescription => 'このキャラクターの役割、関係、ドラマのきっかけを書いてください。';
+
+  @override
+  String get starterCharacterPersonality =>
+      'キャラクターを保ち、シーンを動かし、具体的な行動と感情で応えてください。';
+
+  @override
+  String get starterCharacterScenario => '冒頭のシーン、場所、対立、プレイヤーとの関係を描写してください。';
+
+  @override
+  String get starterCharacterFirstMessage =>
+      '外の足音がだんだん近づいている。あなたが来た以上、もう引き返す道はない。';
+
+  @override
+  String get starterCharacterAltGreeting => '思ったより早く来ましたね。';
+
+  @override
+  String get searchCharactersHint => 'キャラクターを検索...';
+
+  @override
+  String get searchNoResults => '一致するキャラクターがありません。';
+
+  @override
+  String get emptyLibraryTitle => 'ストーリーライブラリは空です';
+
+  @override
+  String get emptyLibraryDescription =>
+      'Tavern キャラクターカードを取り込むか、ゼロから作成して最初のシーンを始めましょう。';
+
+  @override
+  String get deleteCharacterTitle => 'キャラクターを削除';
+
+  @override
+  String deleteCharacterConfirm(Object characterName) {
+    return '$characterName を削除しますか？この操作は取り消せません。';
+  }
+
+  @override
+  String characterDeletedMessage(Object characterName) {
+    return '$characterName を削除しました。';
+  }
+
+  @override
+  String get copyToClipboard => 'クリップボードにコピー';
+
+  @override
+  String get copiedToClipboard => 'コピーしました';
+
+  @override
+  String get messageTimeJustNow => 'たった今';
+
+  @override
+  String messageTimeMinutesAgo(Object count) {
+    return '$count 分前';
+  }
+
+  @override
+  String get rerollButtonTooltip => '返信を再生成';
+
+  @override
+  String get characterDetailsSheetTitle => 'キャラクター詳細';
+
+  @override
+  String get errorGoToSettings => '設定へ';
+
+  @override
+  String get errorRetryMessage => '再試行';
+
+  @override
+  String get coreReconnectedToast => 'コアが再接続されました。もう一度送信できます。';
+
+  @override
+  String get storyCoresTitle => 'ストーリーコア';
+
+  @override
+  String get deleteModelTitle => 'モデルを削除';
+
+  @override
+  String deleteModelConfirm(Object modelName) {
+    return '$modelName を削除しますか？後から再ダウンロードできます。';
+  }
+
+  @override
+  String modelDeletedMessage(Object modelName) {
+    return '$modelName を削除しました。';
+  }
+
+  @override
+  String get diskSpaceLabel => 'ディスク';
 }

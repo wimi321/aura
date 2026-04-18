@@ -56,6 +56,8 @@ class JsonLorebookParser {
         'selective',
         'matchWholeWords',
         'match_whole_words',
+        'name',
+        'position',
         '__entry_key',
         'extensions',
       };
@@ -92,6 +94,8 @@ class JsonLorebookParser {
               _readBool(entry['match_whole_words']) ??
               false,
           comment: entry['comment']?.toString(),
+          name: entry['name']?.toString(),
+          position: _readInt(entry['position']),
           extensions: extensions,
         ),
       );

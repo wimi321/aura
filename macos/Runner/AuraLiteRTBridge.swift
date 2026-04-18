@@ -20,26 +20,40 @@ final class AuraLiteRTBridge: NSObject, FlutterStreamHandler {
     audioStream.setStreamHandler(AudioStreamProxy(owner: self))
   }
 
+  private var isLoaded = false
+  private var activeTextRequestId: String?
+
   private func handle(call: FlutterMethodCall, result: @escaping FlutterResult) {
-    guard let args = call.arguments as? [String: Any] else {
-      result(nil)
-      return
-    }
+    let args = call.arguments as? [String: Any] ?? [:]
 
     switch call.method {
     case "initialize":
       result(nil)
     case "loadModel":
+      isLoaded = true
       result(nil)
     case "unloadModel":
+      isLoaded = false
+      activeTextRequestId = nil
+      result(nil)
+    case "getRuntimeStatus":
+      result([
+        "engineLoaded": isLoaded,
+        "audioInputSupported": false,
+      ])
+    case "cancelActiveInference":
+      activeTextRequestId = nil
       result(nil)
     case "beginTextInference":
+      let requestId = args["requestId"] as? String ?? ""
       let prompt = args["prompt"] as? [String: Any] ?? [:]
       let reply = makeTextReply(from: prompt)
-      emit(chunks: reply, sink: textSink)
+      activeTextRequestId = requestId
+      emit(chunks: reply, sink: textSink, requestId: requestId)
       result(nil)
     case "beginAudioInference":
-      emit(chunks: ["[calm]I heard your voice clearly. Let's continue."], sink: audioSink)
+      let requestId = args["requestId"] as? String ?? ""
+      emit(chunks: ["[calm]I heard your voice clearly. Let's continue."], sink: audioSink, requestId: requestId)
       result(nil)
     default:
       result(FlutterMethodNotImplemented)
@@ -54,12 +68,25 @@ final class AuraLiteRTBridge: NSObject, FlutterStreamHandler {
     return ["[joy]", "You said: ", visible]
   }
 
-  private func emit(chunks: [String], sink: FlutterEventSink?) {
+  private func emit(chunks: [String], sink: FlutterEventSink?, requestId: String) {
     guard let sink else { return }
     for (index, chunk) in chunks.enumerated() {
-      DispatchQueue.main.asyncAfter(deadline: .now() + (.milliseconds(120 * index))) {
-        sink(chunk)
+      DispatchQueue.main.asyncAfter(deadline: .now() + (.milliseconds(120 * index))) { [weak self] in
+        guard self?.activeTextRequestId == requestId else { return }
+        sink([
+          "requestId": requestId,
+          "chunk": chunk,
+          "done": false,
+        ])
       }
+    }
+    DispatchQueue.main.asyncAfter(deadline: .now() + (.milliseconds(120 * chunks.count))) { [weak self] in
+      guard self?.activeTextRequestId == requestId else { return }
+      self?.activeTextRequestId = nil
+      sink([
+        "requestId": requestId,
+        "done": true,
+      ])
     }
   }
 
