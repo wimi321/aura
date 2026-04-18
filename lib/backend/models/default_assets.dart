@@ -1056,7 +1056,7 @@ final Lorebook shadowWardenLorebookZh = Lorebook(
 
 final CharacterCard shadowWardenCharacter = _card(
   id: 'shadow-warden',
-  name: 'Midnight Manor Wrong Name | The Warden',
+  name: 'Midnight Manor Borrowed Name | The Warden',
   description:
       'Your invitation bears your name, but the manor insists someone else already entered under it tonight.',
   personality:
@@ -2766,10 +2766,14 @@ final List<CharacterCard> builtInCharacterLibraryZh =
 
 final List<CharacterCard> allBuiltInCharacterLibrary = <CharacterCard>[
   ...visibleBuiltInCharacterLibrary,
+  slayerMageCharacter,
+  dungeonArbiterCharacter,
 ];
 
 final List<CharacterCard> allBuiltInCharacterLibraryZh = <CharacterCard>[
   ...visibleBuiltInCharacterLibraryZh,
+  slayerMageCharacterZh,
+  dungeonArbiterCharacterZh,
 ];
 
 final Set<String> builtInCharacterIds = <String>{
