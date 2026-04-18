@@ -288,12 +288,14 @@ def make_oath_arbiter() -> Image.Image:
     ]).convert('RGBA')
     add_glow(base, (1160, 360), 135, '#ddb57f', 145)
     add_glow(base, (430, 1510), 280, '#7a1830', 95)
+    add_glow(base, (790, 980), 180, '#a43a4c', 52)
 
     ring = blurred_shape(lambda d: d.ellipse((345, 410, 1255, 1320), outline=(199, 165, 110, 255), width=18), blur=1.0)
     alpha_composite(base, ring)
 
     tribunal = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     draw = ImageDraw.Draw(tribunal)
+    draw.polygon([(300, 1450), (1300, 1450), (1180, 1618), (420, 1618)], fill=(28, 10, 14, 140))
     for y in (1165, 1260, 1355):
         draw.polygon([(420, y), (1180, y), (1085, y + 58), (515, y + 58)], fill=(56, 18, 26, 95))
     draw.polygon([(560, 1110), (1040, 1110), (1125, 1620), (475, 1620)], fill=(25, 10, 14, 210))
@@ -306,6 +308,22 @@ def make_oath_arbiter() -> Image.Image:
     draw.line((495, 980, 640, 1280), fill=(114, 33, 45, 140), width=8)
     draw.line((1105, 980, 960, 1280), fill=(114, 33, 45, 140), width=8)
     alpha_composite(base, tribunal.filter(ImageFilter.GaussianBlur(0.7)))
+
+    hall = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(hall)
+    for x in (250, 430, 1170, 1350):
+        draw.rectangle((x, 620, x + 24, 1520), fill=(40, 16, 22, 100))
+        draw.polygon([(x - 10, 650), (x + 12, 585), (x + 34, 650)], fill=(52, 22, 28, 88))
+    draw.polygon([(260, 1640), (1340, 1640), (1210, 1840), (390, 1840)], fill=(21, 8, 12, 110))
+    alpha_composite(base, hall.filter(ImageFilter.GaussianBlur(2.4)))
+
+    supplicants = blurred_shape(lambda d: (
+        d.ellipse((510, 1470, 575, 1535), fill=(18, 8, 12, 255)),
+        d.polygon([(470, 1526), (622, 1526), (660, 1760), (435, 1760)], fill=(21, 9, 13, 255)),
+        d.ellipse((1015, 1470, 1080, 1535), fill=(18, 8, 12, 255)),
+        d.polygon([(972, 1526), (1128, 1526), (1165, 1765), (932, 1765)], fill=(21, 9, 13, 255)),
+    ), blur=2.8)
+    alpha_composite(base, supplicants)
 
     petals = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     draw = ImageDraw.Draw(petals)
@@ -411,6 +429,7 @@ def make_memory_smuggler() -> Image.Image:
     ]).convert('RGBA')
     add_glow(base, (1195, 325), 170, '#32b9c1', 150)
     add_glow(base, (360, 1500), 240, '#a13f81', 120)
+    add_glow(base, (790, 1300), 160, '#1f7a84', 45)
 
     skyline = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     draw = ImageDraw.Draw(skyline)
@@ -430,6 +449,14 @@ def make_memory_smuggler() -> Image.Image:
     draw.rounded_rectangle((420, 700, 1195, 1515), radius=58, outline=(59, 205, 205, 210), width=12)
     alpha_composite(base, grid.filter(ImageFilter.GaussianBlur(0.9)))
 
+    catwalk = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(catwalk)
+    draw.polygon([(210, 1605), (1370, 1605), (1265, 1718), (315, 1718)], fill=(13, 20, 29, 170))
+    for x in range(320, 1230, 82):
+        draw.line((x, 1615, x - 58, 1710), fill=(47, 123, 130, 48), width=4)
+    draw.rectangle((735, 1290, 865, 1612), fill=(16, 24, 35, 120))
+    alpha_composite(base, catwalk.filter(ImageFilter.GaussianBlur(1.4)))
+
     case = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     draw = ImageDraw.Draw(case)
     draw.rounded_rectangle((540, 870, 1060, 1265), radius=38, fill=(9, 16, 24, 235), outline=(56, 204, 204, 110), width=6)
@@ -448,6 +475,19 @@ def make_memory_smuggler() -> Image.Image:
     for y in range(760, 1500, 95):
         draw.rectangle((120, y, 490, y + 10), fill=(67, 46, 94, 75))
     alpha_composite(base, scan.filter(ImageFilter.GaussianBlur(1.4)))
+
+    courier = blurred_shape(lambda d: (
+        d.ellipse((1018, 1188, 1092, 1262), fill=(8, 12, 17, 255)),
+        d.polygon([(986, 1258), (1128, 1258), (1176, 1588), (950, 1588)], fill=(10, 15, 21, 255)),
+        d.rectangle((900, 1348, 1010, 1498), fill=(10, 16, 23, 230)),
+        d.line((902, 1365, 1006, 1486), fill=(62, 189, 192, 90), width=5),
+    ), blur=2.2)
+    alpha_composite(base, courier)
+
+    skyline_reflect = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(skyline_reflect)
+    draw.ellipse((220, 1655, 1380, 1890), fill=(50, 168, 173, 16))
+    alpha_composite(base, skyline_reflect.filter(ImageFilter.GaussianBlur(28)))
 
     add_bottom_fade(base, 0.59)
     add_vignette(base)
@@ -661,6 +701,7 @@ def make_dungeon_arbiter() -> Image.Image:
     ]).convert('RGBA')
     add_glow(base, (1160, 360), 130, '#c49858', 135)
     add_glow(base, (435, 1440), 250, '#611723', 110)
+    add_glow(base, (800, 1260), 180, '#9b6b3f', 42)
 
     maze = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     draw = ImageDraw.Draw(maze)
@@ -680,12 +721,41 @@ def make_dungeon_arbiter() -> Image.Image:
     draw.rectangle((756, 1360, 844, 1700), fill=(17, 12, 14, 240))
     alpha_composite(base, gate.filter(ImageFilter.GaussianBlur(0.6)))
 
+    stairs = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(stairs)
+    for top in (1545, 1610, 1675, 1740):
+        draw.polygon([(385, top), (1215, top), (1135, top + 42), (465, top + 42)], fill=(15, 16, 21, 150))
+    draw.polygon([(325, 1788), (1275, 1788), (1140, 1940), (460, 1940)], fill=(12, 12, 17, 130))
+    alpha_composite(base, stairs.filter(ImageFilter.GaussianBlur(1.4)))
+
     torches = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     draw = ImageDraw.Draw(torches)
     for x in (500, 1100):
         draw.rectangle((x, 1060, x + 20, 1260), fill=(28, 18, 16, 220))
         draw.polygon([(x - 22, 1058), (x + 10, 1002), (x + 42, 1058)], fill=(206, 124, 59, 180))
     alpha_composite(base, torches.filter(ImageFilter.GaussianBlur(2.0)))
+
+    prisoner = blurred_shape(lambda d: (
+        d.ellipse((760, 1385, 842, 1465), fill=(10, 11, 14, 255)),
+        d.polygon([(715, 1462), (888, 1462), (928, 1765), (682, 1765)], fill=(12, 12, 16, 255)),
+        d.line((726, 1540, 650, 1460), fill=(120, 98, 76, 105), width=7),
+        d.line((876, 1540, 948, 1462), fill=(120, 98, 76, 105), width=7),
+    ), blur=2.1)
+    alpha_composite(base, prisoner)
+
+    chains = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(chains)
+    for points in [
+        (668, 1470, 562, 1368),
+        (928, 1470, 1038, 1366),
+    ]:
+        x1, y1, x2, y2 = points
+        for step in range(6):
+            t = step / 5
+            x = int(x1 + (x2 - x1) * t)
+            y = int(y1 + (y2 - y1) * t)
+            draw.ellipse((x - 18, y - 11, x + 18, y + 11), outline=(126, 103, 83, 84), width=3)
+    alpha_composite(base, chains.filter(ImageFilter.GaussianBlur(1.0)))
 
     add_bottom_fade(base, 0.60)
     add_vignette(base)

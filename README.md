@@ -13,9 +13,9 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/wimi321/aura/releases/download/v0.1.0/Aura-android-arm64-v0.1.0.apk"><strong>Download APK</strong></a>
+  <a href="https://github.com/wimi321/aura/releases/download/v0.1.1/Aura-android-arm64-v0.1.1.apk"><strong>Download APK</strong></a>
   ·
-  <a href="https://github.com/wimi321/aura/releases/tag/v0.1.0"><strong>Latest Release</strong></a>
+  <a href="https://github.com/wimi321/aura/releases/tag/v0.1.1"><strong>Latest Release</strong></a>
   ·
   <a href="README.zh-CN.md"><strong>简体中文</strong></a>
 </p>
@@ -115,7 +115,7 @@ These are screenshots from a running Aura build, not concept mockups.
 
 ### Android
 
-1. Download the latest APK from [GitHub Releases](https://github.com/wimi321/aura/releases) or use the direct [APK link](https://github.com/wimi321/aura/releases/download/v0.1.0/Aura-android-arm64-v0.1.0.apk).
+1. Download the latest APK from [GitHub Releases](https://github.com/wimi321/aura/releases) or use the direct [APK link](https://github.com/wimi321/aura/releases/download/v0.1.1/Aura-android-arm64-v0.1.1.apk).
 2. Open Aura.
 3. Choose `Gemma 4 E2B` or `Gemma 4 E4B`.
 4. Wait for the download to finish.
@@ -137,7 +137,7 @@ That means:
 
 Current public Android arm64 APK:
 
-- about `100.5MB`
+- about `126.8MB`
 
 Earlier bundled-model direction:
 

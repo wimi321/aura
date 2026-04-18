@@ -13,9 +13,9 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/wimi321/aura/releases/download/v0.1.0/Aura-android-arm64-v0.1.0.apk"><strong>下载 APK</strong></a>
+  <a href="https://github.com/wimi321/aura/releases/download/v0.1.1/Aura-android-arm64-v0.1.1.apk"><strong>下载 APK</strong></a>
   ·
-  <a href="https://github.com/wimi321/aura/releases/tag/v0.1.0"><strong>最新版本</strong></a>
+  <a href="https://github.com/wimi321/aura/releases/tag/v0.1.1"><strong>最新版本</strong></a>
   ·
   <a href="README.md"><strong>English</strong></a>
 </p>
@@ -119,7 +119,7 @@ Aura 走的是相反的路线：
 
 ### Android
 
-1. 去 [GitHub Releases](https://github.com/wimi321/aura/releases) 下载最新版，或者直接点这个 [APK 链接](https://github.com/wimi321/aura/releases/download/v0.1.0/Aura-android-arm64-v0.1.0.apk)。
+1. 去 [GitHub Releases](https://github.com/wimi321/aura/releases) 下载最新版，或者直接点这个 [APK 链接](https://github.com/wimi321/aura/releases/download/v0.1.1/Aura-android-arm64-v0.1.1.apk)。
 2. 打开 Aura。
 3. 在首启页选择 `Gemma 4 E2B` 或 `Gemma 4 E4B`。
 4. 等模型下载完成。
@@ -141,7 +141,7 @@ Aura 不再把完整大模型直接塞进 APK。
 
 当前公开 Android arm64 APK 体积：
 
-- 约 `100.5MB`
+- 约 `126.8MB`
 
 此前把模型一起打包时的大致体积：
 
