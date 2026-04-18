@@ -23,12 +23,23 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     _pulseController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 3000),
-    )..repeat(reverse: true);
+    );
 
     _rotationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 12000),
-    )..repeat();
+    );
+  }
+
+  void _ensureAnimations(BuildContext context) {
+    final bool reduceMotion = MediaQuery.of(context).disableAnimations;
+    if (reduceMotion) {
+      if (_pulseController.isAnimating) _pulseController.stop();
+      if (_rotationController.isAnimating) _rotationController.stop();
+    } else {
+      if (!_pulseController.isAnimating) _pulseController.repeat(reverse: true);
+      if (!_rotationController.isAnimating) _rotationController.repeat();
+    }
   }
 
   @override
@@ -38,12 +49,28 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     super.dispose();
   }
 
+  String _stageLabel(AppStateProvider appState, AppLocalizations? l10n) {
+    return switch (appState.modelState) {
+      AppModelState.idle || AppModelState.initializing =>
+        l10n?.splashPreparingRuntime ?? 'Preparing runtime...',
+      AppModelState.loading || AppModelState.switching =>
+        l10n?.splashLoadingCore ?? 'Loading story core...',
+      AppModelState.ready =>
+        l10n?.readyText ?? 'Ready',
+      AppModelState.error =>
+        l10n?.modelStateError ?? 'Error',
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     final AppStateProvider appState = context.watch<AppStateProvider>();
     final AppLocalizations? l10n = AppLocalizations.of(context);
 
-    if (appState.startupResolved) {
+    _ensureAnimations(context);
+
+    if (appState.startupResolved &&
+        appState.modelState != AppModelState.error) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         context.go(
           appState.hasInstalledModels ? '/characters' : '/model-setup',
@@ -51,12 +78,14 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       });
     }
 
+    final bool isError =
+        appState.startupResolved && appState.modelState == AppModelState.error;
+
     return Scaffold(
       backgroundColor: AppTheme.bgBase,
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // The Ambient Glow of the Eclipse Core
           Center(
             child: AnimatedBuilder(
               animation:
@@ -72,7 +101,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
-                        // Rotating glowing outer ring
                         Transform.rotate(
                           angle: _rotationController.value * 2 * 3.14159,
                           child: Container(
@@ -99,7 +127,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                             ),
                           ),
                         ),
-                        // Central Void (Absolute Privacy / Local Run)
                         Container(
                           width: 136,
                           height: 136,
@@ -136,13 +163,66 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                         ),
                   ),
                   const SizedBox(height: 12),
-                  Text(
-                    l10n != null ? l10n.loadingModel : 'Initialize Engine',
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: AppTheme.textMuted,
-                          letterSpacing: 2,
+                  if (isError) ...[
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                      child: Text(
+                        appState.errorMessage ??
+                            (l10n?.modelErrorGeneric ??
+                                'Something went wrong. Please try again.'),
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: AppTheme.statusDanger,
+                              height: 1.4,
+                            ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FilledButton.tonal(
+                          onPressed: () {
+                            context.go(appState.hasInstalledModels
+                                ? '/settings'
+                                : '/model-setup');
+                          },
+                          child: Text(appState.hasInstalledModels
+                              ? (l10n?.splashGoToSettings ?? 'Go to Settings')
+                              : (l10n?.splashDownloadCore ??
+                                  'Download a Core')),
                         ),
-                  ),
+                        const SizedBox(width: 12),
+                        OutlinedButton(
+                          onPressed: () async {
+                            await appState.recoverActiveModel();
+                          },
+                          child:
+                              Text(l10n?.splashTryAgain ?? 'Try Again'),
+                        ),
+                      ],
+                    ),
+                  ] else ...[
+                    Text(
+                      _stageLabel(appState, l10n),
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            color: AppTheme.textMuted,
+                            letterSpacing: 2,
+                          ),
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: 120,
+                      child: LinearProgressIndicator(
+                        value: null,
+                        backgroundColor:
+                            AppTheme.borderSubtle,
+                        color: AppTheme.brandAura.withValues(alpha: 0.6),
+                        borderRadius: BorderRadius.circular(2),
+                        minHeight: 2,
+                      ),
+                    ),
+                  ],
                 ],
               ),
             ),

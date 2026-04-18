@@ -15,6 +15,8 @@ class LorebookEntry {
     this.constant = false,
     this.matchWholeWords = false,
     this.comment,
+    this.name,
+    this.position,
     this.extensions = const <String, Object?>{},
   });
 
@@ -30,6 +32,8 @@ class LorebookEntry {
   final bool constant;
   final bool matchWholeWords;
   final String? comment;
+  final String? name;
+  final int? position;
   final Map<String, Object?> extensions;
 
   Map<String, Object?> toJson() {
@@ -46,6 +50,8 @@ class LorebookEntry {
       'constant': constant,
       'matchWholeWords': matchWholeWords,
       'comment': comment,
+      'name': name,
+      'position': position,
       'extensions': extensions,
     };
   }
@@ -69,6 +75,8 @@ class LorebookEntry {
       constant: json['constant'] as bool? ?? false,
       matchWholeWords: json['matchWholeWords'] as bool? ?? false,
       comment: json['comment']?.toString(),
+      name: json['name']?.toString(),
+      position: (json['position'] as num?)?.toInt(),
       extensions: json['extensions'] is Map<String, Object?>
           ? json['extensions']! as Map<String, Object?>
           : json['extensions'] is Map

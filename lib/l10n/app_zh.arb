@@ -295,5 +295,111 @@
   "modelErrorNoSpace": "存储空间不足。请先清理一些空间再试。",
   "modelErrorCorrupt": "下载文件不完整，请重新下载一次。",
   "modelErrorNetwork": "下载被中断了。请检查网络后重试。",
-  "modelErrorGeneric": "出了点问题，请稍后再试。"
+  "modelErrorGeneric": "出了点问题，请稍后再试。",
+  "modelSetupE2bSpeedChip": "推理速度快",
+  "modelSetupE4bQualityChip": "词汇更丰富，场景更连贯",
+  "splashInitializingEngine": "正在初始化引擎",
+  "splashRetryButton": "重试",
+  "splashPreparingRuntime": "正在准备运行环境...",
+  "splashLoadingCore": "正在加载故事核心...",
+  "splashGoToSettings": "前往设置",
+  "splashDownloadCore": "下载核心",
+  "splashTryAgain": "重试",
+  "importEmbeddedWorldbookCount": "内置世界书 {count}",
+  "@importEmbeddedWorldbookCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "importAltGreetingsCount": "多开场白 {count}",
+  "@importAltGreetingsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "importCardMainPromptTag": "内置主提示词",
+  "importPostHistoryNoteTag": "回复后置指令",
+  "importPreservedFieldsTitle": "导入后保留",
+  "importPreservedFieldsContent": "开场白 / 备用开场 / 场景设定 / 角色人设 / 内置世界书 / 主提示词覆盖 / 回复后置规则",
+  "importNoPersonalityLabel": "这张卡没有单独写出性格字段。",
+  "importNoScenarioLabel": "这张卡没有单独写出场景字段。",
+  "importCreatorNotesTitle": "作者注记",
+  "importAltGreetingsTitle": "备用开场预览",
+  "importStandaloneWorldbookTitle": "独立世界书",
+  "importWorldbookEntriesCount": "词条 {count}",
+  "@importWorldbookEntriesCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "importWorldbookHelperNew": "已识别为独立世界书。选择一个角色后，Aura 会把这份设定直接挂上去。",
+  "importWorldbookHelperMerge": "已识别为独立世界书。Aura 会把它与该角色现有世界书合并，不会覆盖原本设定。",
+  "importWorldbookAttachTo": "挂载到角色",
+  "importWorldbookNoCharacters": "当前没有可挂载的角色。",
+  "importWorldbookChooseCard": "选择角色",
+  "importWorldbookMergeResult": "合并结果",
+  "importWorldbookMergeDetails": "当前角色已有 {existing} 条，导入文件有 {incoming} 条，合并后预计保留 {merged} 条。",
+  "@importWorldbookMergeDetails": {
+    "placeholders": {
+      "existing": {},
+      "incoming": {},
+      "merged": {}
+    }
+  },
+  "importWorldbookDescriptionTitle": "简介",
+  "importWorldbookEntryPreviewTitle": "世界书词条预览",
+  "importWorldbookChooseCharacterError": "请先选择要挂载世界书的角色。",
+  "importPngNoMetadataError": "这张 PNG 没有检测到角色卡元数据。若图片来自相册，请优先从「文件」导入原始角色卡 PNG。",
+  "starterCharacterName": "新角色",
+  "starterCharacterDescription": "写下这个角色在剧情里的定位、关系和危险感。",
+  "starterCharacterPersonality": "保持角色视角，主动推进剧情，给出具体动作与情绪反馈。",
+  "starterCharacterScenario": "描述当前剧情开场、地点、冲突，以及你与用户的关系。",
+  "starterCharacterFirstMessage": "门外的脚步声越来越近。既然你来了，我们就没有退路了。",
+  "starterCharacterAltGreeting": "你来的比我预想得更快。",
+  "searchCharactersHint": "搜索角色...",
+  "searchNoResults": "没有匹配的角色。",
+  "emptyLibraryTitle": "故事库还是空的",
+  "emptyLibraryDescription": "导入一张 Tavern 角色卡或从头创建，开启你的第一个场景。",
+  "deleteCharacterTitle": "删除角色",
+  "deleteCharacterConfirm": "确定要删除 {characterName} 吗？此操作无法撤销。",
+  "@deleteCharacterConfirm": {
+    "placeholders": {
+      "characterName": {}
+    }
+  },
+  "characterDeletedMessage": "已删除 {characterName}。",
+  "@characterDeletedMessage": {
+    "placeholders": {
+      "characterName": {}
+    }
+  },
+  "copyToClipboard": "复制到剪贴板",
+  "copiedToClipboard": "已复制到剪贴板",
+  "messageTimeJustNow": "刚刚",
+  "messageTimeMinutesAgo": "{count} 分钟前",
+  "@messageTimeMinutesAgo": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "rerollButtonTooltip": "重新生成回复",
+  "characterDetailsSheetTitle": "角色详情",
+  "errorGoToSettings": "前往设置",
+  "errorRetryMessage": "重试",
+  "coreReconnectedToast": "核心已重新连接，可以继续发送。",
+  "storyCoresTitle": "故事核心",
+  "deleteModelTitle": "删除模型",
+  "deleteModelConfirm": "确定删除 {modelName}？之后可以重新下载。",
+  "@deleteModelConfirm": {
+    "placeholders": {
+      "modelName": {}
+    }
+  },
+  "modelDeletedMessage": "已删除 {modelName}。",
+  "@modelDeletedMessage": {
+    "placeholders": {
+      "modelName": {}
+    }
+  },
+  "diskSpaceLabel": "磁盘"
 }

@@ -153,7 +153,15 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
     });
     try {
       final CharacterImportPreview preview = await previewLoader(sourceFile);
-      await _importCharacterDirectly(preview);
+      if (!mounted) {
+        return;
+      }
+      setState(() {
+        _preview = preview;
+        _lorebookPreview = null;
+        _busy = false;
+        _error = null;
+      });
       return;
     } catch (error) {
       if (!mounted) {
@@ -184,27 +192,6 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
           });
           return;
         }
-      }
-      setState(() {
-        _busy = false;
-        _error = _friendlyErrorMessage(error);
-      });
-    }
-  }
-
-  Future<void> _importCharacterDirectly(CharacterImportPreview preview) async {
-    final AppStateProvider appState = context.read<AppStateProvider>();
-    try {
-      final Future<CharacterCard> Function(CharacterImportPreview preview)
-          importAction = widget.importAction ?? appState.importCharacterPreview;
-      final CharacterCard imported = await importAction(preview);
-      if (!mounted) {
-        return;
-      }
-      Navigator.pop(context, imported);
-    } catch (error) {
-      if (!mounted) {
-        return;
       }
       setState(() {
         _busy = false;
@@ -400,9 +387,9 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
       } else {
         final String? characterId = _selectedLorebookTargetCharacterId;
         if (characterId == null || characterId.isEmpty) {
-          throw StateError(_isChineseUi(context)
-              ? '请先选择要挂载世界书的角色。'
-              : 'Choose a role card before attaching the worldbook.');
+          final AppLocalizations? confirmL10n = AppLocalizations.of(context);
+          throw StateError(confirmL10n?.importWorldbookChooseCharacterError ??
+              'Choose a role card before attaching the worldbook.');
         }
         imported = await appState.attachLorebookToCharacter(
           characterId: characterId,
@@ -532,23 +519,22 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
                           ? null
                           : (preview == null && lorebookPreview == null
                               ? _pickAndParse
-                              : isWorldbookFlow
-                                  ? _confirmImport
-                                  : null),
+                              : _confirmImport),
                       icon: Icon(
-                        isWorldbookFlow
+                        preview != null || isWorldbookFlow
                             ? Icons.library_books_rounded
-                            : preview == null
-                                ? Icons.upload_file_rounded
-                                : Icons.upload_file_rounded,
+                            : Icons.upload_file_rounded,
                         size: 18,
                       ),
                       label: Text(
                         isWorldbookFlow
                             ? (l10n?.attachWorldbookButton ??
                                 'Attach Worldbook')
-                            : (l10n?.chooseCardButton ??
-                                'Choose Image or File'),
+                            : preview != null
+                                ? (l10n?.confirmImportButton ??
+                                    'Confirm Import')
+                                : (l10n?.chooseCardButton ??
+                                    'Choose Image or File'),
                       ),
                     ),
                   ],
@@ -727,32 +713,30 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
                         ),
                         if (preview.hasLorebook)
                           _tag(
-                            _isChineseUi(context)
-                                ? '内置世界书 ${character.lorebook?.entries.length ?? 0}'
-                                : 'Embedded Worldbook ${character.lorebook?.entries.length ?? 0}',
+                            l10n?.importEmbeddedWorldbookCount(
+                                    '${character.lorebook?.entries.length ?? 0}') ??
+                                'Embedded Worldbook ${character.lorebook?.entries.length ?? 0}',
                             highlighted: true,
                           ),
                         if (character.alternateGreetings.isNotEmpty)
                           _tag(
-                            _isChineseUi(context)
-                                ? '多开场白 ${character.alternateGreetings.length}'
-                                : 'Alt Greetings ${character.alternateGreetings.length}',
+                            l10n?.importAltGreetingsCount(
+                                    '${character.alternateGreetings.length}') ??
+                                'Alt Greetings ${character.alternateGreetings.length}',
                           ),
                         if ((character.mainPromptOverride ?? '')
                             .trim()
                             .isNotEmpty)
                           _tag(
-                            _isChineseUi(context)
-                                ? '内置主提示词'
-                                : 'Card Main Prompt',
+                            l10n?.importCardMainPromptTag ??
+                                'Card Main Prompt',
                           ),
                         if ((character.postHistoryInstructions ?? '')
                             .trim()
                             .isNotEmpty)
                           _tag(
-                            _isChineseUi(context)
-                                ? '回复后置指令'
-                                : 'Post-History Note',
+                            l10n?.importPostHistoryNoteTag ??
+                                'Post-History Note',
                           ),
                       ],
                     ),
@@ -772,10 +756,9 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
           ),
           const SizedBox(height: 18),
           _previewBlock(
-            title: _isChineseUi(context) ? '导入后保留' : 'Imported As-Is',
-            content: _isChineseUi(context)
-                ? '开场白 / 备用开场 / 场景设定 / 角色人设 / 内置世界书 / 主提示词覆盖 / 回复后置规则'
-                : 'Opening message / alternate greetings / scenario / persona / embedded worldbook / main prompt override / post-history rules',
+            title: l10n?.importPreservedFieldsTitle ?? 'Imported As-Is',
+            content: l10n?.importPreservedFieldsContent ??
+                'Opening message / alternate greetings / scenario / persona / embedded worldbook / main prompt override / post-history rules',
           ),
           const SizedBox(height: 12),
           _previewBlock(
@@ -787,20 +770,18 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
           ),
           const SizedBox(height: 12),
           _previewBlock(
-            title: _isChineseUi(context) ? '角色性格' : 'Personality',
+            title: l10n?.characterPersonalityLabel ?? 'Personality',
             content: character.personality.trim().isEmpty
-                ? (_isChineseUi(context)
-                    ? '这张卡没有单独写出性格字段。'
-                    : 'This card does not include a dedicated personality field.')
+                ? (l10n?.importNoPersonalityLabel ??
+                    'This card does not include a dedicated personality field.')
                 : character.personality,
           ),
           const SizedBox(height: 12),
           _previewBlock(
-            title: _isChineseUi(context) ? '当前剧情场景' : 'Scenario',
+            title: l10n?.characterScenarioLabel ?? 'Scenario',
             content: character.scenario.trim().isEmpty
-                ? (_isChineseUi(context)
-                    ? '这张卡没有单独写出场景字段。'
-                    : 'This card does not include a scenario field.')
+                ? (l10n?.importNoScenarioLabel ??
+                    'This card does not include a scenario field.')
                 : character.scenario,
           ),
           const SizedBox(height: 12),
@@ -814,14 +795,14 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
           if ((character.creatorNotes ?? '').trim().isNotEmpty) ...[
             const SizedBox(height: 12),
             _previewBlock(
-              title: _isChineseUi(context) ? '作者注记' : 'Creator Notes',
+              title: l10n?.importCreatorNotesTitle ?? 'Creator Notes',
               content: character.creatorNotes!.trim(),
             ),
           ],
           if (character.alternateGreetings.isNotEmpty) ...[
             const SizedBox(height: 12),
             _previewBlock(
-              title: _isChineseUi(context) ? '备用开场预览' : 'Alternate Greetings',
+              title: l10n?.importAltGreetingsTitle ?? 'Alternate Greetings',
               content: character.alternateGreetings.take(3).join('\n\n'),
             ),
           ],
@@ -849,16 +830,14 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
       targetCharacter?.lorebook,
       preview.lorebook,
     );
-    final String helperText = _isChineseUi(context)
-        ? existingLoreCount == 0
-            ? '已识别为独立世界书。选择一个角色后，Aura 会把这份设定直接挂上去。'
-            : '已识别为独立世界书。Aura 会把它与该角色现有世界书合并，不会覆盖原本设定。'
-        : existingLoreCount == 0
-            ? 'Aura recognized this file as a standalone worldbook. Pick a role card and attach it directly.'
-            : 'Aura recognized this file as a standalone worldbook. It will merge with the role card lore instead of overwriting it.';
-    final String entryLabel = _isChineseUi(context)
-        ? '词条 ${preview.lorebook.entries.length}'
-        : '${preview.lorebook.entries.length} entries';
+    final String helperText = existingLoreCount == 0
+        ? (l10n?.importWorldbookHelperNew ??
+            'Aura recognized this file as a standalone worldbook. Pick a role card and attach it directly.')
+        : (l10n?.importWorldbookHelperMerge ??
+            'Aura recognized this file as a standalone worldbook. It will merge with the role card lore instead of overwriting it.');
+    final String entryLabel =
+        l10n?.importWorldbookEntriesCount('${preview.lorebook.entries.length}') ??
+            '${preview.lorebook.entries.length} entries';
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(18),
@@ -895,9 +874,8 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
                     Text(
                       preview.lorebook.name?.trim().isNotEmpty == true
                           ? preview.lorebook.name!
-                          : (_isChineseUi(context)
-                              ? '独立世界书'
-                              : 'Standalone Worldbook'),
+                          : (l10n?.importStandaloneWorldbookTitle ??
+                              'Standalone Worldbook'),
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
                             fontWeight: FontWeight.w700,
                           ),
@@ -926,11 +904,10 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
           ),
           const SizedBox(height: 18),
           _previewBlock(
-            title: _isChineseUi(context) ? '挂载到角色' : 'Attach To',
+            title: l10n?.importWorldbookAttachTo ?? 'Attach To',
             content: selectedCharacterId == null
-                ? (_isChineseUi(context)
-                    ? '当前没有可挂载的角色。'
-                    : 'No role cards are available yet.')
+                ? (l10n?.importWorldbookNoCharacters ??
+                    'No role cards are available yet.')
                 : targetCharacter!.name,
           ),
           if (characters.isNotEmpty) ...[
@@ -939,7 +916,7 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
               initialValue: selectedCharacterId,
               isExpanded: true,
               decoration: InputDecoration(
-                labelText: _isChineseUi(context) ? '选择角色' : 'Choose Role Card',
+                labelText: l10n?.importWorldbookChooseCard ?? 'Choose Role Card',
               ),
               items: characters
                   .map(
@@ -965,16 +942,18 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
           if (selectedCharacterId != null) ...[
             const SizedBox(height: 12),
             _previewBlock(
-              title: _isChineseUi(context) ? '合并结果' : 'Merge Result',
-              content: _isChineseUi(context)
-                  ? '当前角色已有 $existingLoreCount 条，导入文件有 $incomingLoreCount 条，合并后预计保留 $mergedLoreCount 条。'
-                  : 'Current role has $existingLoreCount entries, this file has $incomingLoreCount, and the merged card will keep about $mergedLoreCount entries.',
+              title: l10n?.importWorldbookMergeResult ?? 'Merge Result',
+              content: l10n?.importWorldbookMergeDetails(
+                      '$existingLoreCount',
+                      '$incomingLoreCount',
+                      '$mergedLoreCount') ??
+                  'Current role has $existingLoreCount entries, this file has $incomingLoreCount, and the merged card will keep about $mergedLoreCount entries.',
             ),
           ],
           if ((preview.lorebook.description?.trim().isNotEmpty ?? false)) ...[
             const SizedBox(height: 12),
             _previewBlock(
-              title: _isChineseUi(context) ? '简介' : 'Description',
+              title: l10n?.importWorldbookDescriptionTitle ?? 'Description',
               content: preview.lorebook.description!.trim(),
             ),
           ],
@@ -982,7 +961,7 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
             const SizedBox(height: 12),
             _previewBlock(
               title:
-                  _isChineseUi(context) ? '世界书词条预览' : 'Worldbook Entry Preview',
+                  l10n?.importWorldbookEntryPreviewTitle ?? 'Worldbook Entry Preview',
               content:
                   preview.lorebook.entries.take(3).map((LorebookEntry entry) {
                 final String keys = entry.keywords.take(4).join(' / ');
@@ -1100,41 +1079,37 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
   bool _isJsonFile(String fileName) => fileName.toLowerCase().endsWith('.json');
 
   CharacterCard _starterCharacter(BuildContext context) {
-    final bool isChinese = _isChineseUi(context);
+    final AppLocalizations? l10n = AppLocalizations.of(context);
+    final String langCode =
+        Localizations.localeOf(context).languageCode.toLowerCase();
+    final bool isCjk = langCode == 'zh' || langCode == 'ja' || langCode == 'ko';
     return CharacterCard(
       id: 'custom-${DateTime.now().microsecondsSinceEpoch}',
-      name: isChinese ? '新角色' : 'New Character',
-      description: isChinese
-          ? '写下这个角色在剧情里的定位、关系和危险感。'
-          : 'Write the role, relationship, and dramatic hook for this character.',
-      personality: isChinese
-          ? '保持角色视角，主动推进剧情，给出具体动作与情绪反馈。'
-          : 'Stay in character, keep the scene moving, and respond with concrete actions and emotions.',
-      scenario: isChinese
-          ? '描述当前剧情开场、地点、冲突，以及你与用户的关系。'
-          : 'Describe the opening scene, location, conflict, and the relationship with the player.',
-      firstMessage: isChinese
-          ? '门外的脚步声越来越近。既然你来了，我们就没有退路了。'
-          : 'The footsteps outside are getting closer. Now that you are here, there is no easy way back.',
+      name: l10n?.starterCharacterName ?? 'New Character',
+      description: l10n?.starterCharacterDescription ??
+          'Write the role, relationship, and dramatic hook for this character.',
+      personality: l10n?.starterCharacterPersonality ??
+          'Stay in character, keep the scene moving, and respond with concrete actions and emotions.',
+      scenario: l10n?.starterCharacterScenario ??
+          'Describe the opening scene, location, conflict, and the relationship with the player.',
+      firstMessage: l10n?.starterCharacterFirstMessage ??
+          'The footsteps outside are getting closer. Now that you are here, there is no easy way back.',
       exampleDialogues: const <String>[],
       alternateGreetings: <String>[
-        isChinese ? '你来的比我预想得更快。' : 'You arrived sooner than I expected.',
+        l10n?.starterCharacterAltGreeting ??
+            'You arrived sooner than I expected.',
       ],
       creator: 'Aura',
-      mainPromptOverride: isChinese
+      mainPromptOverride: isCjk
           ? '{{original}}\n保持剧情向角色扮演，持续推进当前场景，补足动作、环境和情绪细节。'
           : '{{original}}\nKeep the experience story-first roleplay, keep the current scene moving, and add concrete actions, setting details, and emotional beats.',
-      postHistoryInstructions: isChinese
+      postHistoryInstructions: isCjk
           ? '始终延续当前剧情线，不要跳出角色，不要把回应写成总结。'
           : 'Always continue the current storyline, never break character, and do not turn replies into summaries.',
       extensions: const <String, Object?>{
         'user_created': true,
       },
     );
-  }
-
-  bool _isChineseUi(BuildContext context) {
-    return Localizations.localeOf(context).languageCode.toLowerCase() == 'zh';
   }
 
   String _friendlyErrorMessage(Object error) {
@@ -1153,18 +1128,19 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
           'Photo import currently supports Tavern PNG cards only.';
     }
     if (message.contains('PNG does not contain character metadata.')) {
-      return _isChineseUi(context)
-          ? '这张 PNG 没有检测到角色卡元数据。若图片来自相册，请优先从“文件”导入原始角色卡 PNG。'
-          : 'This PNG does not contain character card metadata. If it came from Photos, try importing the original Tavern PNG from Files.';
+      return l10n?.importPngNoMetadataError ??
+          'This PNG does not contain character card metadata. If it came from Photos, try importing the original Tavern PNG from Files.';
     }
     if (message.contains('does not look like a character card')) {
       return l10n?.importInvalidCharacterFileMessage ??
           'This file does not look like a supported character card.';
     }
-    if (message
-            .contains('Choose a role card before attaching the worldbook.') ||
+    final String worldbookChooseError = l10n?.importWorldbookChooseCharacterError ??
+        'Choose a role card before attaching the worldbook.';
+    if (message.contains(worldbookChooseError) ||
+        message.contains('Choose a role card before attaching the worldbook.') ||
         message.contains('请先选择要挂载世界书的角色。')) {
-      return message;
+      return worldbookChooseError;
     }
     return l10n?.importGenericErrorMessage ??
         'Import failed. Please try another character card file.';

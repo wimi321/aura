@@ -21,6 +21,10 @@ class CharacterCard {
     this.avatarPath,
     this.lorebook,
     this.extensions = const <String, Object?>{},
+    this.tags = const <String>[],
+    this.characterVersion,
+    this.spec,
+    this.specVersion,
   });
 
   final String id;
@@ -38,6 +42,10 @@ class CharacterCard {
   final String? avatarPath;
   final Lorebook? lorebook;
   final Map<String, Object?> extensions;
+  final List<String> tags;
+  final String? characterVersion;
+  final String? spec;
+  final String? specVersion;
 
   CharacterCard copyWith({
     String? id,
@@ -56,6 +64,10 @@ class CharacterCard {
     Lorebook? lorebook,
     bool clearLorebook = false,
     Map<String, Object?>? extensions,
+    List<String>? tags,
+    String? characterVersion,
+    String? spec,
+    String? specVersion,
   }) {
     return CharacterCard(
       id: id ?? this.id,
@@ -74,6 +86,10 @@ class CharacterCard {
       avatarPath: avatarPath ?? this.avatarPath,
       lorebook: clearLorebook ? null : (lorebook ?? this.lorebook),
       extensions: extensions ?? this.extensions,
+      tags: tags ?? this.tags,
+      characterVersion: characterVersion ?? this.characterVersion,
+      spec: spec ?? this.spec,
+      specVersion: specVersion ?? this.specVersion,
     );
   }
 
@@ -94,6 +110,10 @@ class CharacterCard {
       'avatarPath': avatarPath,
       'lorebook': lorebook?.toJson(),
       'extensions': extensions,
+      'tags': tags,
+      'characterVersion': characterVersion,
+      'spec': spec,
+      'specVersion': specVersion,
     };
   }
 
@@ -129,6 +149,12 @@ class CharacterCard {
           : json['extensions'] is Map
               ? (json['extensions']! as Map).cast<String, Object?>()
               : const <String, Object?>{},
+      tags: ((json['tags'] as List?) ?? const <Object>[])
+          .map((Object? item) => item.toString())
+          .toList(growable: false),
+      characterVersion: json['characterVersion']?.toString(),
+      spec: json['spec']?.toString(),
+      specVersion: json['specVersion']?.toString(),
     );
   }
 

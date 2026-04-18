@@ -229,13 +229,13 @@
   "importFromPhotosSubtitle": "フォトライブラリに保存済みの Tavern PNG カードを選びます。",
   "importFromFilesTitle": "ファイルから取り込む",
   "importFromFilesSubtitle": "Files から Tavern PNG、JSON カード、単独ワールドブックを選びます。",
-  "importWorldbookHint": "単独のワールドブックはここではなく、キャラクター編集から取り込みます。",
+  "importWorldbookHint": "ここで単独のワールドブック JSON を選ぶこともできます。次のステップでキャラクターカードに接続できます。",
   "importErrorTitle": "このファイルは取り込めません",
   "importFileLabel": "ファイル",
   "importCreatorLabel": "作者",
   "importNoDescriptionLabel": "このカードには説明がありません。",
   "importNoFirstMessageLabel": "このカードには最初のメッセージがありません。",
-  "importWorldbookErrorMessage": "このファイルは単独のワールドブックです。キャラクターを開き、ロアブック欄から取り込んでください。",
+  "importWorldbookErrorMessage": "このファイルは単独のワールドブックです。取り込みフローからそのままキャラクターカードに接続できます。",
   "importUnsupportedFileMessage": "ここで対応しているのは Tavern PNG と JSON のキャラクターカードのみです。",
   "photoImportPngOnlyMessage": "写真からの取り込みは現在 Tavern PNG カードのみ対応しています。",
   "importInvalidCharacterFileMessage": "このファイルは対応しているキャラクターカードには見えません。",
@@ -295,5 +295,111 @@
   "modelErrorNoSpace": "空き容量が不足しています。容量を空けてから再試行してください。",
   "modelErrorCorrupt": "ダウンロードしたファイルが不完全でした。もう一度お試しください。",
   "modelErrorNetwork": "ダウンロードが中断されました。接続を確認して再試行してください。",
-  "modelErrorGeneric": "問題が発生しました。しばらくしてからもう一度お試しください。"
+  "modelErrorGeneric": "問題が発生しました。しばらくしてからもう一度お試しください。",
+  "modelSetupE2bSpeedChip": "高速推論",
+  "modelSetupE4bQualityChip": "より豊かな語彙、より長いシーン",
+  "splashInitializingEngine": "エンジンを初期化しています",
+  "splashRetryButton": "再試行",
+  "splashPreparingRuntime": "ランタイムを準備中...",
+  "splashLoadingCore": "ストーリーコアを読み込み中...",
+  "splashGoToSettings": "設定へ",
+  "splashDownloadCore": "コアをダウンロード",
+  "splashTryAgain": "再試行",
+  "importEmbeddedWorldbookCount": "内蔵ロアブック {count}",
+  "@importEmbeddedWorldbookCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "importAltGreetingsCount": "追加の導入文 {count}",
+  "@importAltGreetingsCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "importCardMainPromptTag": "カード内メイン指示",
+  "importPostHistoryNoteTag": "返信後ルール",
+  "importPreservedFieldsTitle": "そのまま取り込み",
+  "importPreservedFieldsContent": "開始メッセージ / 追加の導入文 / シナリオ / ペルソナ / 内蔵ロアブック / メインプロンプト上書き / 返信後ルール",
+  "importNoPersonalityLabel": "このカードには専用の性格フィールドがありません。",
+  "importNoScenarioLabel": "このカードにはシナリオフィールドがありません。",
+  "importCreatorNotesTitle": "作者メモ",
+  "importAltGreetingsTitle": "追加の導入文",
+  "importStandaloneWorldbookTitle": "独立ワールドブック",
+  "importWorldbookEntriesCount": "{count} 件",
+  "@importWorldbookEntriesCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "importWorldbookHelperNew": "このファイルは独立ワールドブックです。キャラクターカードを選び、直接接続できます。",
+  "importWorldbookHelperMerge": "このファイルは独立ワールドブックです。既存のロアブックとマージし、上書きしません。",
+  "importWorldbookAttachTo": "接続先",
+  "importWorldbookNoCharacters": "接続可能なカードがまだありません。",
+  "importWorldbookChooseCard": "カードを選択",
+  "importWorldbookMergeResult": "マージ結果",
+  "importWorldbookMergeDetails": "現在のカードに {existing} 件、このファイルに {incoming} 件あり、マージ後は約 {merged} 件になります。",
+  "@importWorldbookMergeDetails": {
+    "placeholders": {
+      "existing": {},
+      "incoming": {},
+      "merged": {}
+    }
+  },
+  "importWorldbookDescriptionTitle": "概要",
+  "importWorldbookEntryPreviewTitle": "ワールドブック項目プレビュー",
+  "importWorldbookChooseCharacterError": "ワールドブックを接続する前に、カードを選択してください。",
+  "importPngNoMetadataError": "この PNG にはキャラクターカードのメタデータが含まれていません。写真から取り込んだ場合は、元の Tavern PNG をファイルから取り込んでください。",
+  "starterCharacterName": "新しいキャラクター",
+  "starterCharacterDescription": "このキャラクターの役割、関係、ドラマのきっかけを書いてください。",
+  "starterCharacterPersonality": "キャラクターを保ち、シーンを動かし、具体的な行動と感情で応えてください。",
+  "starterCharacterScenario": "冒頭のシーン、場所、対立、プレイヤーとの関係を描写してください。",
+  "starterCharacterFirstMessage": "外の足音がだんだん近づいている。あなたが来た以上、もう引き返す道はない。",
+  "starterCharacterAltGreeting": "思ったより早く来ましたね。",
+  "searchCharactersHint": "キャラクターを検索...",
+  "searchNoResults": "一致するキャラクターがありません。",
+  "emptyLibraryTitle": "ストーリーライブラリは空です",
+  "emptyLibraryDescription": "Tavern キャラクターカードを取り込むか、ゼロから作成して最初のシーンを始めましょう。",
+  "deleteCharacterTitle": "キャラクターを削除",
+  "deleteCharacterConfirm": "{characterName} を削除しますか？この操作は取り消せません。",
+  "@deleteCharacterConfirm": {
+    "placeholders": {
+      "characterName": {}
+    }
+  },
+  "characterDeletedMessage": "{characterName} を削除しました。",
+  "@characterDeletedMessage": {
+    "placeholders": {
+      "characterName": {}
+    }
+  },
+  "copyToClipboard": "クリップボードにコピー",
+  "copiedToClipboard": "コピーしました",
+  "messageTimeJustNow": "たった今",
+  "messageTimeMinutesAgo": "{count} 分前",
+  "@messageTimeMinutesAgo": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "rerollButtonTooltip": "返信を再生成",
+  "characterDetailsSheetTitle": "キャラクター詳細",
+  "errorGoToSettings": "設定へ",
+  "errorRetryMessage": "再試行",
+  "coreReconnectedToast": "コアが再接続されました。もう一度送信できます。",
+  "storyCoresTitle": "ストーリーコア",
+  "deleteModelTitle": "モデルを削除",
+  "deleteModelConfirm": "{modelName} を削除しますか？後から再ダウンロードできます。",
+  "@deleteModelConfirm": {
+    "placeholders": {
+      "modelName": {}
+    }
+  },
+  "modelDeletedMessage": "{modelName} を削除しました。",
+  "@modelDeletedMessage": {
+    "placeholders": {
+      "modelName": {}
+    }
+  },
+  "diskSpaceLabel": "ディスク"
 }

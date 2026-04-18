@@ -240,7 +240,7 @@ void main() {
 
       expect(
         find.text('导入准则文件'),
-        findsNothing,
+        findsOneWidget,
         reason: _visibleTextDump(tester),
       );
       expect(find.text('编辑当前准则'), findsOneWidget);

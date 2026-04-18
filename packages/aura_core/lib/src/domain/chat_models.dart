@@ -84,6 +84,7 @@ class PromptEnvelope {
     required this.userLabel,
     this.postHistoryInstructions,
     this.triggeredLore = const <String>[],
+    this.depthInsertions = const <DepthInsertion>[],
     this.shouldSummarize = false,
     this.summarySourceMessages = const <ChatMessage>[],
   });
@@ -95,8 +96,20 @@ class PromptEnvelope {
   final String userLabel;
   final String? postHistoryInstructions;
   final List<String> triggeredLore;
+  final List<DepthInsertion> depthInsertions;
   final bool shouldSummarize;
   final List<ChatMessage> summarySourceMessages;
+}
+
+@immutable
+class DepthInsertion {
+  const DepthInsertion({
+    required this.content,
+    required this.depth,
+  });
+
+  final String content;
+  final int depth;
 }
 
 @immutable

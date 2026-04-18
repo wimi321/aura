@@ -9,7 +9,7 @@ const ModelManifest downloadableE2bModelManifest = ModelManifest(
   sizeBytes: 2583085056,
   multimodal: true,
   remoteUrl:
-      'https://huggingface.co/litert-community/gemma-4-E2B-it-litert-lm/resolve/main/gemma-4-E2B-it.litertlm',
+      'https://huggingface.co/litert-community/gemma-4-E2B-it-litert-lm/resolve/7fa1d78473894f7e736a21d920c3aa80f950c0db/gemma-4-E2B-it.litertlm?download=true',
   sha256: 'ab7838cdfc8f77e54d8ca45eadceb20452d9f01e4bfade03e5dce27911b27e42',
   recommendedMinRamGb: 6,
   metadata: <String, Object?>{
@@ -29,7 +29,7 @@ const ModelManifest downloadableE4bModelManifest = ModelManifest(
   sizeBytes: 3654467584,
   multimodal: true,
   remoteUrl:
-      'https://huggingface.co/litert-community/gemma-4-E4B-it-litert-lm/resolve/main/gemma-4-E4B-it.litertlm',
+      'https://huggingface.co/litert-community/gemma-4-E4B-it-litert-lm/resolve/9695417f248178c63a9f318c6e0c56cb917cb837/gemma-4-E4B-it.litertlm?download=true',
   recommendedMinRamGb: 8,
   metadata: <String, Object?>{
     'tier': 'downloadable',

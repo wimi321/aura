@@ -16,6 +16,7 @@ final class AuraLiteRTBridge: NSObject {
   private var activeTextRequestId: String?
   private var activeTextGeneration: UInt64 = 0
   private var activeTextState: TextStreamState?
+  private var streamTimeoutTimer: DispatchWorkItem?
   private var pendingPhotoPickerResult: FlutterResult?
   private var photoPickerCoordinator: NSObject?
 
@@ -52,6 +53,8 @@ final class AuraLiteRTBridge: NSObject {
     case "loadModel":
       handleLoadModel(args: args, result: result)
     case "unloadModel":
+      nativeEngine.cancelActiveGeneration()
+      clearActiveText(notify: true)
       nativeEngine.unloadModel { error in
         if let error {
           result(FlutterError(code: "ENGINE_UNLOAD_FAILED", message: error.localizedDescription, details: nil))
@@ -157,6 +160,7 @@ final class AuraLiteRTBridge: NSObject {
     let promptMap = args["prompt"] as? [String: Any] ?? [:]
     let promptData = PromptData.from(prompt: promptMap)
 
+    nativeEngine.cancelActiveGeneration()
     clearActiveText(notify: false)
 
     let generation = activeTextGeneration + 1
@@ -179,6 +183,8 @@ final class AuraLiteRTBridge: NSObject {
       },
     )
 
+    scheduleStreamTimeout(requestId: requestId, generation: generation)
+
     result(nil)
   }
 
@@ -198,6 +204,7 @@ final class AuraLiteRTBridge: NSObject {
     )
 
     if progress.madeProgress {
+      scheduleStreamTimeout(requestId: requestId, generation: generation)
       state.emittedVisible = progress.effectiveVisible
       if !progress.delta.isEmpty {
         emitChunk(textSink, requestId: requestId, chunk: progress.delta)
@@ -238,6 +245,7 @@ final class AuraLiteRTBridge: NSObject {
     activeTextRequestId = nil
     activeTextState = nil
     activeTextGeneration += 1
+    cancelStreamTimeout()
     if notify, let requestId, !requestId.isEmpty {
       emitError(textSink, requestId: requestId, error: cancellationError)
     }
@@ -250,10 +258,30 @@ final class AuraLiteRTBridge: NSObject {
     activeTextRequestId = nil
     activeTextState = nil
     activeTextGeneration += 1
+    cancelStreamTimeout()
   }
 
   private func isCurrentTextRequest(requestId: String, generation: UInt64) -> Bool {
     activeTextRequestId == requestId && activeTextGeneration == generation
+  }
+
+  private func scheduleStreamTimeout(requestId: String, generation: UInt64) {
+    cancelStreamTimeout()
+    let work = DispatchWorkItem { [weak self] in
+      guard let self, self.isCurrentTextRequest(requestId: requestId, generation: generation) else {
+        return
+      }
+      self.nativeEngine.cancelActiveGeneration()
+      self.clearTextIfCurrent(requestId: requestId, generation: generation)
+      self.emitDone(self.textSink, requestId: requestId)
+    }
+    streamTimeoutTimer = work
+    DispatchQueue.main.asyncAfter(deadline: .now() + 60, execute: work)
+  }
+
+  private func cancelStreamTimeout() {
+    streamTimeoutTimer?.cancel()
+    streamTimeoutTimer = nil
   }
 
   fileprivate func setTextSink(_ sink: FlutterEventSink?) {

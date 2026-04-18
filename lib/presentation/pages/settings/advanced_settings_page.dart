@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:aura_app/l10n/generated/app_localizations.dart';
 import 'package:aura_core/aura_core.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
@@ -50,11 +53,12 @@ class AdvancedSettingsPage extends StatelessWidget {
               _PromptPresetCard(appState: appState),
               const SizedBox(height: 36),
               _buildSectionHeader(context,
-                  l10n?.activeCoreTitle ?? 'Active Core', Icons.memory_rounded),
+                  l10n?.storyCoresTitle ?? 'Story Cores', Icons.memory_rounded),
               const SizedBox(height: 12),
-              if (activeModel != null)
-                _ActiveCoreCard(manifest: activeModel, appState: appState)
-              else
+              if (activeModel != null) ...[
+                _ActiveCoreCard(manifest: activeModel, appState: appState),
+                const SizedBox(height: 16),
+              ] else ...[
                 Container(
                   padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
@@ -85,21 +89,16 @@ class AdvancedSettingsPage extends StatelessWidget {
                     ],
                   ),
                 ),
-              const SizedBox(height: 36),
-              _buildSectionHeader(
-                  context,
-                  l10n?.availableCoresTitle ?? 'Available Cores',
-                  Icons.cloud_download_rounded),
-              const SizedBox(height: 16),
-              for (final ModelManifest manifest in models) ...[
-                // Do not duplicate the active one in the "available" visual list,
-                // or just dim it down if active.
-                _ModelModuleCard(
-                    manifest: manifest,
-                    activeModel: activeModel,
-                    appState: appState),
                 const SizedBox(height: 16),
               ],
+              for (final ModelManifest manifest in models)
+                if (manifest.id != activeModel?.id) ...[
+                  _ModelModuleCard(
+                      manifest: manifest,
+                      activeModel: activeModel,
+                      appState: appState),
+                  const SizedBox(height: 16),
+                ],
               const SizedBox(height: 40),
             ],
           );
@@ -209,6 +208,51 @@ class _PromptPresetCard extends StatelessWidget {
               ),
             ),
           ),
+          const SizedBox(height: 10),
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton.icon(
+              icon: const Icon(Icons.file_open_rounded, size: 18),
+              onPressed: () async {
+                final XFile? picked = await openFile(
+                  acceptedTypeGroups: const <XTypeGroup>[
+                    XTypeGroup(
+                      label: 'JSON',
+                      extensions: <String>['json'],
+                      uniformTypeIdentifiers: <String>[
+                        'public.json',
+                      ],
+                    ),
+                  ],
+                );
+                if (picked == null) {
+                  return;
+                }
+                try {
+                  final Preset imported =
+                      await appState.importPresetFile(File(picked.path));
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(imported.name),
+                      ),
+                    );
+                  }
+                } catch (error) {
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(error.toString()),
+                      ),
+                    );
+                  }
+                }
+              },
+              label: Text(
+                l10n?.importPresetJsonButton ?? 'Import Directive File',
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -306,6 +350,54 @@ class _ModelModuleCard extends StatelessWidget {
   final ModelManifest? activeModel;
   final AppStateProvider appState;
 
+  Future<void> _confirmDelete(
+    BuildContext context,
+    AppStateProvider appState,
+    ModelManifest model,
+  ) async {
+    final AppLocalizations? l10n = AppLocalizations.of(context);
+    final bool? confirmed = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: AppTheme.bgElevated,
+          title: Text(l10n?.deleteModelTitle ?? 'Delete Model'),
+          content: Text(
+            l10n?.deleteModelConfirm(model.name) ??
+                'Delete ${model.name}? You can re-download it later.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(l10n?.cancelButton ?? 'Cancel'),
+            ),
+            FilledButton(
+              style: FilledButton.styleFrom(
+                backgroundColor: AppTheme.statusDanger,
+              ),
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(l10n?.deleteButton ?? 'Delete'),
+            ),
+          ],
+        );
+      },
+    );
+    if (confirmed != true || !context.mounted) {
+      return;
+    }
+    final bool deleted = await appState.deleteInstalledModel(model);
+    if (deleted && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            l10n?.modelDeletedMessage(model.name) ??
+                '${model.name} has been deleted.',
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final AppLocalizations? l10n = AppLocalizations.of(context);
@@ -337,6 +429,16 @@ class _ModelModuleCard extends StatelessWidget {
                         .titleLarge
                         ?.copyWith(fontWeight: FontWeight.w700)),
               ),
+              if (installed && !isActive)
+                IconButton(
+                  onPressed: () => _confirmDelete(context, appState, manifest),
+                  icon: const Icon(Icons.delete_outline_rounded,
+                      size: 20, color: AppTheme.statusDanger),
+                  tooltip: l10n?.deleteModelTitle ?? 'Delete Model',
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+              const SizedBox(width: 8),
               if (badgeLabel != null)
                 _Tag(label: badgeLabel, color: badgeColor ?? AppTheme.brandAura)
               else if (installed && !isActive)
@@ -354,12 +456,26 @@ class _ModelModuleCard extends StatelessWidget {
                 ?.copyWith(color: AppTheme.textSecondary),
           ),
           const SizedBox(height: 8),
-          Text(
-            _localizedCoreSummary(context, manifest),
-            style: Theme.of(context)
-                .textTheme
-                .labelSmall
-                ?.copyWith(color: AppTheme.textMuted),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  _localizedCoreSummary(context, manifest),
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelSmall
+                      ?.copyWith(color: AppTheme.textMuted),
+                ),
+              ),
+              if (installed)
+                Text(
+                  '${l10n?.diskSpaceLabel ?? 'Disk'}: ${_formatBytes(manifest.sizeBytes)}',
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelSmall
+                      ?.copyWith(color: AppTheme.textMuted),
+                ),
+            ],
           ),
           if (downloading) ...[
             const SizedBox(height: 24),

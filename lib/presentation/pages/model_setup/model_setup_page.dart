@@ -83,6 +83,8 @@ class ModelSetupPage extends StatelessWidget {
                               l10n?.firstRunE2bHeadline ?? 'Faster first start',
                           summary: l10n?.firstRunE2bSummary ??
                               'Best for a first install. Smaller download, quicker setup, and smooth story entry.',
+                          qualityChip: l10n?.modelSetupE2bSpeedChip ??
+                              'Fast inference',
                           onPressed: () => _activateOrDownload(
                             context,
                             appState,
@@ -99,6 +101,8 @@ class ModelSetupPage extends StatelessWidget {
                               'Stronger scene detail',
                           summary: l10n?.firstRunE4bSummary ??
                               'Bigger download, but stronger writing quality, richer detail, and steadier scene control.',
+                          qualityChip: l10n?.modelSetupE4bQualityChip ??
+                              'Richer vocabulary, longer scenes',
                           onPressed: () => _activateOrDownload(
                             context,
                             appState,
@@ -178,7 +182,7 @@ class ModelSetupPage extends StatelessWidget {
   }
 }
 
-class _SetupModelCard extends StatelessWidget {
+class _SetupModelCard extends StatefulWidget {
   const _SetupModelCard({
     required this.manifest,
     required this.badgeLabel,
@@ -186,6 +190,7 @@ class _SetupModelCard extends StatelessWidget {
     required this.headline,
     required this.summary,
     required this.onPressed,
+    this.qualityChip,
   });
 
   final ModelManifest manifest;
@@ -194,18 +199,70 @@ class _SetupModelCard extends StatelessWidget {
   final String headline;
   final String summary;
   final Future<void> Function() onPressed;
+  final String? qualityChip;
+
+  @override
+  State<_SetupModelCard> createState() => _SetupModelCardState();
+}
+
+class _SetupModelCardState extends State<_SetupModelCard> {
+  int _lastReceivedBytes = 0;
+  DateTime _lastTimestamp = DateTime.now();
+  double _speedBytesPerSecond = 0;
+
+  void _updateSpeed(int receivedBytes) {
+    final DateTime now = DateTime.now();
+    final double elapsed =
+        now.difference(_lastTimestamp).inMilliseconds / 1000.0;
+    if (elapsed >= 0.5 && receivedBytes > _lastReceivedBytes) {
+      final double speed =
+          (receivedBytes - _lastReceivedBytes) / elapsed;
+      setState(() {
+        _speedBytesPerSecond = speed;
+        _lastReceivedBytes = receivedBytes;
+        _lastTimestamp = now;
+      });
+    } else if (_lastReceivedBytes == 0 && receivedBytes > 0) {
+      _lastReceivedBytes = receivedBytes;
+      _lastTimestamp = now;
+    }
+  }
+
+  String _formatEta(int receivedBytes, int totalBytes) {
+    if (_speedBytesPerSecond <= 0 || totalBytes <= receivedBytes) {
+      return '';
+    }
+    final int remainingBytes = totalBytes - receivedBytes;
+    final int remainingSeconds =
+        (remainingBytes / _speedBytesPerSecond).ceil();
+    if (remainingSeconds < 60) {
+      return '<1 min';
+    }
+    return '~${(remainingSeconds / 60).ceil()} min';
+  }
 
   @override
   Widget build(BuildContext context) {
     final AppLocalizations? l10n = AppLocalizations.of(context);
     final AppStateProvider appState = context.watch<AppStateProvider>();
-    final bool isInstalled = appState.isInstalled(manifest);
-    final bool isActive = appState.isActive(manifest);
-    final bool isDownloading = appState.isDownloading(manifest);
+    final bool isInstalled = appState.isInstalled(widget.manifest);
+    final bool isActive = appState.isActive(widget.manifest);
+    final bool isDownloading = appState.isDownloading(widget.manifest);
     final bool anotherDownloadInProgress =
         appState.downloadingModelId != null &&
-            appState.downloadingModelId != manifest.id;
+            appState.downloadingModelId != widget.manifest.id;
     final bool canTapPrimary = !isDownloading && !anotherDownloadInProgress;
+
+    if (isDownloading) {
+      _updateSpeed(appState.downloadReceivedBytes);
+    } else if (_lastReceivedBytes > 0) {
+      _lastReceivedBytes = 0;
+      _speedBytesPerSecond = 0;
+    }
+
+    final int percent = appState.downloadTotalBytes > 0
+        ? (appState.downloadReceivedBytes * 100 ~/ appState.downloadTotalBytes)
+        : 0;
 
     return Container(
       padding: const EdgeInsets.all(24),
@@ -214,12 +271,12 @@ class _SetupModelCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: isActive
-              ? badgeColor.withValues(alpha: 0.55)
+              ? widget.badgeColor.withValues(alpha: 0.55)
               : AppTheme.borderSubtle,
         ),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: badgeColor.withValues(alpha: 0.14),
+            color: widget.badgeColor.withValues(alpha: 0.14),
             blurRadius: 40,
             offset: const Offset(0, 18),
           ),
@@ -231,7 +288,7 @@ class _SetupModelCard extends StatelessWidget {
         children: <Widget>[
           Row(
             children: <Widget>[
-              _Badge(label: badgeLabel, color: badgeColor),
+              _Badge(label: widget.badgeLabel, color: widget.badgeColor),
               const Spacer(),
               if (isInstalled && !isActive)
                 _Badge(
@@ -247,7 +304,7 @@ class _SetupModelCard extends StatelessWidget {
           ),
           const SizedBox(height: 18),
           Text(
-            manifest.name,
+            widget.manifest.name,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                   color: AppTheme.textPrimary,
                   fontWeight: FontWeight.w800,
@@ -255,7 +312,7 @@ class _SetupModelCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            headline,
+            widget.headline,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: AppTheme.textPrimary,
                   fontWeight: FontWeight.w700,
@@ -263,7 +320,7 @@ class _SetupModelCard extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Text(
-            summary,
+            widget.summary,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppTheme.textSecondary,
                   height: 1.55,
@@ -276,12 +333,17 @@ class _SetupModelCard extends StatelessWidget {
             children: <Widget>[
               _InfoChip(
                 icon: Icons.download_rounded,
-                label: _formatBytes(manifest.sizeBytes),
+                label: _formatBytes(widget.manifest.sizeBytes),
               ),
               _InfoChip(
                 icon: Icons.memory_rounded,
-                label: _localizedRamHint(context, manifest),
+                label: _localizedRamHint(context, widget.manifest),
               ),
+              if (widget.qualityChip != null)
+                _InfoChip(
+                  icon: Icons.auto_awesome_outlined,
+                  label: widget.qualityChip!,
+                ),
             ],
           ),
           if (isDownloading) ...<Widget>[
@@ -292,19 +354,30 @@ class _SetupModelCard extends StatelessWidget {
                 value: appState.downloadProgress,
                 minHeight: 8,
                 backgroundColor: AppTheme.bgElevated,
-                color: badgeColor,
+                color: widget.badgeColor,
               ),
             ),
             const SizedBox(height: 10),
-            Text(
-              _localizedDownloadProgress(
-                context,
-                appState.downloadReceivedBytes,
-                appState.downloadTotalBytes,
-              ),
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: AppTheme.textSecondary,
+            Row(
+              children: <Widget>[
+                Text(
+                  '$percent%',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: widget.badgeColor,
+                        fontWeight: FontWeight.w700,
+                      ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    _buildDownloadDetail(context, appState),
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: AppTheme.textSecondary,
+                        ),
+                    overflow: TextOverflow.ellipsis,
                   ),
+                ),
+              ],
             ),
           ],
           const SizedBox(height: 24),
@@ -312,10 +385,10 @@ class _SetupModelCard extends StatelessWidget {
             children: <Widget>[
               Expanded(
                 child: FilledButton(
-                  onPressed: canTapPrimary ? onPressed : null,
+                  onPressed: canTapPrimary ? widget.onPressed : null,
                   style: FilledButton.styleFrom(
                     backgroundColor:
-                        isActive ? AppTheme.bgElevated : badgeColor,
+                        isActive ? AppTheme.bgElevated : widget.badgeColor,
                     foregroundColor:
                         isActive ? AppTheme.textMuted : AppTheme.ink,
                     disabledBackgroundColor: AppTheme.bgElevated,
@@ -360,6 +433,22 @@ class _SetupModelCard extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _buildDownloadDetail(
+      BuildContext context, AppStateProvider appState) {
+    final String received = _formatBytes(appState.downloadReceivedBytes);
+    final String total = _formatBytes(appState.downloadTotalBytes);
+    final StringBuffer buf = StringBuffer('$received / $total');
+    if (_speedBytesPerSecond > 0) {
+      buf.write(' · ${_formatBytes(_speedBytesPerSecond.round())}/s');
+      final String eta = _formatEta(
+          appState.downloadReceivedBytes, appState.downloadTotalBytes);
+      if (eta.isNotEmpty) {
+        buf.write(' · $eta');
+      }
+    }
+    return buf.toString();
   }
 }
 
@@ -463,18 +552,6 @@ String _localizedRamHint(BuildContext context, ModelManifest manifest) {
   final AppLocalizations? l10n = AppLocalizations.of(context);
   final String memory = '${manifest.recommendedMinRamGb ?? 0}GB+';
   return l10n?.modelSetupRamHint(memory) ?? 'Recommended RAM $memory';
-}
-
-String _localizedDownloadProgress(
-  BuildContext context,
-  int receivedBytes,
-  int totalBytes,
-) {
-  final AppLocalizations? l10n = AppLocalizations.of(context);
-  final String received = _formatBytes(receivedBytes);
-  final String total = _formatBytes(totalBytes);
-  return l10n?.modelSetupDownloadProgress(received, total) ??
-      'Downloaded $received / $total';
 }
 
 String _localizedModelError(BuildContext context, String message) {

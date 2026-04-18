@@ -752,4 +752,213 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get modelErrorGeneric => 'Something went wrong. Please try again.';
+
+  @override
+  String get modelSetupE2bSpeedChip => 'Fast inference';
+
+  @override
+  String get modelSetupE4bQualityChip => 'Richer vocabulary, longer scenes';
+
+  @override
+  String get splashInitializingEngine => 'Initializing Engine';
+
+  @override
+  String get splashRetryButton => 'Retry';
+
+  @override
+  String get splashPreparingRuntime => 'Preparing runtime...';
+
+  @override
+  String get splashLoadingCore => 'Loading story core...';
+
+  @override
+  String get splashGoToSettings => 'Go to Settings';
+
+  @override
+  String get splashDownloadCore => 'Download a Core';
+
+  @override
+  String get splashTryAgain => 'Try Again';
+
+  @override
+  String importEmbeddedWorldbookCount(Object count) {
+    return 'Embedded Worldbook $count';
+  }
+
+  @override
+  String importAltGreetingsCount(Object count) {
+    return 'Alt Greetings $count';
+  }
+
+  @override
+  String get importCardMainPromptTag => 'Card Main Prompt';
+
+  @override
+  String get importPostHistoryNoteTag => 'Post-History Note';
+
+  @override
+  String get importPreservedFieldsTitle => 'Imported As-Is';
+
+  @override
+  String get importPreservedFieldsContent =>
+      'Opening message / alternate greetings / scenario / persona / embedded worldbook / main prompt override / post-history rules';
+
+  @override
+  String get importNoPersonalityLabel =>
+      'This card does not include a dedicated personality field.';
+
+  @override
+  String get importNoScenarioLabel =>
+      'This card does not include a scenario field.';
+
+  @override
+  String get importCreatorNotesTitle => 'Creator Notes';
+
+  @override
+  String get importAltGreetingsTitle => 'Alternate Greetings';
+
+  @override
+  String get importStandaloneWorldbookTitle => 'Standalone Worldbook';
+
+  @override
+  String importWorldbookEntriesCount(Object count) {
+    return '$count entries';
+  }
+
+  @override
+  String get importWorldbookHelperNew =>
+      'Aura recognized this file as a standalone worldbook. Pick a role card and attach it directly.';
+
+  @override
+  String get importWorldbookHelperMerge =>
+      'Aura recognized this file as a standalone worldbook. It will merge with the role card lore instead of overwriting it.';
+
+  @override
+  String get importWorldbookAttachTo => 'Attach To';
+
+  @override
+  String get importWorldbookNoCharacters => 'No role cards are available yet.';
+
+  @override
+  String get importWorldbookChooseCard => 'Choose Role Card';
+
+  @override
+  String get importWorldbookMergeResult => 'Merge Result';
+
+  @override
+  String importWorldbookMergeDetails(
+      Object existing, Object incoming, Object merged) {
+    return 'Current role has $existing entries, this file has $incoming, and the merged card will keep about $merged entries.';
+  }
+
+  @override
+  String get importWorldbookDescriptionTitle => 'Description';
+
+  @override
+  String get importWorldbookEntryPreviewTitle => 'Worldbook Entry Preview';
+
+  @override
+  String get importWorldbookChooseCharacterError =>
+      'Choose a role card before attaching the worldbook.';
+
+  @override
+  String get importPngNoMetadataError =>
+      'This PNG does not contain character card metadata. If it came from Photos, try importing the original Tavern PNG from Files.';
+
+  @override
+  String get starterCharacterName => 'New Character';
+
+  @override
+  String get starterCharacterDescription =>
+      'Write the role, relationship, and dramatic hook for this character.';
+
+  @override
+  String get starterCharacterPersonality =>
+      'Stay in character, keep the scene moving, and respond with concrete actions and emotions.';
+
+  @override
+  String get starterCharacterScenario =>
+      'Describe the opening scene, location, conflict, and the relationship with the player.';
+
+  @override
+  String get starterCharacterFirstMessage =>
+      'The footsteps outside are getting closer. Now that you are here, there is no easy way back.';
+
+  @override
+  String get starterCharacterAltGreeting =>
+      'You arrived sooner than I expected.';
+
+  @override
+  String get searchCharactersHint => 'Search characters...';
+
+  @override
+  String get searchNoResults => 'No characters match your search.';
+
+  @override
+  String get emptyLibraryTitle => 'Your story library is empty';
+
+  @override
+  String get emptyLibraryDescription =>
+      'Import a Tavern character card or create one from scratch to begin your first scene.';
+
+  @override
+  String get deleteCharacterTitle => 'Delete Character';
+
+  @override
+  String deleteCharacterConfirm(Object characterName) {
+    return 'Are you sure you want to delete $characterName? This cannot be undone.';
+  }
+
+  @override
+  String characterDeletedMessage(Object characterName) {
+    return '$characterName has been deleted.';
+  }
+
+  @override
+  String get copyToClipboard => 'Copy to clipboard';
+
+  @override
+  String get copiedToClipboard => 'Copied to clipboard';
+
+  @override
+  String get messageTimeJustNow => 'just now';
+
+  @override
+  String messageTimeMinutesAgo(Object count) {
+    return '$count min ago';
+  }
+
+  @override
+  String get rerollButtonTooltip => 'Regenerate response';
+
+  @override
+  String get characterDetailsSheetTitle => 'Character Details';
+
+  @override
+  String get errorGoToSettings => 'Go to Settings';
+
+  @override
+  String get errorRetryMessage => 'Retry';
+
+  @override
+  String get coreReconnectedToast => 'Core reconnected. You can send again.';
+
+  @override
+  String get storyCoresTitle => 'Story Cores';
+
+  @override
+  String get deleteModelTitle => 'Delete Model';
+
+  @override
+  String deleteModelConfirm(Object modelName) {
+    return 'Delete $modelName? You can re-download it later.';
+  }
+
+  @override
+  String modelDeletedMessage(Object modelName) {
+    return '$modelName has been deleted.';
+  }
+
+  @override
+  String get diskSpaceLabel => 'Disk';
 }

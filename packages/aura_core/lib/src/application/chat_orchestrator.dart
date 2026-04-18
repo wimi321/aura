@@ -35,7 +35,7 @@ class ChatOrchestrator {
     final String assistantLabel = _assistantLabel(card, input.localeTag);
     final String userLabel = _userLabel(input.localeTag);
     final List<LorebookEntry> candidateLore = card.lorebook?.resolveMatches(
-          input.userMessage.content,
+          _buildScanText(input, card.lorebook?.scanDepth),
           localeTag: input.localeTag,
         ) ??
         const <LorebookEntry>[];
@@ -43,17 +43,23 @@ class ChatOrchestrator {
       basePrompt: resolvedPreset.systemPromptTemplate,
       card: card,
       localeTag: input.localeTag,
-      matchedLore: const <LorebookEntry>[],
+      beforeCharLore: const <LorebookEntry>[],
+      afterCharLore: const <LorebookEntry>[],
       assistantLabel: assistantLabel,
       userLabel: userLabel,
       compactRolePacket: compactRolePacket,
     );
-    final GenerationConfig generationConfig = _clampGenerationConfig(
+    final GenerationConfig clampedConfig = _clampGenerationConfig(
       generationConfig: requestedGenerationConfig,
       baseSystemInstruction: baseSystemInstruction,
       history: input.history,
       userMessage: input.userMessage,
       isLowMemoryDevice: isLowMemoryDevice,
+    );
+    final GenerationConfig generationConfig = _withDynamicStopSequences(
+      config: clampedConfig,
+      userLabel: userLabel,
+      characterName: assistantLabel,
     );
     final List<LorebookEntry> matchedLore = _fitLorebookEntries(
       candidates: candidateLore,
@@ -68,15 +74,39 @@ class ChatOrchestrator {
       userMessage: input.userMessage,
       isLowMemoryDevice: isLowMemoryDevice,
     );
+    final List<LorebookEntry> beforeCharLore = matchedLore
+        .where((LorebookEntry e) => e.position == 0)
+        .toList(growable: false);
+    final List<LorebookEntry> afterCharLore = matchedLore
+        .where((LorebookEntry e) => e.position == null || e.position == 1)
+        .toList(growable: false);
+    final List<LorebookEntry> depthLore = matchedLore
+        .where((LorebookEntry e) => e.position == 4)
+        .toList(growable: false);
     final String systemInstruction = _resolveSystemInstruction(
       basePrompt: resolvedPreset.systemPromptTemplate,
       card: card,
       localeTag: input.localeTag,
-      matchedLore: matchedLore,
+      beforeCharLore: beforeCharLore,
+      afterCharLore: afterCharLore,
       assistantLabel: assistantLabel,
       userLabel: userLabel,
       compactRolePacket: compactRolePacket,
     );
+    final List<DepthInsertion> depthInsertions = depthLore
+        .map((LorebookEntry entry) {
+          final String content = RoleplayTextFormatter.formatCardField(
+            entry.content,
+            characterName: assistantLabel,
+            userAlias: userLabel,
+            localeTag: input.localeTag,
+            extensions: card.extensions,
+            applyPromptRegex: true,
+          );
+          return content.isEmpty ? null : DepthInsertion(content: content, depth: 0);
+        })
+        .whereType<DepthInsertion>()
+        .toList(growable: false);
     final String? postHistoryInstructions = _resolvePostHistoryInstructions(
       card.postHistoryInstructions,
       localeTag: input.localeTag,
@@ -86,13 +116,21 @@ class ChatOrchestrator {
       cardExtensions: card.extensions,
     );
 
+    final List<ChatMessage> truncatedHistory = _truncateHistory(
+      history: input.history,
+      systemInstruction: systemInstruction,
+      userMessage: input.userMessage,
+      generationConfig: generationConfig,
+      isLowMemoryDevice: isLowMemoryDevice,
+    );
+
     final List<ChatMessage> messages = <ChatMessage>[
       ChatMessage(
         id: 'system',
         role: ChatRole.system,
         content: systemInstruction,
       ),
-      ...input.history,
+      ...truncatedHistory,
       _injectWhisper(input.userMessage, input.whisperInstruction),
     ];
 
@@ -116,6 +154,7 @@ class ChatOrchestrator {
           .map((LorebookEntry entry) => entry.id)
           .where((String id) => id.isNotEmpty)
           .toList(growable: false),
+      depthInsertions: depthInsertions,
       shouldSummarize: shouldSummarize,
       summarySourceMessages: shouldSummarize
           ? _contextWindowProfile.summarySlice(input.history)
@@ -169,7 +208,8 @@ class ChatOrchestrator {
     required String basePrompt,
     required CharacterCard card,
     required String? localeTag,
-    required List<LorebookEntry> matchedLore,
+    required List<LorebookEntry> beforeCharLore,
+    required List<LorebookEntry> afterCharLore,
     required String assistantLabel,
     required String userLabel,
     required bool compactRolePacket,
@@ -183,7 +223,26 @@ class ChatOrchestrator {
       cardExtensions: card.extensions,
     );
     final StringBuffer system = StringBuffer()
-      ..writeln(mergedBasePrompt)
+      ..writeln(mergedBasePrompt);
+
+    if (beforeCharLore.isNotEmpty) {
+      system.writeln();
+      for (final LorebookEntry entry in beforeCharLore) {
+        final String entryContent = RoleplayTextFormatter.formatCardField(
+          entry.content,
+          characterName: assistantLabel,
+          userAlias: userLabel,
+          localeTag: localeTag,
+          extensions: card.extensions,
+          applyPromptRegex: true,
+        );
+        if (entryContent.isNotEmpty) {
+          system.writeln(entryContent);
+        }
+      }
+    }
+
+    system
       ..writeln()
       ..writeln(
         card.buildSystemRole(
@@ -197,10 +256,10 @@ class ChatOrchestrator {
       ..writeln()
       ..writeln(_languageGuardrail(localeTag));
 
-    if (matchedLore.isNotEmpty) {
+    if (afterCharLore.isNotEmpty) {
       system.writeln();
       system.writeln('Triggered Lorebook Entries:');
-      for (final LorebookEntry entry in matchedLore) {
+      for (final LorebookEntry entry in afterCharLore) {
         final String entryContent = RoleplayTextFormatter.formatCardField(
           entry.content,
           characterName: assistantLabel,
@@ -545,6 +604,82 @@ class ChatOrchestrator {
       return '당신';
     }
     return 'You';
+  }
+
+  GenerationConfig _withDynamicStopSequences({
+    required GenerationConfig config,
+    required String userLabel,
+    required String characterName,
+  }) {
+    final Set<String> sequences = <String>{...config.stopSequences};
+    for (final String separator in const <String>[':', '：']) {
+      sequences.add('\n$userLabel$separator');
+      sequences.add('\n$characterName$separator');
+    }
+    final List<String> deduplicated = sequences.toList(growable: false);
+    return GenerationConfig(
+      temperature: config.temperature,
+      topP: config.topP,
+      topK: config.topK,
+      maxOutputTokens: config.maxOutputTokens,
+      repetitionPenalty: config.repetitionPenalty,
+      stopSequences: deduplicated,
+    );
+  }
+
+  List<ChatMessage> _truncateHistory({
+    required List<ChatMessage> history,
+    required String systemInstruction,
+    required ChatMessage userMessage,
+    required GenerationConfig generationConfig,
+    required bool isLowMemoryDevice,
+  }) {
+    if (history.isEmpty) {
+      return history;
+    }
+    final int window = _contextWindowProfile.resolveWindow(
+      isLowMemoryDevice: isLowMemoryDevice,
+    );
+    final int systemTokens = _estimateTokens(systemInstruction);
+    final int userTokens = userMessage.estimatedTokenCount;
+    final int reserveForOutput = generationConfig.maxOutputTokens;
+    final int budget = window - systemTokens - userTokens - reserveForOutput;
+    if (budget <= 0) {
+      // Keep at least last 2 messages.
+      final int keep = history.length < 2 ? history.length : 2;
+      return history.sublist(history.length - keep);
+    }
+
+    int totalTokens = 0;
+    for (final ChatMessage message in history) {
+      totalTokens += message.estimatedTokenCount;
+    }
+    if (totalTokens <= budget) {
+      return history;
+    }
+
+    // Remove oldest messages until we fit, keeping at least 2.
+    int startIndex = 0;
+    final int minKeep = history.length < 2 ? history.length : 2;
+    final int maxRemovable = history.length - minKeep;
+    while (totalTokens > budget && startIndex < maxRemovable) {
+      totalTokens -= history[startIndex].estimatedTokenCount;
+      startIndex++;
+    }
+    return history.sublist(startIndex);
+  }
+
+  String _buildScanText(ChatTurnInput input, int? scanDepth) {
+    final int depth = scanDepth ?? 2;
+    final StringBuffer buffer = StringBuffer();
+    final int start = input.history.length > depth
+        ? input.history.length - depth
+        : 0;
+    for (int i = start; i < input.history.length; i++) {
+      buffer.writeln(input.history[i].content);
+    }
+    buffer.write(input.userMessage.content);
+    return buffer.toString();
   }
 
   bool _isContinueSceneTurn(ChatMessage message) {

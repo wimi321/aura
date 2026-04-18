@@ -711,4 +711,203 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get modelErrorGeneric => '出了点问题，请稍后再试。';
+
+  @override
+  String get modelSetupE2bSpeedChip => '推理速度快';
+
+  @override
+  String get modelSetupE4bQualityChip => '词汇更丰富，场景更连贯';
+
+  @override
+  String get splashInitializingEngine => '正在初始化引擎';
+
+  @override
+  String get splashRetryButton => '重试';
+
+  @override
+  String get splashPreparingRuntime => '正在准备运行环境...';
+
+  @override
+  String get splashLoadingCore => '正在加载故事核心...';
+
+  @override
+  String get splashGoToSettings => '前往设置';
+
+  @override
+  String get splashDownloadCore => '下载核心';
+
+  @override
+  String get splashTryAgain => '重试';
+
+  @override
+  String importEmbeddedWorldbookCount(Object count) {
+    return '内置世界书 $count';
+  }
+
+  @override
+  String importAltGreetingsCount(Object count) {
+    return '多开场白 $count';
+  }
+
+  @override
+  String get importCardMainPromptTag => '内置主提示词';
+
+  @override
+  String get importPostHistoryNoteTag => '回复后置指令';
+
+  @override
+  String get importPreservedFieldsTitle => '导入后保留';
+
+  @override
+  String get importPreservedFieldsContent =>
+      '开场白 / 备用开场 / 场景设定 / 角色人设 / 内置世界书 / 主提示词覆盖 / 回复后置规则';
+
+  @override
+  String get importNoPersonalityLabel => '这张卡没有单独写出性格字段。';
+
+  @override
+  String get importNoScenarioLabel => '这张卡没有单独写出场景字段。';
+
+  @override
+  String get importCreatorNotesTitle => '作者注记';
+
+  @override
+  String get importAltGreetingsTitle => '备用开场预览';
+
+  @override
+  String get importStandaloneWorldbookTitle => '独立世界书';
+
+  @override
+  String importWorldbookEntriesCount(Object count) {
+    return '词条 $count';
+  }
+
+  @override
+  String get importWorldbookHelperNew => '已识别为独立世界书。选择一个角色后，Aura 会把这份设定直接挂上去。';
+
+  @override
+  String get importWorldbookHelperMerge =>
+      '已识别为独立世界书。Aura 会把它与该角色现有世界书合并，不会覆盖原本设定。';
+
+  @override
+  String get importWorldbookAttachTo => '挂载到角色';
+
+  @override
+  String get importWorldbookNoCharacters => '当前没有可挂载的角色。';
+
+  @override
+  String get importWorldbookChooseCard => '选择角色';
+
+  @override
+  String get importWorldbookMergeResult => '合并结果';
+
+  @override
+  String importWorldbookMergeDetails(
+      Object existing, Object incoming, Object merged) {
+    return '当前角色已有 $existing 条，导入文件有 $incoming 条，合并后预计保留 $merged 条。';
+  }
+
+  @override
+  String get importWorldbookDescriptionTitle => '简介';
+
+  @override
+  String get importWorldbookEntryPreviewTitle => '世界书词条预览';
+
+  @override
+  String get importWorldbookChooseCharacterError => '请先选择要挂载世界书的角色。';
+
+  @override
+  String get importPngNoMetadataError =>
+      '这张 PNG 没有检测到角色卡元数据。若图片来自相册，请优先从「文件」导入原始角色卡 PNG。';
+
+  @override
+  String get starterCharacterName => '新角色';
+
+  @override
+  String get starterCharacterDescription => '写下这个角色在剧情里的定位、关系和危险感。';
+
+  @override
+  String get starterCharacterPersonality => '保持角色视角，主动推进剧情，给出具体动作与情绪反馈。';
+
+  @override
+  String get starterCharacterScenario => '描述当前剧情开场、地点、冲突，以及你与用户的关系。';
+
+  @override
+  String get starterCharacterFirstMessage => '门外的脚步声越来越近。既然你来了，我们就没有退路了。';
+
+  @override
+  String get starterCharacterAltGreeting => '你来的比我预想得更快。';
+
+  @override
+  String get searchCharactersHint => '搜索角色...';
+
+  @override
+  String get searchNoResults => '没有匹配的角色。';
+
+  @override
+  String get emptyLibraryTitle => '故事库还是空的';
+
+  @override
+  String get emptyLibraryDescription => '导入一张 Tavern 角色卡或从头创建，开启你的第一个场景。';
+
+  @override
+  String get deleteCharacterTitle => '删除角色';
+
+  @override
+  String deleteCharacterConfirm(Object characterName) {
+    return '确定要删除 $characterName 吗？此操作无法撤销。';
+  }
+
+  @override
+  String characterDeletedMessage(Object characterName) {
+    return '已删除 $characterName。';
+  }
+
+  @override
+  String get copyToClipboard => '复制到剪贴板';
+
+  @override
+  String get copiedToClipboard => '已复制到剪贴板';
+
+  @override
+  String get messageTimeJustNow => '刚刚';
+
+  @override
+  String messageTimeMinutesAgo(Object count) {
+    return '$count 分钟前';
+  }
+
+  @override
+  String get rerollButtonTooltip => '重新生成回复';
+
+  @override
+  String get characterDetailsSheetTitle => '角色详情';
+
+  @override
+  String get errorGoToSettings => '前往设置';
+
+  @override
+  String get errorRetryMessage => '重试';
+
+  @override
+  String get coreReconnectedToast => '核心已重新连接，可以继续发送。';
+
+  @override
+  String get storyCoresTitle => '故事核心';
+
+  @override
+  String get deleteModelTitle => '删除模型';
+
+  @override
+  String deleteModelConfirm(Object modelName) {
+    return '确定删除 $modelName？之后可以重新下载。';
+  }
+
+  @override
+  String modelDeletedMessage(Object modelName) {
+    return '已删除 $modelName。';
+  }
+
+  @override
+  String get diskSpaceLabel => '磁盘';
 }

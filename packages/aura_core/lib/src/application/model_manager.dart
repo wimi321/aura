@@ -38,11 +38,13 @@ class ModelManager {
     try {
       if (_activeModel != null) {
         await _runtime.unloadModel();
+        _activeModel = null;
       }
       await _runtime.loadModel(manifest);
       _activeModel = manifest;
       _emit(ModelLoadState.ready);
     } catch (_) {
+      _activeModel = null;
       _emit(ModelLoadState.error);
       rethrow;
     }
