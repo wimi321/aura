@@ -1,0 +1,5 @@
+-keep class com.google.ai.edge.litertlm.** { *; }
+-keep interface com.google.ai.edge.litertlm.** { *; }
+-keepclassmembers class * implements com.google.ai.edge.litertlm.MessageCallback { *; }
+-keepclassmembers class * implements com.google.ai.edge.litertlm.ResponseCallback { *; }
+-keepattributes Signature,InnerClasses,EnclosingMethod,*Annotation*

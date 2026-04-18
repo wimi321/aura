@@ -1,0 +1,299 @@
+{
+  "@@locale": "zh",
+  "appTitle": "Aura",
+  "bootstrapLoadingMessage": "正在开启你的本地剧情空间...",
+  "bootstrapErrorTitle": "Aura 启动失败",
+  "bootstrapErrorDescription": "本地环境未能完成初始化。你可以先查看下面的错误信息。",
+  "loadingModel": "构建世界中...",
+  "modelStateIdle": "待命",
+  "modelStateError": "异常",
+  "statusLabel": "状态 {state}",
+  "@statusLabel": {
+    "placeholders": {
+      "state": {}
+    }
+  },
+  "readyText": "已就绪",
+  "chatInputHint": "发送消息...",
+  "whisperHint": "耳语指令（仅影响下一条回复）...",
+  "advancedSettings": "本地运算与设置",
+  "characters": "剧本库",
+  "importCharacter": "导入角色",
+  "importPreviewTitle": "导入剧情卡",
+  "lorebookIncluded": "📚 附带世界观设定 ({count}个词条)",
+  "companionsTitle": "剧本库",
+  "appTagline": "本地剧情角色扮演，隐私优先。",
+  "engineStatusTitle": "本地运算引擎",
+  "engineRunning": "正在运行 {modelName}",
+  "@engineRunning": {
+    "placeholders": {
+      "modelName": {}
+    }
+  },
+  "systemLabel": "系统",
+  "settingsTitle": "运算与存储设置",
+  "languageSectionTitle": "首选语言",
+  "activeCoreTitle": "当前运行引擎",
+  "systemOfflineText": "当前未开启本地计算。请先启动一个引擎以进入剧情。",
+  "availableCoresTitle": "可用引擎",
+  "hardwareImportsTitle": "扩展与导入",
+  "promptPresetTitle": "基础行为准则",
+  "promptPresetActiveLabel": "当前准则",
+  "importPresetJsonButton": "导入准则文件",
+  "editActivePresetButton": "编辑当前准则",
+  "editPromptPresetTitle": "编辑行为准则",
+  "presetNameFieldLabel": "准则名称",
+  "presetSystemPromptFieldLabel": "基础行为说明",
+  "presetTemperatureFieldLabel": "发散度",
+  "presetTopPFieldLabel": "采样范围",
+  "presetTopKFieldLabel": "候选数量",
+  "presetMaxOutputTokensFieldLabel": "最大回复长度",
+  "defaultRoleplayPresetName": "Aura 默认剧情准则",
+  "defaultRoleplayPresetPrompt": "你将完全沉浸于当前角色设定中。始终保持角色视角，写得具体、有画面感；除非系统明确允许，否则绝对不要承认自己是一台 AI。",
+  "importedPresetFallbackName": "导入准则",
+  "neuralAccelerationTitle": "神经处理器加速",
+  "neuralAccelerationSubtitle": "条件允许时自动切换到 NPU/CoreML",
+  "expressionPackTitle": "动态立绘 (ZIP)",
+  "expressionPackSubtitle": "导入高级 Live2D 表情资源",
+  "activeBadge": "运行中",
+  "builtInTag": "内置",
+  "downloadedTag": "已下载",
+  "alreadyActiveButton": "当前已启用",
+  "activateEngineButton": "启用该引擎",
+  "activateBuiltInEngineButton": "启用内置引擎",
+  "downloadInstallButton": "下载并安装",
+  "interfaceReplyLanguageTitle": "界面与回复语言",
+  "interfaceReplyLanguageDescription": "默认跟随系统语言。你也可以固定语言，角色的回复将会尽力遵循此设定。",
+  "languageFieldLabel": "语言",
+  "chatNoActiveModel": "尚未加载本地引擎，无法开始剧情。",
+  "whisperSheetTitle": "耳语指令",
+  "whisperSheetDescription": "此指令只在幕后影响角色的下一次行动，不会出现在剧本对话中。",
+  "whisperSheetExample": "例如：语气更冰冷一些，表现得不耐烦。",
+  "applyWhisper": "应用耳语",
+  "chatBackButtonTooltip": "返回",
+  "chatWhisperButtonTooltip": "打开耳语",
+  "chatMoreActionsTooltip": "剧情操作",
+  "chatSendButtonTooltip": "推进剧情",
+  "chatStopButtonTooltip": "停止生成",
+  "nextWhisperLabel": "下一条耳语",
+  "chatInputPlaceholder": "写下剧情发展...",
+  "chatModelPreparing": "Aura 正在构筑剧情背景，请稍候...",
+  "chatRecoveringCore": "思维链正在重组，稍等片刻...",
+  "chatConversationResetting": "正在重置时间线...",
+  "chatGenerationTimedOut": "Aura 暂无反应。请重试。",
+  "chatRuntimeRecovered": "重组完成，剧情继续。",
+  "chatRuntimeRecoveryFailed": "剧情引擎意外断开。请在设置中重新启用。",
+  "assistantLabel": "角色",
+  "noActiveModel": "暂无引擎连接",
+  "roleplayReadyLabel": "已准备就绪，可以进入剧情",
+  "newConversationButton": "重新开始剧情",
+  "clearHistoryButton": "清空进度",
+  "clearHistoryConfirmTitle": "确认清空历史？",
+  "clearHistoryConfirmDescription": "这会删除 {characterName} 的全部历史会话，原来的剧情分支无法恢复。",
+  "@clearHistoryConfirmDescription": {
+    "placeholders": {
+      "characterName": {}
+    }
+  },
+  "clearHistoryConfirmAction": "确认清空",
+  "historyClearedMessage": "该角色的历史会话已清空。",
+  "sessionHistoryTitle": "历史会话",
+  "sessionHistoryShortLabel": "历史记录",
+  "sessionHistoryDescription": "回到 {characterName} 的旧剧情分支，继续原来的线。",
+  "@sessionHistoryDescription": {
+    "placeholders": {
+      "characterName": {}
+    }
+  },
+  "sessionHistoryEmpty": "这个角色还没有历史会话。",
+  "sessionCurrentLabel": "当前会话",
+  "sessionMessageCount": "{count} 条消息",
+  "@sessionMessageCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "sessionBranchEmpty": "这条剧情线还没有正式开始。",
+  "importingCardText": "正在解析角色卡...",
+  "importCardEmptyState": "选择一张酒馆 PNG 或 JSON 角色卡进行预览。",
+  "chooseCardButton": "选择图片或文件",
+  "confirmImportButton": "确认导入",
+  "cancelButton": "取消",
+  "editCharacterTitle": "编辑角色",
+  "editCharacterButtonTooltip": "编辑角色",
+  "characterWorkbenchTitle": "角色工作台",
+  "characterWorkbenchDescription": "在这里调整角色卡正文、角色头像，以及世界书词条。所有修改都会直接落到本地卡库。",
+  "characterPortraitImportedHint": "这张角色卡已自带原始图片。",
+  "characterPortraitAutoImportHint": "如果导入的是 Tavern PNG 角色卡，图片会自动带进来；没有图时才会使用内置剧情卡面。",
+  "characterCoreFieldsTitle": "基础信息",
+  "characterCoreFieldsDescription": "这些字段决定角色简介、场景开场和剧情走向。",
+  "characterNameLabel": "名称",
+  "characterDescriptionLabel": "简介",
+  "characterPersonalityLabel": "性格",
+  "characterScenarioLabel": "场景设定",
+  "characterFirstMessageLabel": "开场白",
+  "characterExamplesLabel": "示例对话",
+  "characterAlternateGreetingsLabel": "备用开场白",
+  "characterCreatorNotesLabel": "作者注记",
+  "characterMainPromptLabel": "主提示词覆盖",
+  "characterPostHistoryInstructionsLabel": "回复后置指令",
+  "characterAdvancedFieldsTitle": "酒馆高级字段",
+  "characterAdvancedFieldsDescription": "这些字段会直接影响角色卡的备用开场白、主提示词与下一轮回复约束。",
+  "blankLineSeparatedHint": "每段之间空一行。",
+  "characterLorebookTitle": "世界书 / 设定集",
+  "characterLorebookDescription": "支持导入独立世界书，也可以直接在这里增删改词条。导入时默认合并，不覆盖已有设定。",
+  "lorebookAttachedLabel": "已挂载世界书（{count}个词条）",
+  "@lorebookAttachedLabel": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "lorebookMissingLabel": "当前还没有挂载世界书。",
+  "importLorebookButton": "导入世界书",
+  "importMergeWorldbookButton": "导入并合并世界书",
+  "addLorebookEntryButton": "新增词条",
+  "replaceLorebookButton": "替换世界书",
+  "removeLorebookButton": "移除世界书",
+  "lorebookMetaPanelTitle": "世界书名称 / 简介",
+  "lorebookMetaSummaryFilled": "已填写名称与简介。",
+  "lorebookMetaSummaryPartial": "已填写 1 项高级信息。",
+  "lorebookMetaSummaryEmpty": "默认折叠，需要时再补充。",
+  "worldbookNameLabel": "世界书名称",
+  "worldbookDescriptionLabel": "世界书简介",
+  "lorebookEntriesTitle": "世界书词条",
+  "lorebookEntriesCollapsedEmptyHint": "默认折叠，避免大型世界书直接铺满整个工作台。",
+  "lorebookEntriesCollapsedHint": "点击展开，查看或编辑全部词条。",
+  "lorebookEntryCount": "{count} 条词条",
+  "@lorebookEntryCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "lorebookEntriesEmptyState": "当前没有词条。你可以导入酒馆世界书，或手动添加关键词触发的设定条目。",
+  "lorebookEntryFallbackLabel": "词条 {index}",
+  "@lorebookEntryFallbackLabel": {
+    "placeholders": {
+      "index": {}
+    }
+  },
+  "editEntryTooltip": "修改词条",
+  "deleteEntryTooltip": "删除词条",
+  "secondaryKeywordsTag": "次级 {keywords}",
+  "@secondaryKeywordsTag": {
+    "placeholders": {
+      "keywords": {}
+    }
+  },
+  "priorityTag": "优先级 {value}",
+  "@priorityTag": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "lorebookEntryEditorTitle": "编辑世界书词条",
+  "lorebookEntryIdLabel": "词条 ID",
+  "lorebookEntryPrimaryKeywordsLabel": "主关键词",
+  "lorebookEntryPrimaryKeywordsHelper": "用英文逗号分隔，例如：钟离, 契约, 璃月",
+  "lorebookEntrySecondaryKeywordsLabel": "次级关键词",
+  "lorebookEntrySecondaryKeywordsHelper": "可选，用英文逗号分隔。",
+  "lorebookEntryContentLabel": "词条内容",
+  "lorebookEntryCommentLabel": "备注",
+  "lorebookEntryPriorityLabel": "优先级",
+  "lorebookEntryEnabledLabel": "启用词条",
+  "lorebookEntrySelectiveLabel": "启用次级关键词匹配",
+  "lorebookEntryConstantLabel": "恒定注入",
+  "lorebookEntryWholeWordLabel": "整词匹配",
+  "lorebookEntryCaseSensitiveLabel": "区分大小写",
+  "saveEntryButton": "保存词条",
+  "lorebookEntryValidationError": "至少填写关键词和词条内容。",
+  "lorebookImportedMessage": "世界书已挂载（{count}个词条）。",
+  "@lorebookImportedMessage": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "saveButton": "保存",
+  "savingButton": "保存中...",
+  "importDialogDescription": "Tavern / SillyTavern 角色卡会直接导入本地卡库；如果选中的是独立世界书，下一步可以把它挂到目标角色上。",
+  "importPreviewRoleCardTag": "剧情卡",
+  "embeddedWorldbookTag": "内置世界书",
+  "createCharacterButton": "手动创建角色",
+  "attachWorldbookButton": "挂载世界书",
+  "importEmptyStateIntro": "先选导入来源：照片适合已保存到相册的 Tavern PNG，文件支持 Tavern / SillyTavern 的 PNG、JSON 角色卡与独立世界书。带内置世界书的角色卡会一步导入。",
+  "importEmptyStateDetails": "如果文件里带有 `character_book` / 世界书，Aura 会自动识别并保留开场白、备用开场、剧情提示与设定词条。",
+  "importCreateCharacterHint": "如果你没有现成角色卡，也可以直接在这里手动新建一张。",
+  "chooseAnotherCardButton": "重新选择图片或文件",
+  "importSourceSheetTitle": "选择导入方式",
+  "importSourceSheetSubtitle": "照片适合已经存进相册的 Tavern PNG 角色卡，文件支持 Tavern PNG、JSON 角色卡和独立世界书。",
+  "importFromPhotosTitle": "从照片导入 PNG",
+  "importFromPhotosSubtitle": "适合已经保存到相册里的 Tavern PNG 角色卡。",
+  "importFromFilesTitle": "从文件导入",
+  "importFromFilesSubtitle": "支持 PNG 角色卡、JSON 角色卡和独立世界书。",
+  "importWorldbookHint": "这里也可以直接选择独立世界书 JSON。下一步里把它挂到对应角色上就行。",
+  "importErrorTitle": "这个文件暂时不能导入",
+  "importFileLabel": "文件",
+  "importCreatorLabel": "作者",
+  "importNoDescriptionLabel": "这张角色卡没有填写简介。",
+  "importNoFirstMessageLabel": "这张角色卡没有填写开场白。",
+  "importWorldbookErrorMessage": "这个文件看起来是独立世界书，Aura 可以在导入流程里直接把它挂到角色上。",
+  "importUnsupportedFileMessage": "这里目前只支持 Tavern PNG 与 JSON 角色卡。",
+  "photoImportPngOnlyMessage": "从照片导入时目前只支持 Tavern PNG 角色卡。",
+  "importInvalidCharacterFileMessage": "这个文件看起来不像可导入的角色卡。",
+  "importGenericErrorMessage": "导入失败，请换一个角色卡文件再试。",
+  "importSuccessMessage": "已导入 {characterName}",
+  "@importSuccessMessage": {
+    "placeholders": {
+      "characterName": {}
+    }
+  },
+  "characterCreatedMessage": "已创建角色卡：{characterName}",
+  "@characterCreatedMessage": {
+    "placeholders": {
+      "characterName": {}
+    }
+  },
+  "importOpenChatAction": "进入剧情",
+  "settingsButtonTooltip": "打开设置",
+  "editMessageActionTitle": "修改这条消息",
+  "editMessageActionDescription": "保留当前剧情，只改这一条记录。",
+  "deleteMessageActionTitle": "删除这条消息",
+  "deleteMessageActionDescription": "从当前会话里移除这条记录。",
+  "editMessageDialogTitle": "修改消息",
+  "editMessageHint": "输入新的消息内容",
+  "messageUpdated": "消息已修改。",
+  "deleteMessageDialogTitle": "删除消息",
+  "deleteMessageDialogDescription": "这条消息会从当前会话中移除。",
+  "deleteButton": "删除",
+  "messageDeleted": "消息已删除。",
+  "continueSceneButtonTooltip": "自动续写当前剧情",
+  "continueScenePrompt": "延续当前剧情场景，自然推进冲突、线索或情绪，不要重置关系，也不要跳出角色。",
+  "storyCoreDownloadPrompt": "先下载一个剧情引擎，再进入故事。",
+  "storyCoreChooseButton": "选择剧情引擎",
+  "storyCoreDownloadStatus": "选择剧情引擎",
+  "firstRunModelTitle": "先选一个剧情引擎",
+  "firstRunModelSubtitle": "Aura 第一次打开需要先下载一个本地剧情引擎。E2B 更快开始，E4B 质量更强，下载完成后会自动进入你刚才要打开的剧情。",
+  "firstRunModelRecommendedBadge": "推荐",
+  "firstRunModelQualityBadge": "更高质量",
+  "firstRunE2bHeadline": "更快开始",
+  "firstRunE2bSummary": "适合第一次安装。下载更轻、启动更快，能够更顺滑地进入剧情。",
+  "firstRunE4bHeadline": "更强细节表现",
+  "firstRunE4bSummary": "下载更大，但剧情细节、场景稳定性和整体表现都会更强。",
+  "modelDownloadPreparingButton": "下载中...",
+  "modelSetupRamHint": "建议内存 {memory}",
+  "@modelSetupRamHint": {
+    "placeholders": {
+      "memory": {}
+    }
+  },
+  "modelSetupDownloadProgress": "已下载 {received} / {total}",
+  "@modelSetupDownloadProgress": {
+    "placeholders": {
+      "received": {},
+      "total": {}
+    }
+  },
+  "modelErrorNoSpace": "存储空间不足。请先清理一些空间再试。",
+  "modelErrorCorrupt": "下载文件不完整，请重新下载一次。",
+  "modelErrorNetwork": "下载被中断了。请检查网络后重试。",
+  "modelErrorGeneric": "出了点问题，请稍后再试。"
+}

@@ -1,0 +1,44 @@
+load("@build_bazel_rules_apple//apple:apple.bzl", "apple_static_xcframework")
+
+package(
+    default_visibility = ["//visibility:public"],
+)
+
+objc_library(
+    name = "AuraLiteRTNative",
+    srcs = ["AuraLiteRTNative.mm"],
+    hdrs = ["AuraLiteRTNative.h"],
+    copts = ["-std=c++20"],
+    enable_modules = True,
+    sdk_frameworks = [
+        "AVFAudio",
+        "AVFoundation",
+        "AudioToolbox",
+        "Foundation",
+        "Metal",
+    ],
+    deps = [
+        "//runtime/conversation",
+        "//runtime/conversation:io_types",
+        "//runtime/engine:litert_lm_lib",
+        "@com_google_absl//absl/status",
+        "@com_google_absl//absl/status:statusor",
+        "@com_google_absl//absl/strings",
+        "@com_google_absl//absl/time",
+        "@nlohmann_json//:json",
+    ],
+)
+
+apple_static_xcframework(
+    name = "AuraLiteRTNative_xcframework",
+    bundle_name = "AuraLiteRTNative",
+    ios = {
+        "simulator": ["arm64"],
+        "device": ["arm64"],
+    },
+    minimum_os_versions = {
+        "ios": "13.0",
+    },
+    public_hdrs = [":AuraLiteRTNative.h"],
+    deps = [":AuraLiteRTNative"],
+)

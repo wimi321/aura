@@ -1,0 +1,299 @@
+{
+  "@@locale": "ja",
+  "appTitle": "Aura",
+  "bootstrapLoadingMessage": "あなただけのローカル物語空間を開いています...",
+  "bootstrapErrorTitle": "Aura を起動できませんでした",
+  "bootstrapErrorDescription": "ローカル環境の初期化を完了できませんでした。下の詳細を確認してください。",
+  "loadingModel": "モデルを起動しています...",
+  "modelStateIdle": "待機",
+  "modelStateError": "異常",
+  "statusLabel": "状態 {state}",
+  "@statusLabel": {
+    "placeholders": {
+      "state": {}
+    }
+  },
+  "readyText": "準備完了",
+  "chatInputHint": "メッセージを入力...",
+  "whisperHint": "ウィスパー指示...",
+  "advancedSettings": "詳細設定",
+  "characters": "キャラクター",
+  "importCharacter": "キャラクターを追加",
+  "importPreviewTitle": "ストーリーカードを取り込む",
+  "lorebookIncluded": "📚 ロアブックあり ({count} 件)",
+  "companionsTitle": "あなたの仲間たち",
+  "appTagline": "ローカル知能、プライバシー第一。",
+  "engineStatusTitle": "エンジン状態",
+  "engineRunning": "{modelName} を実行中",
+  "@engineRunning": {
+    "placeholders": {
+      "modelName": {}
+    }
+  },
+  "systemLabel": "システム",
+  "settingsTitle": "エンジンコントロールセンター",
+  "languageSectionTitle": "言語",
+  "activeCoreTitle": "現在のコア",
+  "systemOfflineText": "システムはオフラインです。コアを有効化してください。",
+  "availableCoresTitle": "利用可能なコア",
+  "hardwareImportsTitle": "ハードウェアとインポート",
+  "promptPresetTitle": "プロンプトプリセット",
+  "promptPresetActiveLabel": "現在のプリセット",
+  "importPresetJsonButton": "プリセット JSON を取り込む",
+  "editActivePresetButton": "現在のプリセットを編集",
+  "editPromptPresetTitle": "プロンプトプリセットを編集",
+  "presetNameFieldLabel": "プリセット名",
+  "presetSystemPromptFieldLabel": "システムプロンプト",
+  "presetTemperatureFieldLabel": "Temperature",
+  "presetTopPFieldLabel": "Top P",
+  "presetTopKFieldLabel": "Top K",
+  "presetMaxOutputTokensFieldLabel": "最大出力トークン",
+  "defaultRoleplayPresetName": "Aura デフォルトロールプレイ",
+  "defaultRoleplayPresetPrompt": "与えられた役に深く没入してください。常にキャラクターとして振る舞い、臨場感豊かに描写し、システムが明示的に許可しない限り AI アシスタントであることに触れないでください。",
+  "importedPresetFallbackName": "取り込み済みプリセット",
+  "neuralAccelerationTitle": "ニューラルエンジン加速",
+  "neuralAccelerationSubtitle": "可能な場合は自動で NPU/CoreML に切り替えます",
+  "expressionPackTitle": "表情パック（ZIP）",
+  "expressionPackSubtitle": "複雑な 2D 表情パックを取り込みます",
+  "activeBadge": "有効",
+  "builtInTag": "内蔵",
+  "downloadedTag": "ダウンロード済み",
+  "alreadyActiveButton": "すでに有効です",
+  "activateEngineButton": "エンジンを有効化",
+  "activateBuiltInEngineButton": "内蔵エンジンを有効化",
+  "downloadInstallButton": "ダウンロードしてインストール",
+  "interfaceReplyLanguageTitle": "UI と返信言語",
+  "interfaceReplyLanguageDescription": "既定ではシステム言語に従います。ここで固定すると、会話中で明示的に変更しない限り返信もその言語に従います。",
+  "languageFieldLabel": "言語",
+  "chatNoActiveModel": "有効なモデルがまだ読み込まれていません。",
+  "whisperSheetTitle": "ウィスパー指示",
+  "whisperSheetDescription": "次の返信だけに影響し、この指示は画面上の会話には表示されません。",
+  "whisperSheetExample": "例：少し柔らかく返答し、不安を自信の裏に隠して。",
+  "applyWhisper": "適用",
+  "chatBackButtonTooltip": "戻る",
+  "chatWhisperButtonTooltip": "ウィスパー指示を開く",
+  "chatMoreActionsTooltip": "会話アクション",
+  "chatSendButtonTooltip": "メッセージを送信",
+  "chatStopButtonTooltip": "生成を停止",
+  "nextWhisperLabel": "次のウィスパー",
+  "chatInputPlaceholder": "Aura にメッセージ...",
+  "chatModelPreparing": "モデルを準備しています。少しお待ちください...",
+  "chatRecoveringCore": "少し不安定だったため、自動で整えています...",
+  "chatConversationResetting": "この会話を整えています...",
+  "chatGenerationTimedOut": "今回の返信はタイムアウトしました。もう一度送信するか、停止してから再試行できます。",
+  "chatRuntimeRecovered": "復旧しました。もう一度送信できます。",
+  "chatRuntimeRecoveryFailed": "復旧に失敗しました。設定からモデルを再度有効にしてください。",
+  "assistantLabel": "Aura",
+  "noActiveModel": "有効なモデルはありません",
+  "roleplayReadyLabel": "ロールプレイの文脈準備完了",
+  "newConversationButton": "新しい会話",
+  "clearHistoryButton": "履歴を消去",
+  "clearHistoryConfirmTitle": "履歴をすべて消去しますか？",
+  "clearHistoryConfirmDescription": "{characterName} の保存済み履歴がすべて削除され、この分岐は元に戻せません。",
+  "@clearHistoryConfirmDescription": {
+    "placeholders": {
+      "characterName": {}
+    }
+  },
+  "clearHistoryConfirmAction": "すべて削除",
+  "historyClearedMessage": "このキャラクターの会話履歴を消去しました。",
+  "sessionHistoryTitle": "履歴",
+  "sessionHistoryShortLabel": "履歴",
+  "sessionHistoryDescription": "{characterName} の過去の分岐に戻り、その続きから進めます。",
+  "@sessionHistoryDescription": {
+    "placeholders": {
+      "characterName": {}
+    }
+  },
+  "sessionHistoryEmpty": "このカードにはまだ保存済みの履歴がありません。",
+  "sessionCurrentLabel": "現在の会話",
+  "sessionMessageCount": "{count} 件のメッセージ",
+  "@sessionMessageCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "sessionBranchEmpty": "この分岐はまだ始まっていません。",
+  "importingCardText": "キャラクターカードを解析しています...",
+  "importCardEmptyState": "Tavern PNG または JSON カードを選んでプレビューします。",
+  "chooseCardButton": "画像またはファイルを選択",
+  "confirmImportButton": "インポートを確定",
+  "cancelButton": "キャンセル",
+  "editCharacterTitle": "キャラクターを編集",
+  "editCharacterButtonTooltip": "キャラクターを編集",
+  "characterWorkbenchTitle": "キャラクターワークベンチ",
+  "characterWorkbenchDescription": "カード本文、立ち絵、ロアブック項目をここで調整できます。変更はすべてローカルライブラリに保存されます。",
+  "characterPortraitImportedHint": "このカードには元の画像がすでに含まれています。",
+  "characterPortraitAutoImportHint": "Tavern PNG カードを取り込むと画像も自動で引き継がれます。画像がない場合だけ内蔵カバーを使います。",
+  "characterCoreFieldsTitle": "基本情報",
+  "characterCoreFieldsDescription": "これらの項目で役柄紹介、シーン開始、物語の流れを決めます。",
+  "characterNameLabel": "名前",
+  "characterDescriptionLabel": "説明",
+  "characterPersonalityLabel": "性格",
+  "characterScenarioLabel": "シナリオ",
+  "characterAlternateGreetingsLabel": "追加の導入文",
+  "characterCreatorNotesLabel": "作者メモ",
+  "characterMainPromptLabel": "カード内メイン指示",
+  "characterPostHistoryInstructionsLabel": "返信後ルール",
+  "characterAdvancedFieldsTitle": "詳細設定",
+  "characterAdvancedFieldsDescription": "追加の導入文、作者メモ、カード内メイン指示、返信後ルールを必要なときだけ編集します。",
+  "blankLineSeparatedHint": "各ブロックの間は 1 行空けてください。",
+  "characterFirstMessageLabel": "最初のメッセージ",
+  "characterExamplesLabel": "会話例",
+  "characterLorebookTitle": "ロアブック / ワールドブック",
+  "characterLorebookDescription": "単独ロアブックの取り込みにも対応しており、ここで直接項目を編集できます。取り込み時は既存設定を上書きせず、既定でマージします。",
+  "lorebookAttachedLabel": "ロアブックを接続済み ({count} 件)",
+  "@lorebookAttachedLabel": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "lorebookMissingLabel": "ロアブックはまだ接続されていません。",
+  "importLorebookButton": "ロアブックを取り込む",
+  "importMergeWorldbookButton": "ロアブックを取り込みマージ",
+  "addLorebookEntryButton": "項目を追加",
+  "replaceLorebookButton": "ロアブックを差し替える",
+  "removeLorebookButton": "ロアブックを外す",
+  "lorebookMetaPanelTitle": "ワールドブック名 / 概要",
+  "lorebookMetaSummaryFilled": "名前と概要が入力されています。",
+  "lorebookMetaSummaryPartial": "高度な項目が 1 つ入力されています。",
+  "lorebookMetaSummaryEmpty": "必要になるまで折りたたまれます。",
+  "worldbookNameLabel": "ワールドブック名",
+  "worldbookDescriptionLabel": "ワールドブック概要",
+  "lorebookEntriesTitle": "ワールドブック項目",
+  "lorebookEntriesCollapsedEmptyHint": "大きなワールドブックで画面が埋まらないよう、初期状態では折りたたまれます。",
+  "lorebookEntriesCollapsedHint": "タップしてすべての項目を表示・編集します。",
+  "lorebookEntryCount": "{count} 件",
+  "@lorebookEntryCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "lorebookEntriesEmptyState": "項目はまだありません。Tavern のロアブックを取り込むか、キーワードで発火する設定項目を手動で追加してください。",
+  "lorebookEntryFallbackLabel": "項目 {index}",
+  "@lorebookEntryFallbackLabel": {
+    "placeholders": {
+      "index": {}
+    }
+  },
+  "editEntryTooltip": "項目を編集",
+  "deleteEntryTooltip": "項目を削除",
+  "secondaryKeywordsTag": "補助 {keywords}",
+  "@secondaryKeywordsTag": {
+    "placeholders": {
+      "keywords": {}
+    }
+  },
+  "priorityTag": "優先度 {value}",
+  "@priorityTag": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "lorebookEntryEditorTitle": "ワールドブック項目を編集",
+  "lorebookEntryIdLabel": "項目 ID",
+  "lorebookEntryPrimaryKeywordsLabel": "主キーワード",
+  "lorebookEntryPrimaryKeywordsHelper": "カンマ区切りです。例: zhongli, contract, liyue",
+  "lorebookEntrySecondaryKeywordsLabel": "補助キーワード",
+  "lorebookEntrySecondaryKeywordsHelper": "任意、カンマ区切りです。",
+  "lorebookEntryContentLabel": "項目内容",
+  "lorebookEntryCommentLabel": "メモ",
+  "lorebookEntryPriorityLabel": "優先度",
+  "lorebookEntryEnabledLabel": "項目を有効化",
+  "lorebookEntrySelectiveLabel": "補助キーワード必須",
+  "lorebookEntryConstantLabel": "常時注入",
+  "lorebookEntryWholeWordLabel": "完全一致",
+  "lorebookEntryCaseSensitiveLabel": "大文字小文字を区別",
+  "saveEntryButton": "項目を保存",
+  "lorebookEntryValidationError": "少なくともキーワードと内容を入力してください。",
+  "lorebookImportedMessage": "ロアブックを接続しました ({count} 件)。",
+  "@lorebookImportedMessage": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "saveButton": "保存",
+  "savingButton": "保存中...",
+  "importDialogDescription": "Tavern / SillyTavern のカードはそのままライブラリに取り込まれます。単体のロアブックは次の手順で対象カードへ接続できます。",
+  "importPreviewRoleCardTag": "ストーリーカード",
+  "embeddedWorldbookTag": "内蔵ロアブック",
+  "createCharacterButton": "手動で作成",
+  "attachWorldbookButton": "ロアブックを接続",
+  "importEmptyStateIntro": "まず取り込み元を選んでください。写真はフォトライブラリに保存済みの Tavern PNG 向け、ファイルは Tavern / SillyTavern の PNG・JSON カードと単体ロアブックに対応します。ロアブック内蔵カードは一度で取り込めます。",
+  "importEmptyStateDetails": "カードに `character_book` / ロアブックが含まれていれば、Aura が開幕文、予備の挨拶、指示文、シーン設定をそのまま保持します。",
+  "importCreateCharacterHint": "手元にカードがなくても、ここから新しく作成できます。",
+  "chooseAnotherCardButton": "別の画像またはファイルを選ぶ",
+  "importSourceSheetTitle": "取り込み方法を選択",
+  "importSourceSheetSubtitle": "写真はフォトライブラリに保存済みの Tavern PNG 向けです。ファイルでは Tavern PNG / JSON カードを選べます。",
+  "importFromPhotosTitle": "写真から取り込む",
+  "importFromPhotosSubtitle": "フォトライブラリに保存済みの Tavern PNG カードを選びます。",
+  "importFromFilesTitle": "ファイルから取り込む",
+  "importFromFilesSubtitle": "Files から Tavern PNG、JSON カード、単独ワールドブックを選びます。",
+  "importWorldbookHint": "単独のワールドブックはここではなく、キャラクター編集から取り込みます。",
+  "importErrorTitle": "このファイルは取り込めません",
+  "importFileLabel": "ファイル",
+  "importCreatorLabel": "作者",
+  "importNoDescriptionLabel": "このカードには説明がありません。",
+  "importNoFirstMessageLabel": "このカードには最初のメッセージがありません。",
+  "importWorldbookErrorMessage": "このファイルは単独のワールドブックです。キャラクターを開き、ロアブック欄から取り込んでください。",
+  "importUnsupportedFileMessage": "ここで対応しているのは Tavern PNG と JSON のキャラクターカードのみです。",
+  "photoImportPngOnlyMessage": "写真からの取り込みは現在 Tavern PNG カードのみ対応しています。",
+  "importInvalidCharacterFileMessage": "このファイルは対応しているキャラクターカードには見えません。",
+  "importGenericErrorMessage": "インポートに失敗しました。別のカードファイルでお試しください。",
+  "importSuccessMessage": "{characterName} を取り込みました。",
+  "@importSuccessMessage": {
+    "placeholders": {
+      "characterName": {}
+    }
+  },
+  "characterCreatedMessage": "{characterName} を作成しました。",
+  "@characterCreatedMessage": {
+    "placeholders": {
+      "characterName": {}
+    }
+  },
+  "importOpenChatAction": "会話を始める",
+  "settingsButtonTooltip": "設定を開く",
+  "editMessageActionTitle": "このメッセージを編集",
+  "editMessageActionDescription": "物語の流れを保ったまま、この発言だけを直します。",
+  "deleteMessageActionTitle": "このメッセージを削除",
+  "deleteMessageActionDescription": "現在の会話からこの発言を取り除きます。",
+  "editMessageDialogTitle": "メッセージを編集",
+  "editMessageHint": "メッセージを書き直す",
+  "messageUpdated": "メッセージを更新しました。",
+  "deleteMessageDialogTitle": "メッセージを削除",
+  "deleteMessageDialogDescription": "このメッセージは現在の会話から削除されます。",
+  "deleteButton": "削除",
+  "messageDeleted": "メッセージを削除しました。",
+  "continueSceneButtonTooltip": "現在のシーンを続ける",
+  "continueScenePrompt": "現在のシーンを自然に続けてください。関係性をリセットしたり、役から外れたりせず、緊張感、手掛かり、感情を前に進めてください。",
+  "storyCoreDownloadPrompt": "シーンに入る前にストーリーコアをダウンロードしてください。",
+  "storyCoreChooseButton": "ストーリーコアを選ぶ",
+  "storyCoreDownloadStatus": "ストーリーコアを選択",
+  "firstRunModelTitle": "最初のストーリーコアを選択",
+  "firstRunModelSubtitle": "Aura を初めて開くときは、まず 1 つのローカルストーリーコアが必要です。E2B は導入が速く、E4B はより高品質です。完了後はそのままシーンに戻ります。",
+  "firstRunModelRecommendedBadge": "おすすめ",
+  "firstRunModelQualityBadge": "高品質",
+  "firstRunE2bHeadline": "すばやく始める",
+  "firstRunE2bSummary": "初回導入向けです。ダウンロードが軽く、セットアップも速いため、シーンに入りやすくなります。",
+  "firstRunE4bHeadline": "より豊かな描写",
+  "firstRunE4bSummary": "ダウンロードは大きめですが、描写の密度やシーンの安定感はさらに高くなります。",
+  "modelDownloadPreparingButton": "ダウンロード中...",
+  "modelSetupRamHint": "推奨メモリ {memory}",
+  "@modelSetupRamHint": {
+    "placeholders": {
+      "memory": {}
+    }
+  },
+  "modelSetupDownloadProgress": "ダウンロード済み {received} / {total}",
+  "@modelSetupDownloadProgress": {
+    "placeholders": {
+      "received": {},
+      "total": {}
+    }
+  },
+  "modelErrorNoSpace": "空き容量が不足しています。容量を空けてから再試行してください。",
+  "modelErrorCorrupt": "ダウンロードしたファイルが不完全でした。もう一度お試しください。",
+  "modelErrorNetwork": "ダウンロードが中断されました。接続を確認して再試行してください。",
+  "modelErrorGeneric": "問題が発生しました。しばらくしてからもう一度お試しください。"
+}

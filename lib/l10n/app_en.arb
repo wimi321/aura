@@ -1,0 +1,302 @@
+{
+  "@@locale": "en",
+  "appTitle": "Aura",
+  "bootstrapLoadingMessage": "Opening your private story space...",
+  "bootstrapErrorTitle": "Aura failed to launch",
+  "bootstrapErrorDescription": "Aura could not finish startup. Check the details below.",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "loadingModel": "Constructing scene...",
+  "modelStateIdle": "Idle",
+  "modelStateError": "Error",
+  "statusLabel": "Status {state}",
+  "@statusLabel": {
+    "placeholders": {
+      "state": {}
+    }
+  },
+  "readyText": "Ready",
+  "chatInputHint": "Continue the story...",
+  "whisperHint": "Whisper instruction (next turn only)...",
+  "advancedSettings": "System Archives",
+  "characters": "Story Library",
+  "importCharacter": "Import Character",
+  "importPreviewTitle": "Import Story Card",
+  "lorebookIncluded": "📚 Includes Lorebook ({count} entries)",
+  "companionsTitle": "Story Library",
+  "appTagline": "Local roleplay, private by design.",
+  "engineStatusTitle": "Local Inference Engine",
+  "engineRunning": "Inference Core: {modelName}",
+  "@engineRunning": {
+    "placeholders": {
+      "modelName": {}
+    }
+  },
+  "systemLabel": "SYSTEM",
+  "settingsTitle": "Storage & Settings",
+  "languageSectionTitle": "Language",
+  "activeCoreTitle": "Active Inference Core",
+  "systemOfflineText": "Offline. Please boot up a local inference core to enter the story.",
+  "availableCoresTitle": "Available Inference Cores",
+  "hardwareImportsTitle": "Hardware & Extensions",
+  "promptPresetTitle": "Story Directives",
+  "promptPresetActiveLabel": "Current Directive",
+  "importPresetJsonButton": "Import Directive File",
+  "editActivePresetButton": "Edit Current Directive",
+  "editPromptPresetTitle": "Edit System Directive",
+  "presetNameFieldLabel": "Directive Name",
+  "presetSystemPromptFieldLabel": "Story Behavior",
+  "presetTemperatureFieldLabel": "Creativity",
+  "presetTopPFieldLabel": "Sampling Range",
+  "presetTopKFieldLabel": "Candidate Count",
+  "presetMaxOutputTokensFieldLabel": "Max Output Tokens",
+  "defaultRoleplayPresetName": "Aura Default Story Directive",
+  "defaultRoleplayPresetPrompt": "You are fully immersed in the assigned role. Stay in character, write vividly, and never mention being an AI assistant unless the system explicitly allows it.",
+  "importedPresetFallbackName": "Imported Directive",
+  "neuralAccelerationTitle": "Neural Engine Acceleration",
+  "neuralAccelerationSubtitle": "Automatically routing to NPU/CoreML when possible",
+  "expressionPackTitle": "Expression Pack (ZIP)",
+  "expressionPackSubtitle": "Import complex 2D expression packs",
+  "activeBadge": "ACTIVE",
+  "builtInTag": "Built-in",
+  "downloadedTag": "Downloaded",
+  "alreadyActiveButton": "Already Active",
+  "activateEngineButton": "Activate Core",
+  "activateBuiltInEngineButton": "Activate Built-in Core",
+  "downloadInstallButton": "Download & Install",
+  "interfaceReplyLanguageTitle": "Interface & Reply Language",
+  "interfaceReplyLanguageDescription": "UI follows the system by default. You can pin a language here, and chat replies will follow that preference unless the user explicitly switches.",
+  "languageFieldLabel": "Language",
+  "chatNoActiveModel": "Offline. No inference core is loaded for the story.",
+  "whisperSheetTitle": "Whisper Instruction",
+  "whisperSheetDescription": "Influence the character's next turn from behind the scenes without breaking the story text.",
+  "whisperSheetExample": "Example: Reply more softly and hide concern under confidence.",
+  "applyWhisper": "Apply Whisper",
+  "chatBackButtonTooltip": "Back",
+  "chatWhisperButtonTooltip": "Open whisper instruction",
+  "chatMoreActionsTooltip": "Scene actions",
+  "chatSendButtonTooltip": "Progress story",
+  "chatStopButtonTooltip": "Stop generation",
+  "nextWhisperLabel": "Next whisper",
+  "chatInputPlaceholder": "Write the next turn...",
+  "chatModelPreparing": "Aura is arranging the scene...",
+  "chatRecoveringCore": "Reconnecting thought process...",
+  "chatConversationResetting": "Resetting the timeline...",
+  "chatGenerationTimedOut": "Aura didn't respond in time. You can send again.",
+  "chatRuntimeRecovered": "Reconnection successful. You may continue.",
+  "chatRuntimeRecoveryFailed": "Inference core disconnected. Please reactivate in Settings.",
+  "assistantLabel": "Character",
+  "noActiveModel": "No active core",
+  "roleplayReadyLabel": "Ready to enter the story",
+  "newConversationButton": "New Scene",
+  "clearHistoryButton": "Reset Scene",
+  "clearHistoryConfirmTitle": "Clear all session history?",
+  "clearHistoryConfirmDescription": "This deletes every saved session for {characterName} and the old branches cannot be restored.",
+  "@clearHistoryConfirmDescription": {
+    "placeholders": {
+      "characterName": {}
+    }
+  },
+  "clearHistoryConfirmAction": "Delete All",
+  "historyClearedMessage": "Scene progress has been reset for this character.",
+  "sessionHistoryTitle": "Session History",
+  "sessionHistoryShortLabel": "History",
+  "sessionHistoryDescription": "Jump back into an older branch for {characterName} and keep that storyline going.",
+  "@sessionHistoryDescription": {
+    "placeholders": {
+      "characterName": {}
+    }
+  },
+  "sessionHistoryEmpty": "No saved sessions for this role card yet.",
+  "sessionCurrentLabel": "Current Session",
+  "sessionMessageCount": "{count} messages",
+  "@sessionMessageCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "sessionBranchEmpty": "This branch has not started yet.",
+  "importingCardText": "Parsing character card...",
+  "importCardEmptyState": "Choose a Tavern PNG or JSON card to preview it.",
+  "chooseCardButton": "Choose Image or File",
+  "confirmImportButton": "Confirm Import",
+  "cancelButton": "Cancel",
+  "editCharacterTitle": "Edit Character",
+  "editCharacterButtonTooltip": "Edit character",
+  "characterWorkbenchTitle": "Character Workbench",
+  "characterWorkbenchDescription": "Tune the card body, portrait, and worldbook entries here. All changes are saved into the local library.",
+  "characterPortraitImportedHint": "This role card already includes its original portrait art.",
+  "characterPortraitAutoImportHint": "If you import a Tavern PNG card, Aura carries the art over automatically. The built-in cinematic cover is only used when no image exists.",
+  "characterCoreFieldsTitle": "Core Card Fields",
+  "characterCoreFieldsDescription": "These fields define the role summary, scene setup, and opening momentum.",
+  "characterNameLabel": "Name",
+  "characterDescriptionLabel": "Description",
+  "characterPersonalityLabel": "Personality",
+  "characterScenarioLabel": "Scenario",
+  "characterFirstMessageLabel": "First Message",
+  "characterExamplesLabel": "Example Dialogues",
+  "characterAlternateGreetingsLabel": "Alternate Greetings",
+  "characterCreatorNotesLabel": "Creator Notes",
+  "characterMainPromptLabel": "Main Prompt Override",
+  "characterPostHistoryInstructionsLabel": "Post-History Instructions",
+  "characterAdvancedFieldsTitle": "Tavern Advanced Fields",
+  "characterAdvancedFieldsDescription": "These fields feed directly into alternate greetings, prompt overrides, and next-turn reply constraints.",
+  "blankLineSeparatedHint": "Separate each block with a blank line.",
+  "characterLorebookTitle": "Lorebook / Worldbook",
+  "characterLorebookDescription": "Import standalone worldbooks or manage entries directly here. Imported worldbooks merge by default instead of overwriting existing lore.",
+  "lorebookAttachedLabel": "Attached lorebook ({count} entries)",
+  "@lorebookAttachedLabel": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "lorebookMissingLabel": "No lorebook attached yet.",
+  "importLorebookButton": "Import Lorebook",
+  "importMergeWorldbookButton": "Import & Merge Worldbook",
+  "addLorebookEntryButton": "Add Entry",
+  "replaceLorebookButton": "Replace Lorebook",
+  "removeLorebookButton": "Remove Lorebook",
+  "lorebookMetaPanelTitle": "Worldbook Name & Summary",
+  "lorebookMetaSummaryFilled": "Name and summary are filled in.",
+  "lorebookMetaSummaryPartial": "One advanced field is filled in.",
+  "lorebookMetaSummaryEmpty": "Collapsed by default. Expand only if you need it.",
+  "worldbookNameLabel": "Worldbook Name",
+  "worldbookDescriptionLabel": "Worldbook Description",
+  "lorebookEntriesTitle": "Worldbook Entries",
+  "lorebookEntriesCollapsedEmptyHint": "Collapsed by default so giant worldbooks do not flood the whole workbench.",
+  "lorebookEntriesCollapsedHint": "Tap to reveal and manage every entry.",
+  "lorebookEntryCount": "{count} entries",
+  "@lorebookEntryCount": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "lorebookEntriesEmptyState": "No entries yet. Import a Tavern worldbook or add keyword-triggered scene notes manually.",
+  "lorebookEntryFallbackLabel": "Entry {index}",
+  "@lorebookEntryFallbackLabel": {
+    "placeholders": {
+      "index": {}
+    }
+  },
+  "editEntryTooltip": "Edit entry",
+  "deleteEntryTooltip": "Delete entry",
+  "secondaryKeywordsTag": "Secondary {keywords}",
+  "@secondaryKeywordsTag": {
+    "placeholders": {
+      "keywords": {}
+    }
+  },
+  "priorityTag": "Priority {value}",
+  "@priorityTag": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "lorebookEntryEditorTitle": "Edit Worldbook Entry",
+  "lorebookEntryIdLabel": "Entry ID",
+  "lorebookEntryPrimaryKeywordsLabel": "Primary Keywords",
+  "lorebookEntryPrimaryKeywordsHelper": "Comma-separated, for example: zhongli, contract, liyue",
+  "lorebookEntrySecondaryKeywordsLabel": "Secondary Keywords",
+  "lorebookEntrySecondaryKeywordsHelper": "Optional, comma-separated.",
+  "lorebookEntryContentLabel": "Entry Content",
+  "lorebookEntryCommentLabel": "Comment",
+  "lorebookEntryPriorityLabel": "Priority",
+  "lorebookEntryEnabledLabel": "Enable Entry",
+  "lorebookEntrySelectiveLabel": "Require Secondary Keywords",
+  "lorebookEntryConstantLabel": "Always Inject",
+  "lorebookEntryWholeWordLabel": "Whole Word Match",
+  "lorebookEntryCaseSensitiveLabel": "Case Sensitive",
+  "saveEntryButton": "Save Entry",
+  "lorebookEntryValidationError": "Please provide at least keywords and content.",
+  "lorebookImportedMessage": "Lorebook attached ({count} entries).",
+  "@lorebookImportedMessage": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "saveButton": "Save",
+  "savingButton": "Saving...",
+  "importDialogDescription": "Tavern and SillyTavern cards import straight into the library. Standalone worldbooks can be attached to a role card in the next step.",
+  "importPreviewRoleCardTag": "Story Card",
+  "embeddedWorldbookTag": "Embedded Worldbook",
+  "createCharacterButton": "Create Character",
+  "attachWorldbookButton": "Attach Worldbook",
+  "importEmptyStateIntro": "Choose an import source first: Photos are for Tavern PNG cards already saved to your gallery, while Files support Tavern or SillyTavern PNG cards, JSON cards, and standalone worldbooks. Cards with embedded worldbooks come in one step.",
+  "importEmptyStateDetails": "Aura will automatically preserve `character_book` world info, greetings, prompt overrides, and scene notes when the card includes them.",
+  "importCreateCharacterHint": "No existing role card yet? You can also create one from scratch here.",
+  "chooseAnotherCardButton": "Choose Another Image or File",
+  "importSourceSheetTitle": "Choose Import Source",
+  "importSourceSheetSubtitle": "Photos are for Tavern PNG cards already saved to your gallery. Files support Tavern PNG and JSON cards.",
+  "importFromPhotosTitle": "Import From Photos",
+  "importFromPhotosSubtitle": "Pick a Tavern PNG card that is already in your photo library.",
+  "importFromFilesTitle": "Import From Files",
+  "importFromFilesSubtitle": "Pick a Tavern PNG card, JSON card, or standalone worldbook from Files.",
+  "importWorldbookHint": "You can also choose a standalone worldbook JSON here. Aura will let you attach it to a role card in the next step.",
+  "importErrorTitle": "Unable to import this file",
+  "importFileLabel": "File",
+  "importCreatorLabel": "Creator",
+  "importNoDescriptionLabel": "This card does not include a description.",
+  "importNoFirstMessageLabel": "This card does not include a first message.",
+  "importWorldbookErrorMessage": "This file is a standalone worldbook. Aura can attach it directly to a role card from the import flow.",
+  "importUnsupportedFileMessage": "Only Tavern PNG and JSON character cards are supported here.",
+  "photoImportPngOnlyMessage": "Photo import currently supports Tavern PNG cards only.",
+  "importInvalidCharacterFileMessage": "This file does not look like a supported character card.",
+  "importGenericErrorMessage": "Import failed. Please try another character card file.",
+  "importSuccessMessage": "{characterName} imported successfully.",
+  "@importSuccessMessage": {
+    "placeholders": {
+      "characterName": {}
+    }
+  },
+  "characterCreatedMessage": "{characterName} created successfully.",
+  "@characterCreatedMessage": {
+    "placeholders": {
+      "characterName": {}
+    }
+  },
+  "importOpenChatAction": "Open Scene",
+  "settingsButtonTooltip": "Open settings",
+  "editMessageActionTitle": "Edit this message",
+  "editMessageActionDescription": "Keep the story and revise this turn only.",
+  "deleteMessageActionTitle": "Delete this message",
+  "deleteMessageActionDescription": "Remove this turn from the current session.",
+  "editMessageDialogTitle": "Edit message",
+  "editMessageHint": "Rewrite the message",
+  "messageUpdated": "Message updated.",
+  "deleteMessageDialogTitle": "Delete message",
+  "deleteMessageDialogDescription": "This message will be removed from the current session.",
+  "deleteButton": "Delete",
+  "messageDeleted": "Message deleted.",
+  "continueSceneButtonTooltip": "Continue the current scene",
+  "continueScenePrompt": "Continue the current scene naturally. Advance the tension, clues, or emotions without resetting the relationship or breaking character.",
+  "storyCoreDownloadPrompt": "Download a story core before entering the scene.",
+  "storyCoreChooseButton": "Choose Story Core",
+  "storyCoreDownloadStatus": "Choose a story core",
+  "firstRunModelTitle": "Choose your first story core",
+  "firstRunModelSubtitle": "Aura needs one local story core before the first scene can begin. E2B starts faster. E4B gives you stronger quality, and Aura will return to your scene as soon as the download finishes.",
+  "firstRunModelRecommendedBadge": "Recommended",
+  "firstRunModelQualityBadge": "Higher quality",
+  "firstRunE2bHeadline": "Faster first start",
+  "firstRunE2bSummary": "Best for a first install. Smaller download, quicker setup, and smoother story entry.",
+  "firstRunE4bHeadline": "Stronger scene detail",
+  "firstRunE4bSummary": "Bigger download, but stronger writing quality, richer detail, and steadier scene control.",
+  "modelDownloadPreparingButton": "Downloading...",
+  "modelSetupRamHint": "Recommended RAM {memory}",
+  "@modelSetupRamHint": {
+    "placeholders": {
+      "memory": {}
+    }
+  },
+  "modelSetupDownloadProgress": "Downloaded {received} / {total}",
+  "@modelSetupDownloadProgress": {
+    "placeholders": {
+      "received": {},
+      "total": {}
+    }
+  },
+  "modelErrorNoSpace": "Not enough storage space. Free up some space and try again.",
+  "modelErrorCorrupt": "The downloaded file was incomplete. Please try again.",
+  "modelErrorNetwork": "Download interrupted. Check your connection and try again.",
+  "modelErrorGeneric": "Something went wrong. Please try again."
+}

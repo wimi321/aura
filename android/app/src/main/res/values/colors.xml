@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="aura_launch_black">#04080D</color>
+    <color name="aura_icon_background_top">#08101A</color>
+    <color name="aura_icon_background_bottom">#000000</color>
+</resources>
