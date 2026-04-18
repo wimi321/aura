@@ -242,6 +242,7 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
                 children: [
                   Text(
                     l10n?.importSourceSheetTitle ?? 'Choose Import Source',
+                    key: const ValueKey<String>('import-source-sheet-title'),
                     style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
@@ -259,6 +260,7 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
                   const SizedBox(height: 16),
                   _buildImportSourceTile(
                     context: sheetContext,
+                    key: const ValueKey<String>('import-source-photos'),
                     icon: Icons.photo_library_rounded,
                     title: l10n?.importFromPhotosTitle ?? 'Import From Photos',
                     subtitle: l10n?.importFromPhotosSubtitle ??
@@ -268,6 +270,7 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
                   const SizedBox(height: 10),
                   _buildImportSourceTile(
                     context: sheetContext,
+                    key: const ValueKey<String>('import-source-files'),
                     icon: Icons.folder_open_rounded,
                     title: l10n?.importFromFilesTitle ?? 'Import From Files',
                     subtitle: l10n?.importFromFilesSubtitle ??
@@ -285,12 +288,14 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
 
   Widget _buildImportSourceTile({
     required BuildContext context,
+    Key? key,
     required IconData icon,
     required String title,
     required String subtitle,
     required _ImportSource source,
   }) {
     return InkWell(
+      key: key,
       borderRadius: BorderRadius.circular(18),
       onTap: () => Navigator.pop(context, source),
       child: Ink(
@@ -521,6 +526,8 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
                         ),
                       ),
                     FilledButton.icon(
+                      key: const ValueKey<String>(
+                          'import-dialog-open-picker-button'),
                       onPressed: isLocked
                           ? null
                           : (preview == null && lorebookPreview == null

@@ -55,6 +55,7 @@ tmp_*.log
 tmp*.png
 tmp*.xml
 flutter_*.log
+docs/readme/raw/
 
 # Symbolication related
 app.*.symbols

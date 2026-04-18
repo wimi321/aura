@@ -226,6 +226,7 @@ class _SetupModelCard extends StatelessWidget {
         ],
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
@@ -306,7 +307,6 @@ class _SetupModelCard extends StatelessWidget {
                   ),
             ),
           ],
-          const Spacer(),
           const SizedBox(height: 24),
           Row(
             children: <Widget>[

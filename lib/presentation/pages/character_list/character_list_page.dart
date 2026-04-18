@@ -40,6 +40,7 @@ class CharacterListPage extends StatelessWidget {
                   style: Theme.of(context).textTheme.headlineSmall,
                 ),
                 FilledButton.tonal(
+                  key: const ValueKey<String>('character-import-button'),
                   onPressed: () => _showImportDialog(context),
                   style: FilledButton.styleFrom(
                     backgroundColor: AppTheme.bgElevated,

@@ -1106,15 +1106,20 @@ class _MessageBubble extends StatelessWidget {
                   const Icon(Icons.auto_awesome,
                       size: 14, color: AppTheme.brandAura),
                   const SizedBox(width: 8),
-                  Text(
+                  Expanded(
+                    child: Text(
                       (characterName.trim().isEmpty
                               ? (l10n?.assistantLabel ?? 'CHARACTER')
                               : characterName)
                           .toUpperCase(),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.labelSmall?.copyWith(
                           color: AppTheme.brandAura,
                           letterSpacing: 1.2,
-                          fontWeight: FontWeight.w700)),
+                          fontWeight: FontWeight.w700),
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 12),
