@@ -3,6 +3,9 @@
 Aura is a private, on-device mobile app for Tavern-style roleplay and scene progression.
 It is built for story cards, worldbooks, and interactive fiction flow instead of generic chatbot Q&A.
 
+- Repository: [github.com/wimi321/aura](https://github.com/wimi321/aura)
+- Android downloads: [GitHub Releases](https://github.com/wimi321/aura/releases)
+
 ## What Aura Is
 
 Aura is designed around one clear product idea:
