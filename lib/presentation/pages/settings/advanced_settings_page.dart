@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../application/providers/app_state_provider.dart';
+import '../../utils/format_bytes.dart';
 import '../../../backend/models/default_assets.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../utils/preset_localization.dart';
@@ -469,7 +470,7 @@ class _ModelModuleCard extends StatelessWidget {
               ),
               if (installed)
                 Text(
-                  '${l10n?.diskSpaceLabel ?? 'Disk'}: ${_formatBytes(manifest.sizeBytes)}',
+                  '${l10n?.diskSpaceLabel ?? 'Disk'}: ${formatBytes(manifest.sizeBytes)}',
                   style: Theme.of(context)
                       .textTheme
                       .labelSmall
@@ -656,7 +657,7 @@ String _localizedSettingsStateLabel(
 String _localizedCoreSummary(BuildContext context, ModelManifest manifest) {
   final String code =
       Localizations.localeOf(context).languageCode.toLowerCase();
-  final String size = _formatBytes(manifest.sizeBytes);
+  final String size = formatBytes(manifest.sizeBytes);
   final String memory = '${manifest.recommendedMinRamGb}GB+';
   if (code == 'zh') {
     return '$size · 建议内存 $memory';
@@ -714,8 +715,8 @@ String _localizedDownloadSummary(
 ) {
   final String code =
       Localizations.localeOf(context).languageCode.toLowerCase();
-  final String received = _formatBytes(receivedBytes);
-  final String total = _formatBytes(totalBytes);
+  final String received = formatBytes(receivedBytes);
+  final String total = formatBytes(totalBytes);
   if (code == 'zh') {
     return '已下载 $received / $total';
   }
@@ -744,21 +745,4 @@ Map<String, String> _localizedLanguageLabels(BuildContext context) {
     'ja': '日本語',
     'ko': '한국어',
   };
-}
-
-String _formatBytes(int bytes) {
-  if (bytes <= 0) {
-    return '0 B';
-  }
-
-  const List<String> units = <String>['B', 'KB', 'MB', 'GB', 'TB'];
-  double value = bytes.toDouble();
-  int unitIndex = 0;
-  while (value >= 1024 && unitIndex < units.length - 1) {
-    value /= 1024;
-    unitIndex += 1;
-  }
-  final String precision =
-      unitIndex >= 3 ? value.toStringAsFixed(2) : value.toStringAsFixed(0);
-  return '$precision ${units[unitIndex]}';
 }

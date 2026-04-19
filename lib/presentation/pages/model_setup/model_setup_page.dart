@@ -7,6 +7,7 @@ import 'package:aura_core/aura_core.dart';
 
 import '../../../application/providers/app_state_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../utils/format_bytes.dart';
 
 class ModelSetupPage extends StatelessWidget {
   const ModelSetupPage({super.key, this.returnTo});
@@ -333,7 +334,7 @@ class _SetupModelCardState extends State<_SetupModelCard> {
             children: <Widget>[
               _InfoChip(
                 icon: Icons.download_rounded,
-                label: _formatBytes(widget.manifest.sizeBytes),
+                label: formatBytes(widget.manifest.sizeBytes),
               ),
               _InfoChip(
                 icon: Icons.memory_rounded,
@@ -437,11 +438,11 @@ class _SetupModelCardState extends State<_SetupModelCard> {
 
   String _buildDownloadDetail(
       BuildContext context, AppStateProvider appState) {
-    final String received = _formatBytes(appState.downloadReceivedBytes);
-    final String total = _formatBytes(appState.downloadTotalBytes);
+    final String received = formatBytes(appState.downloadReceivedBytes);
+    final String total = formatBytes(appState.downloadTotalBytes);
     final StringBuffer buf = StringBuffer('$received / $total');
     if (_speedBytesPerSecond > 0) {
-      buf.write(' · ${_formatBytes(_speedBytesPerSecond.round())}/s');
+      buf.write(' · ${formatBytes(_speedBytesPerSecond.round())}/s');
       final String eta = _formatEta(
           appState.downloadReceivedBytes, appState.downloadTotalBytes);
       if (eta.isNotEmpty) {
@@ -567,20 +568,4 @@ String _localizedModelError(BuildContext context, String message) {
       return l10n?.modelErrorGeneric ?? message;
   }
   return message;
-}
-
-String _formatBytes(int bytes) {
-  if (bytes <= 0) {
-    return '0 B';
-  }
-  const List<String> units = <String>['B', 'KB', 'MB', 'GB', 'TB'];
-  double value = bytes.toDouble();
-  int unitIndex = 0;
-  while (value >= 1024 && unitIndex < units.length - 1) {
-    value /= 1024;
-    unitIndex += 1;
-  }
-  final String precision =
-      unitIndex >= 3 ? value.toStringAsFixed(2) : value.toStringAsFixed(0);
-  return '$precision ${units[unitIndex]}';
 }
