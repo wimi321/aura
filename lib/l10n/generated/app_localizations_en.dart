@@ -65,7 +65,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get companionsTitle => 'Story Library';
 
   @override
-  String get appTagline => 'Local roleplay, private by design.';
+  String get appTagline => 'Gemma 4 on your phone. No API, no cloud, no cost.';
 
   @override
   String get engineStatusTitle => 'Local Inference Engine';
@@ -899,7 +899,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get emptyLibraryDescription =>
-      'Import a Tavern character card or create one from scratch to begin your first scene.';
+      'Import a Tavern card or create one from scratch. Everything runs on-device — no API keys, no cloud, no cost.';
 
   @override
   String get deleteCharacterTitle => 'Delete Character';

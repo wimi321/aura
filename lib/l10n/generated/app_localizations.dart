@@ -207,7 +207,7 @@ abstract class AppLocalizations {
   /// No description provided for @appTagline.
   ///
   /// In en, this message translates to:
-  /// **'Local roleplay, private by design.'**
+  /// **'Gemma 4 on your phone. No API, no cloud, no cost.'**
   String get appTagline;
 
   /// No description provided for @engineStatusTitle.
@@ -1672,7 +1672,7 @@ abstract class AppLocalizations {
   /// No description provided for @emptyLibraryDescription.
   ///
   /// In en, this message translates to:
-  /// **'Import a Tavern character card or create one from scratch to begin your first scene.'**
+  /// **'Import a Tavern card or create one from scratch. Everything runs on-device — no API keys, no cloud, no cost.'**
   String get emptyLibraryDescription;
 
   /// No description provided for @deleteCharacterTitle.

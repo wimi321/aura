@@ -22,7 +22,7 @@
   "importPreviewTitle": "导入剧情卡",
   "lorebookIncluded": "📚 附带世界观设定 ({count}个词条)",
   "companionsTitle": "剧本库",
-  "appTagline": "本地剧情角色扮演，隐私优先。",
+  "appTagline": "Gemma 4 手机直接跑，不用 API，不花钱。",
   "engineStatusTitle": "本地运算引擎",
   "engineRunning": "正在运行 {modelName}",
   "@engineRunning": {
@@ -359,7 +359,7 @@
   "searchCharactersHint": "搜索角色...",
   "searchNoResults": "没有匹配的角色。",
   "emptyLibraryTitle": "故事库还是空的",
-  "emptyLibraryDescription": "导入一张 Tavern 角色卡或从头创建，开启你的第一个场景。",
+  "emptyLibraryDescription": "导入一张 Tavern 角色卡或从头创建。全部在手机上运行，不用 API，不花钱，不上网。",
   "deleteCharacterTitle": "删除角色",
   "deleteCharacterConfirm": "确定要删除 {characterName} 吗？此操作无法撤销。",
   "@deleteCharacterConfirm": {

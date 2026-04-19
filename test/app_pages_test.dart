@@ -213,7 +213,7 @@ void main() {
 
       await tester.pump();
       expect(find.text('剧本库'), findsOneWidget);
-      expect(find.text('本地剧情角色扮演，隐私优先。'), findsOneWidget);
+      expect(find.text('Gemma 4 手机直接跑，不用 API，不花钱。'), findsOneWidget);
 
       await tester.pumpWidget(const SizedBox.shrink());
       await tester.pump();

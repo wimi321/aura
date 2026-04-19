@@ -22,7 +22,7 @@
   "importPreviewTitle": "ストーリーカードを取り込む",
   "lorebookIncluded": "📚 ロアブックあり ({count} 件)",
   "companionsTitle": "あなたの仲間たち",
-  "appTagline": "ローカル知能、プライバシー第一。",
+  "appTagline": "Gemma 4 をスマホで実行。API不要、無料、完全オフライン。",
   "engineStatusTitle": "エンジン状態",
   "engineRunning": "{modelName} を実行中",
   "@engineRunning": {
@@ -359,7 +359,7 @@
   "searchCharactersHint": "キャラクターを検索...",
   "searchNoResults": "一致するキャラクターがありません。",
   "emptyLibraryTitle": "ストーリーライブラリは空です",
-  "emptyLibraryDescription": "Tavern キャラクターカードを取り込むか、ゼロから作成して最初のシーンを始めましょう。",
+  "emptyLibraryDescription": "Tavern カードを取り込むか、ゼロから作成。すべてデバイス上で動作 — API不要、無料、クラウドなし。",
   "deleteCharacterTitle": "キャラクターを削除",
   "deleteCharacterConfirm": "{characterName} を削除しますか？この操作は取り消せません。",
   "@deleteCharacterConfirm": {
