@@ -25,7 +25,7 @@
   "importPreviewTitle": "Import Story Card",
   "lorebookIncluded": "📚 Includes Lorebook ({count} entries)",
   "companionsTitle": "Story Library",
-  "appTagline": "Local roleplay, private by design.",
+  "appTagline": "Gemma 4 on your phone. No API, no cloud, no cost.",
   "engineStatusTitle": "Local Inference Engine",
   "engineRunning": "Inference Core: {modelName}",
   "@engineRunning": {
@@ -362,7 +362,7 @@
   "searchCharactersHint": "Search characters...",
   "searchNoResults": "No characters match your search.",
   "emptyLibraryTitle": "Your story library is empty",
-  "emptyLibraryDescription": "Import a Tavern character card or create one from scratch to begin your first scene.",
+  "emptyLibraryDescription": "Import a Tavern card or create one from scratch. Everything runs on-device — no API keys, no cloud, no cost.",
   "deleteCharacterTitle": "Delete Character",
   "deleteCharacterConfirm": "Are you sure you want to delete {characterName}? This cannot be undone.",
   "@deleteCharacterConfirm": {

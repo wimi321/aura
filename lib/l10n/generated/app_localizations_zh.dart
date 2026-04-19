@@ -64,7 +64,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get companionsTitle => '剧本库';
 
   @override
-  String get appTagline => '本地剧情角色扮演，隐私优先。';
+  String get appTagline => 'Gemma 4 手机直接跑，不用 API，不花钱。';
 
   @override
   String get engineStatusTitle => '本地运算引擎';
@@ -848,7 +848,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get emptyLibraryTitle => '故事库还是空的';
 
   @override
-  String get emptyLibraryDescription => '导入一张 Tavern 角色卡或从头创建，开启你的第一个场景。';
+  String get emptyLibraryDescription =>
+      '导入一张 Tavern 角色卡或从头创建。全部在手机上运行，不用 API，不花钱，不上网。';
 
   @override
   String get deleteCharacterTitle => '删除角色';

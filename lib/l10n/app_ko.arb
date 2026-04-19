@@ -22,7 +22,7 @@
   "importPreviewTitle": "스토리 카드 가져오기",
   "lorebookIncluded": "📚 로어북 포함 ({count}개 항목)",
   "companionsTitle": "당신의 동료들",
-  "appTagline": "로컬 지능, 프라이버시 우선.",
+  "appTagline": "Gemma 4를 폰에서 실행. API 불필요, 무료, 완전 오프라인.",
   "engineStatusTitle": "엔진 상태",
   "engineRunning": "{modelName} 실행 중",
   "@engineRunning": {
@@ -359,7 +359,7 @@
   "searchCharactersHint": "캐릭터 검색...",
   "searchNoResults": "검색과 일치하는 캐릭터가 없습니다.",
   "emptyLibraryTitle": "스토리 라이브러리가 비어 있습니다",
-  "emptyLibraryDescription": "Tavern 캐릭터 카드를 가져오거나 새로 만들어 첫 장면을 시작하세요.",
+  "emptyLibraryDescription": "Tavern 카드를 가져오거나 새로 만드세요. 모든 것이 기기에서 실행됩니다 — API 불필요, 무료, 클라우드 없음.",
   "deleteCharacterTitle": "캐릭터 삭제",
   "deleteCharacterConfirm": "{characterName}을(를) 삭제할까요? 이 작업은 되돌릴 수 없습니다.",
   "@deleteCharacterConfirm": {

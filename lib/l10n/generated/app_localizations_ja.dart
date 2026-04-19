@@ -65,7 +65,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get companionsTitle => 'あなたの仲間たち';
 
   @override
-  String get appTagline => 'ローカル知能、プライバシー第一。';
+  String get appTagline => 'Gemma 4 をスマホで実行。API不要、無料、完全オフライン。';
 
   @override
   String get engineStatusTitle => 'エンジン状態';
@@ -865,7 +865,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get emptyLibraryDescription =>
-      'Tavern キャラクターカードを取り込むか、ゼロから作成して最初のシーンを始めましょう。';
+      'Tavern カードを取り込むか、ゼロから作成。すべてデバイス上で動作 — API不要、無料、クラウドなし。';
 
   @override
   String get deleteCharacterTitle => 'キャラクターを削除';

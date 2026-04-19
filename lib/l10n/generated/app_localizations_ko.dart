@@ -65,7 +65,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get companionsTitle => '당신의 동료들';
 
   @override
-  String get appTagline => '로컬 지능, 프라이버시 우선.';
+  String get appTagline => 'Gemma 4를 폰에서 실행. API 불필요, 무료, 완전 오프라인.';
 
   @override
   String get engineStatusTitle => '엔진 상태';
@@ -865,7 +865,7 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get emptyLibraryDescription =>
-      'Tavern 캐릭터 카드를 가져오거나 새로 만들어 첫 장면을 시작하세요.';
+      'Tavern 카드를 가져오거나 새로 만드세요. 모든 것이 기기에서 실행됩니다 — API 불필요, 무료, 클라우드 없음.';
 
   @override
   String get deleteCharacterTitle => '캐릭터 삭제';
