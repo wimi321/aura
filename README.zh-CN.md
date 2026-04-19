@@ -52,52 +52,28 @@ Aura 是一款开源、隐私优先的 AI 角色扮演应用，**完全在手机
 ## 应用截图
 
 <p align="center">
-  <img src="docs/readme/quick-start.gif" alt="Aura 快速上手" width="780" />
+  <img src="docs/readme/story-library.png" alt="剧本库" width="180" />&nbsp;&nbsp;
+  <img src="docs/readme/chat-scene.png" alt="剧情聊天" width="180" />&nbsp;&nbsp;
+  <img src="docs/readme/model-setup.png" alt="模型选择" width="180" />&nbsp;&nbsp;
+  <img src="docs/readme/import-flow.png" alt="导入流程" width="180" />
 </p>
 
-<table>
-  <tr>
-    <td align="center">
-      <img src="docs/readme/story-library.png" alt="剧本库" width="220" />
-      <br /><strong>剧本库</strong><br />
-      <sub>搜索、导入或创建角色</sub>
-    </td>
-    <td align="center">
-      <img src="docs/readme/model-setup.png" alt="模型选择" width="220" />
-      <br /><strong>模型选择</strong><br />
-      <sub>E2B（更快）或 E4B（更强）</sub>
-    </td>
-    <td align="center">
-      <img src="docs/readme/chat-scene.png" alt="剧情聊天" width="220" />
-      <br /><strong>沉浸式剧情</strong><br />
-      <sub>续写 / 重新生成 / 耳语指令</sub>
-    </td>
-    <td align="center">
-      <img src="docs/readme/import-flow.png" alt="导入流程" width="220" />
-      <br /><strong>卡片导入</strong><br />
-      <sub>Tavern PNG/JSON + 世界书预览</sub>
-    </td>
-  </tr>
-</table>
+<p align="center">
+  <sub>剧本库 &nbsp;·&nbsp; 沉浸式剧情 &nbsp;·&nbsp; 模型选择 &nbsp;·&nbsp; 卡片导入</sub>
+</p>
 
-### 内置剧情卡
-
-<table>
-  <tr>
-    <td align="center">
-      <img src="assets/images/characters/palace-consort.png" alt="宫廷悬局" width="200" />
-      <br /><strong>宫廷悬局</strong>
-    </td>
-    <td align="center">
-      <img src="assets/images/characters/deskmate.png" alt="校园慢热" width="200" />
-      <br /><strong>校园慢热</strong>
-    </td>
-    <td align="center">
-      <img src="assets/images/characters/instance-monitor.png" alt="规则怪谈" width="200" />
-      <br /><strong>规则怪谈</strong>
-    </td>
-  </tr>
-</table>
+<details>
+<summary>内置剧情卡</summary>
+<br />
+<p align="center">
+  <img src="assets/images/characters/palace-consort.png" alt="宫廷悬局" width="140" />&nbsp;&nbsp;
+  <img src="assets/images/characters/deskmate.png" alt="校园慢热" width="140" />&nbsp;&nbsp;
+  <img src="assets/images/characters/instance-monitor.png" alt="规则怪谈" width="140" />
+</p>
+<p align="center">
+  <sub>宫廷悬局 &nbsp;·&nbsp; 校园慢热 &nbsp;·&nbsp; 规则怪谈</sub>
+</p>
+</details>
 
 ---
 

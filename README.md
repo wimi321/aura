@@ -52,52 +52,28 @@ Import any Tavern/SillyTavern character card, load a local Gemma 4 model, and st
 ## Screenshots
 
 <p align="center">
-  <img src="docs/readme/quick-start.gif" alt="Aura quick start flow" width="780" />
+  <img src="docs/readme/story-library.png" alt="Story library" width="180" />&nbsp;&nbsp;
+  <img src="docs/readme/chat-scene.png" alt="Chat scene" width="180" />&nbsp;&nbsp;
+  <img src="docs/readme/model-setup.png" alt="Model setup" width="180" />&nbsp;&nbsp;
+  <img src="docs/readme/import-flow.png" alt="Import flow" width="180" />
 </p>
 
-<table>
-  <tr>
-    <td align="center">
-      <img src="docs/readme/story-library.png" alt="Story library" width="220" />
-      <br /><strong>Story Library</strong><br />
-      <sub>Search, import, or create characters</sub>
-    </td>
-    <td align="center">
-      <img src="docs/readme/model-setup.png" alt="Model setup" width="220" />
-      <br /><strong>Model Setup</strong><br />
-      <sub>Choose E2B (fast) or E4B (quality)</sub>
-    </td>
-    <td align="center">
-      <img src="docs/readme/chat-scene.png" alt="Chat scene" width="220" />
-      <br /><strong>Scene Chat</strong><br />
-      <sub>Immersive roleplay with continue/reroll</sub>
-    </td>
-    <td align="center">
-      <img src="docs/readme/import-flow.png" alt="Import flow" width="220" />
-      <br /><strong>Card Import</strong><br />
-      <sub>Tavern PNG/JSON with worldbook preview</sub>
-    </td>
-  </tr>
-</table>
+<p align="center">
+  <sub>Story Library &nbsp;·&nbsp; Scene Chat &nbsp;·&nbsp; Model Setup &nbsp;·&nbsp; Card Import</sub>
+</p>
 
-### Built-in Story Cards
-
-<table>
-  <tr>
-    <td align="center">
-      <img src="assets/images/characters/palace-consort.png" alt="Palace intrigue" width="200" />
-      <br /><strong>Palace Intrigue</strong>
-    </td>
-    <td align="center">
-      <img src="assets/images/characters/deskmate.png" alt="Campus romance" width="200" />
-      <br /><strong>Campus Slow-Burn</strong>
-    </td>
-    <td align="center">
-      <img src="assets/images/characters/instance-monitor.png" alt="Rule-based horror" width="200" />
-      <br /><strong>Rule-Based Horror</strong>
-    </td>
-  </tr>
-</table>
+<details>
+<summary>Built-in story cards</summary>
+<br />
+<p align="center">
+  <img src="assets/images/characters/palace-consort.png" alt="Palace intrigue" width="140" />&nbsp;&nbsp;
+  <img src="assets/images/characters/deskmate.png" alt="Campus romance" width="140" />&nbsp;&nbsp;
+  <img src="assets/images/characters/instance-monitor.png" alt="Rule-based horror" width="140" />
+</p>
+<p align="center">
+  <sub>Palace Intrigue &nbsp;·&nbsp; Campus Slow-Burn &nbsp;·&nbsp; Rule-Based Horror</sub>
+</p>
+</details>
 
 ---
 
