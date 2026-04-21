@@ -68,6 +68,7 @@
   "interfaceReplyLanguageTitle": "Interface & Reply Language",
   "interfaceReplyLanguageDescription": "UI follows the system by default. You can pin a language here, and chat replies will follow that preference unless the user explicitly switches.",
   "languageFieldLabel": "Language",
+  "followSystemLabel": "Follow System",
   "chatNoActiveModel": "Offline. No inference core is loaded for the story.",
   "whisperSheetTitle": "Whisper Instruction",
   "whisperSheetDescription": "Influence the character's next turn from behind the scenes without breaking the story text.",

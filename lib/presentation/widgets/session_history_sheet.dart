@@ -249,7 +249,6 @@ String _formatSessionTime(
   final String date = material.formatShortDate(local);
   final String time = material.formatTimeOfDay(
     TimeOfDay.fromDateTime(local),
-    alwaysUse24HourFormat: true,
   );
   return '$date $time';
 }

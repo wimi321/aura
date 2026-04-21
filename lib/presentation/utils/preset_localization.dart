@@ -16,8 +16,7 @@ String localizedPresetName(BuildContext context, Preset preset) {
 String localizedPresetPromptTemplate(BuildContext context, Preset preset) {
   final AppLocalizations? l10n = AppLocalizations.of(context);
   if (preset.id == 'default-roleplay') {
-    return l10n?.defaultRoleplayPresetPrompt ??
-        preset.systemPromptTemplate;
+    return l10n?.defaultRoleplayPresetPrompt ?? preset.systemPromptTemplate;
   }
   return preset.systemPromptTemplate;
 }

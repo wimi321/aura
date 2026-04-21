@@ -14,7 +14,8 @@ class ModelManager {
   ModelManager(this._runtime);
 
   final InferenceRuntime _runtime;
-  final StreamController<ModelLoadState> _stateController = StreamController<ModelLoadState>.broadcast();
+  final StreamController<ModelLoadState> _stateController =
+      StreamController<ModelLoadState>.broadcast();
 
   ModelManifest? _activeModel;
   ModelLoadState _state = ModelLoadState.idle;
@@ -34,7 +35,9 @@ class ModelManager {
   }
 
   Future<void> switchModel(ModelManifest manifest) async {
-    _emit(_activeModel == null ? ModelLoadState.loading : ModelLoadState.switching);
+    _emit(_activeModel == null
+        ? ModelLoadState.loading
+        : ModelLoadState.switching);
     try {
       if (_activeModel != null) {
         await _runtime.unloadModel();
@@ -51,7 +54,16 @@ class ModelManager {
   }
 
   Future<void> dispose() async {
-    await _stateController.close();
+    try {
+      if (_activeModel != null) {
+        await _runtime.unloadModel();
+        _activeModel = null;
+      }
+    } finally {
+      if (!_stateController.isClosed) {
+        await _stateController.close();
+      }
+    }
   }
 
   void _emit(ModelLoadState next) {

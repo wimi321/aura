@@ -182,6 +182,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get languageFieldLabel => '语言';
 
   @override
+  String get followSystemLabel => '跟随系统';
+
+  @override
   String get chatNoActiveModel => '尚未加载本地引擎，无法开始剧情。';
 
   @override

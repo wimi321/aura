@@ -48,7 +48,8 @@ class CharacterCoverArt extends StatelessWidget {
                 key: ValueKey<String>('character-art-image-${character.id}'),
                 image: provider,
                 fit: BoxFit.cover,
-                errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+                errorBuilder: (BuildContext context, Object error,
+                    StackTrace? stackTrace) {
                   return _GeneratedBackdrop(
                     character: character,
                     palette: palette,

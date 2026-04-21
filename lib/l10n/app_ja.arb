@@ -65,6 +65,7 @@
   "interfaceReplyLanguageTitle": "UI と返信言語",
   "interfaceReplyLanguageDescription": "既定ではシステム言語に従います。ここで固定すると、会話中で明示的に変更しない限り返信もその言語に従います。",
   "languageFieldLabel": "言語",
+  "followSystemLabel": "システムに従う",
   "chatNoActiveModel": "有効なモデルがまだ読み込まれていません。",
   "whisperSheetTitle": "ウィスパー指示",
   "whisperSheetDescription": "次の返信だけに影響し、この指示は画面上の会話には表示されません。",

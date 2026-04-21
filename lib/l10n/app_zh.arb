@@ -65,6 +65,7 @@
   "interfaceReplyLanguageTitle": "界面与回复语言",
   "interfaceReplyLanguageDescription": "默认跟随系统语言。你也可以固定语言，角色的回复将会尽力遵循此设定。",
   "languageFieldLabel": "语言",
+  "followSystemLabel": "跟随系统",
   "chatNoActiveModel": "尚未加载本地引擎，无法开始剧情。",
   "whisperSheetTitle": "耳语指令",
   "whisperSheetDescription": "此指令只在幕后影响角色的下一次行动，不会出现在剧本对话中。",

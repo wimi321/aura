@@ -188,6 +188,8 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
         } catch (lorebookError) {
           setState(() {
             _busy = false;
+            _preview = null;
+            _lorebookPreview = null;
             _error = _friendlyErrorMessage(lorebookError);
           });
           return;
@@ -195,6 +197,8 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
       }
       setState(() {
         _busy = false;
+        _preview = null;
+        _lorebookPreview = null;
         _error = _friendlyErrorMessage(error);
       });
     }
@@ -728,8 +732,7 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
                             .trim()
                             .isNotEmpty)
                           _tag(
-                            l10n?.importCardMainPromptTag ??
-                                'Card Main Prompt',
+                            l10n?.importCardMainPromptTag ?? 'Card Main Prompt',
                           ),
                         if ((character.postHistoryInstructions ?? '')
                             .trim()
@@ -835,9 +838,9 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
             'Aura recognized this file as a standalone worldbook. Pick a role card and attach it directly.')
         : (l10n?.importWorldbookHelperMerge ??
             'Aura recognized this file as a standalone worldbook. It will merge with the role card lore instead of overwriting it.');
-    final String entryLabel =
-        l10n?.importWorldbookEntriesCount('${preview.lorebook.entries.length}') ??
-            '${preview.lorebook.entries.length} entries';
+    final String entryLabel = l10n?.importWorldbookEntriesCount(
+            '${preview.lorebook.entries.length}') ??
+        '${preview.lorebook.entries.length} entries';
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(18),
@@ -916,7 +919,8 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
               initialValue: selectedCharacterId,
               isExpanded: true,
               decoration: InputDecoration(
-                labelText: l10n?.importWorldbookChooseCard ?? 'Choose Role Card',
+                labelText:
+                    l10n?.importWorldbookChooseCard ?? 'Choose Role Card',
               ),
               items: characters
                   .map(
@@ -943,10 +947,8 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
             const SizedBox(height: 12),
             _previewBlock(
               title: l10n?.importWorldbookMergeResult ?? 'Merge Result',
-              content: l10n?.importWorldbookMergeDetails(
-                      '$existingLoreCount',
-                      '$incomingLoreCount',
-                      '$mergedLoreCount') ??
+              content: l10n?.importWorldbookMergeDetails('$existingLoreCount',
+                      '$incomingLoreCount', '$mergedLoreCount') ??
                   'Current role has $existingLoreCount entries, this file has $incomingLoreCount, and the merged card will keep about $mergedLoreCount entries.',
             ),
           ],
@@ -960,8 +962,8 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
           if (preview.lorebook.entries.isNotEmpty) ...[
             const SizedBox(height: 12),
             _previewBlock(
-              title:
-                  l10n?.importWorldbookEntryPreviewTitle ?? 'Worldbook Entry Preview',
+              title: l10n?.importWorldbookEntryPreviewTitle ??
+                  'Worldbook Entry Preview',
               content:
                   preview.lorebook.entries.take(3).map((LorebookEntry entry) {
                 final String keys = entry.keywords.take(4).join(' / ');
@@ -1135,10 +1137,12 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
       return l10n?.importInvalidCharacterFileMessage ??
           'This file does not look like a supported character card.';
     }
-    final String worldbookChooseError = l10n?.importWorldbookChooseCharacterError ??
-        'Choose a role card before attaching the worldbook.';
+    final String worldbookChooseError =
+        l10n?.importWorldbookChooseCharacterError ??
+            'Choose a role card before attaching the worldbook.';
     if (message.contains(worldbookChooseError) ||
-        message.contains('Choose a role card before attaching the worldbook.') ||
+        message
+            .contains('Choose a role card before attaching the worldbook.') ||
         message.contains('请先选择要挂载世界书的角色。')) {
       return worldbookChooseError;
     }

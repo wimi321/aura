@@ -84,8 +84,8 @@ class ModelSetupPage extends StatelessWidget {
                               l10n?.firstRunE2bHeadline ?? 'Faster first start',
                           summary: l10n?.firstRunE2bSummary ??
                               'Best for a first install. Smaller download, quicker setup, and smooth story entry.',
-                          qualityChip: l10n?.modelSetupE2bSpeedChip ??
-                              'Fast inference',
+                          qualityChip:
+                              l10n?.modelSetupE2bSpeedChip ?? 'Fast inference',
                           onPressed: () => _activateOrDownload(
                             context,
                             appState,
@@ -149,6 +149,11 @@ class ModelSetupPage extends StatelessWidget {
     ModelManifest manifest,
   ) async {
     if (appState.isDownloading(manifest)) {
+      return;
+    }
+    if (appState.isActive(manifest) &&
+        appState.modelState == AppModelState.ready) {
+      context.go(_resolvedReturnLocation());
       return;
     }
     if (appState.isInstalled(manifest)) {
@@ -216,8 +221,7 @@ class _SetupModelCardState extends State<_SetupModelCard> {
     final double elapsed =
         now.difference(_lastTimestamp).inMilliseconds / 1000.0;
     if (elapsed >= 0.5 && receivedBytes > _lastReceivedBytes) {
-      final double speed =
-          (receivedBytes - _lastReceivedBytes) / elapsed;
+      final double speed = (receivedBytes - _lastReceivedBytes) / elapsed;
       setState(() {
         _speedBytesPerSecond = speed;
         _lastReceivedBytes = receivedBytes;
@@ -234,8 +238,7 @@ class _SetupModelCardState extends State<_SetupModelCard> {
       return '';
     }
     final int remainingBytes = totalBytes - receivedBytes;
-    final int remainingSeconds =
-        (remainingBytes / _speedBytesPerSecond).ceil();
+    final int remainingSeconds = (remainingBytes / _speedBytesPerSecond).ceil();
     if (remainingSeconds < 60) {
       return '<1 min';
     }
@@ -436,8 +439,7 @@ class _SetupModelCardState extends State<_SetupModelCard> {
     );
   }
 
-  String _buildDownloadDetail(
-      BuildContext context, AppStateProvider appState) {
+  String _buildDownloadDetail(BuildContext context, AppStateProvider appState) {
     final String received = formatBytes(appState.downloadReceivedBytes);
     final String total = formatBytes(appState.downloadTotalBytes);
     final StringBuffer buf = StringBuffer('$received / $total');

@@ -5,7 +5,8 @@ import 'package:test/test.dart';
 
 void main() {
   test('persists and reads session files', () async {
-    final Directory tempDir = await Directory.systemTemp.createTemp('aura_session_test');
+    final Directory tempDir =
+        await Directory.systemTemp.createTemp('aura_session_test');
     addTearDown(() => tempDir.delete(recursive: true));
 
     final FileSessionRepository repository = FileSessionRepository(tempDir);

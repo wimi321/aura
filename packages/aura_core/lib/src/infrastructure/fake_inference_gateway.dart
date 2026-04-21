@@ -7,7 +7,9 @@ import '../domain/runtime_options.dart';
 class FakeInferenceGateway implements InferenceGateway {
   FakeInferenceGateway({
     List<String> scriptedTextChunks = const <String>['[joy]Hello', ' there'],
-    List<String> scriptedAudioChunks = const <String>['[calm]I heard you clearly.'],
+    List<String> scriptedAudioChunks = const <String>[
+      '[calm]I heard you clearly.'
+    ],
   })  : _scriptedTextChunks = scriptedTextChunks,
         _scriptedAudioChunks = scriptedAudioChunks;
 
@@ -42,7 +44,9 @@ class FakeInferenceGateway implements InferenceGateway {
   Future<void> cancelActiveGeneration() async {}
 
   @override
-  Stream<String> streamAudio({required PromptEnvelope prompt, required List<List<int>> audioFrames}) async* {
+  Stream<String> streamAudio(
+      {required PromptEnvelope prompt,
+      required List<List<int>> audioFrames}) async* {
     for (final String chunk in _scriptedAudioChunks) {
       yield chunk;
     }

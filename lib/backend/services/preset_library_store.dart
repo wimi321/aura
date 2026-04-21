@@ -21,7 +21,8 @@ class PresetLibraryStore {
         .toList(growable: false);
   }
 
-  Future<Preset> importPresetFile(File sourceFile, {List<Preset> existing = const <Preset>[]}) async {
+  Future<Preset> importPresetFile(File sourceFile,
+      {List<Preset> existing = const <Preset>[]}) async {
     final Preset parsed = _parser.parse(await sourceFile.readAsString());
     final String id = _uniqueId(parsed.id, existing);
     final Preset normalized = Preset(
@@ -32,7 +33,9 @@ class PresetLibraryStore {
       metadata: <String, Object?>{
         ...parsed.metadata,
         'imported': true,
-        'source_file': sourceFile.uri.pathSegments.isEmpty ? sourceFile.path : sourceFile.uri.pathSegments.last,
+        'source_file': sourceFile.uri.pathSegments.isEmpty
+            ? sourceFile.path
+            : sourceFile.uri.pathSegments.last,
       },
     );
     final List<Preset> next = <Preset>[
@@ -43,7 +46,8 @@ class PresetLibraryStore {
     return normalized;
   }
 
-  Future<Preset> savePreset(Preset preset, {List<Preset> existing = const <Preset>[]}) async {
+  Future<Preset> savePreset(Preset preset,
+      {List<Preset> existing = const <Preset>[]}) async {
     final List<Preset> next = <Preset>[
       ...existing.where((Preset item) => item.id != preset.id),
       preset,
@@ -56,7 +60,9 @@ class PresetLibraryStore {
     await _file.parent.create(recursive: true);
     await _file.writeAsString(
       const JsonEncoder.withIndent('  ').convert(
-        presets.map((Preset preset) => _presetToJson(preset)).toList(growable: false),
+        presets
+            .map((Preset preset) => _presetToJson(preset))
+            .toList(growable: false),
       ),
     );
   }
@@ -84,22 +90,29 @@ class PresetLibraryStore {
   }
 
   Preset _presetFromJson(Map<String, Object?> json) {
-    final Map<String, Object?> generation = (json['generation'] as Map?)?.cast<String, Object?>() ?? const <String, Object?>{};
+    final Map<String, Object?> generation =
+        (json['generation'] as Map?)?.cast<String, Object?>() ??
+            const <String, Object?>{};
     return Preset(
       id: json['id']?.toString() ?? 'imported-preset',
       name: json['name']?.toString() ?? 'Imported Preset',
-      systemPromptTemplate: json['system_prompt']?.toString() ?? const Preset.defaultRoleplay().systemPromptTemplate,
+      systemPromptTemplate: json['system_prompt']?.toString() ??
+          const Preset.defaultRoleplay().systemPromptTemplate,
       generationConfig: GenerationConfig(
         temperature: (generation['temperature'] as num?)?.toDouble() ?? 0.85,
         topP: (generation['top_p'] as num?)?.toDouble() ?? 0.9,
         topK: (generation['top_k'] as num?)?.toInt() ?? 40,
-        maxOutputTokens: (generation['max_output_tokens'] as num?)?.toInt() ?? 512,
-        repetitionPenalty: (generation['repetition_penalty'] as num?)?.toDouble() ?? 1.08,
-        stopSequences: ((generation['stop_sequences'] as List?) ?? const <Object>[])
-            .map((Object? item) => item.toString())
-            .toList(growable: false),
+        maxOutputTokens:
+            (generation['max_output_tokens'] as num?)?.toInt() ?? 512,
+        repetitionPenalty:
+            (generation['repetition_penalty'] as num?)?.toDouble() ?? 1.08,
+        stopSequences:
+            ((generation['stop_sequences'] as List?) ?? const <Object>[])
+                .map((Object? item) => item.toString())
+                .toList(growable: false),
       ),
-      metadata: (json['metadata'] as Map?)?.cast<String, Object?>() ?? const <String, Object?>{},
+      metadata: (json['metadata'] as Map?)?.cast<String, Object?>() ??
+          const <String, Object?>{},
     );
   }
 }

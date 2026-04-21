@@ -13,9 +13,11 @@ class ModelDownloadManager {
   final ModelDownloader _downloader;
   final ModelCatalogRepository _catalogRepository;
 
-  Stream<ModelDownloadSnapshot> downloadAndRegister(ModelManifest manifest) async* {
+  Stream<ModelDownloadSnapshot> downloadAndRegister(
+      ModelManifest manifest) async* {
     await _catalogRepository.upsert(manifest);
-    await for (final ModelDownloadSnapshot snapshot in _downloader.download(manifest)) {
+    await for (final ModelDownloadSnapshot snapshot
+        in _downloader.download(manifest)) {
       if (snapshot.status == DownloadStatus.completed) {
         await _catalogRepository.upsert(snapshot.model);
       }

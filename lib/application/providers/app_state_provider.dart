@@ -224,10 +224,11 @@ class AppStateProvider extends ChangeNotifier {
   Future<void> refreshPresets() async {
     final List<Preset> imported = await _presetLibraryStore.loadPresets();
     final Preset? savedDefault = imported
-        .where((Preset preset) => preset.id == 'default-roleplay')
-        .isEmpty
+            .where((Preset preset) => preset.id == 'default-roleplay')
+            .isEmpty
         ? null
-        : imported.firstWhere((Preset preset) => preset.id == 'default-roleplay');
+        : imported
+            .firstWhere((Preset preset) => preset.id == 'default-roleplay');
     _availablePresets = <Preset>[
       savedDefault ?? const Preset.defaultRoleplay(),
       ...imported.where((Preset preset) => preset.id != 'default-roleplay'),
@@ -454,11 +455,9 @@ class AppStateProvider extends ChangeNotifier {
     if (session == null) {
       throw StateError('Session not found: $sessionId');
     }
-    final List<ChatMessage> messages =
-        List<ChatMessage>.from(session.messages);
+    final List<ChatMessage> messages = List<ChatMessage>.from(session.messages);
     // Remove trailing assistant message
-    if (messages.isNotEmpty &&
-        messages.last.role == ChatRole.assistant) {
+    if (messages.isNotEmpty && messages.last.role == ChatRole.assistant) {
       messages.removeLast();
     }
     // Find last user message text
@@ -824,6 +823,7 @@ class AppStateProvider extends ChangeNotifier {
       await modelFile.delete();
     }
     _installedModelIds[manifest.id] = false;
+    await refreshModels();
     _notifyListenersSafely();
     return true;
   }
@@ -832,18 +832,23 @@ class AppStateProvider extends ChangeNotifier {
     switch (state) {
       case ModelLoadState.idle:
         _modelState = AppModelState.idle;
+        _errorMessage = null;
         break;
       case ModelLoadState.initializing:
         _modelState = AppModelState.initializing;
+        _errorMessage = null;
         break;
       case ModelLoadState.loading:
         _modelState = AppModelState.loading;
+        _errorMessage = null;
         break;
       case ModelLoadState.ready:
         _modelState = AppModelState.ready;
+        _errorMessage = null;
         break;
       case ModelLoadState.switching:
         _modelState = AppModelState.switching;
+        _errorMessage = null;
         break;
       case ModelLoadState.error:
         _modelState = AppModelState.error;
@@ -856,6 +861,7 @@ class AppStateProvider extends ChangeNotifier {
   void dispose() {
     _isDisposed = true;
     _stateSub?.cancel();
+    unawaited(engine.dispose());
     super.dispose();
   }
 

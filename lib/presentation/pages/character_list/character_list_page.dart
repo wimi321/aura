@@ -101,8 +101,8 @@ class _CharacterListPageState extends State<CharacterListPage> {
                         )
                       : null,
                   isDense: true,
-                  contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 12),
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 ),
               ),
             ],
@@ -408,8 +408,6 @@ String _localizedModelStateChip(
   AppModelState state,
   AppLocalizations? l10n,
 ) {
-  final String languageCode =
-      Localizations.localeOf(context).languageCode.toLowerCase();
   final String label = switch (state) {
     AppModelState.idle => l10n?.modelStateIdle ?? 'Idle',
     AppModelState.initializing ||
@@ -419,8 +417,7 @@ String _localizedModelStateChip(
     AppModelState.ready => l10n?.readyText ?? 'Ready',
     AppModelState.error => l10n?.modelStateError ?? 'Error',
   };
-  return l10n?.statusLabel(label) ??
-      (languageCode == 'zh' ? '状态 $label' : 'Status $label');
+  return l10n?.statusLabel(label) ?? 'Status $label';
 }
 
 class _PremiumCharacterCard extends StatelessWidget {
@@ -580,229 +577,231 @@ class _PremiumCharacterCard extends StatelessWidget {
       label: 'Character: ${character.name}',
       button: true,
       child: Container(
-      key: ValueKey<String>('character-card-${character.id}'),
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
-        color: AppTheme.bgCard,
-        border: Border.all(color: AppTheme.borderSubtle),
-      ),
-      child: Column(
-        children: [
-          InkWell(
-            onTap: isChatReady
-                ? () => context.push('/chat/${character.id}')
-                : needsModelDownload
-                    ? () => context.push(
-                          Uri(
-                            path: '/model-setup',
-                            queryParameters: <String, String>{
-                              'returnTo': '/chat/${character.id}',
-                            },
-                          ).toString(),
-                        )
-                    : null,
-            child: Stack(
-              children: [
-                CharacterCoverArt(
-                  character: character,
-                  height: 440,
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(20),
+        key: ValueKey<String>('character-card-${character.id}'),
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          color: AppTheme.bgCard,
+          border: Border.all(color: AppTheme.borderSubtle),
+        ),
+        child: Column(
+          children: [
+            InkWell(
+              onTap: isChatReady
+                  ? () => context.push('/chat/${character.id}')
+                  : needsModelDownload
+                      ? () => context.push(
+                            Uri(
+                              path: '/model-setup',
+                              queryParameters: <String, String>{
+                                'returnTo': '/chat/${character.id}',
+                              },
+                            ).toString(),
+                          )
+                      : null,
+              child: Stack(
+                children: [
+                  CharacterCoverArt(
+                    character: character,
+                    height: 440,
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(20),
+                    ),
                   ),
-                ),
-                Positioned.fill(
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: <Color>[
-                          Colors.black.withValues(alpha: 0.1),
-                          Colors.black.withValues(alpha: 0.4),
-                          Colors.black.withValues(alpha: 0.85),
-                          AppTheme.bgCard,
-                        ],
-                        stops: const [0.0, 0.4, 0.8, 1.0],
+                  Positioned.fill(
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: <Color>[
+                            Colors.black.withValues(alpha: 0.1),
+                            Colors.black.withValues(alpha: 0.4),
+                            Colors.black.withValues(alpha: 0.85),
+                            AppTheme.bgCard,
+                          ],
+                          stops: const [0.0, 0.4, 0.8, 1.0],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Positioned(
-                  left: 24,
-                  right: 24,
-                  bottom: 24,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                if ((availabilityLabel ?? '').isNotEmpty) ...[
+                  Positioned(
+                    left: 24,
+                    right: 24,
+                    bottom: 24,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if ((availabilityLabel ?? '').isNotEmpty) ...[
+                                    Text(
+                                      availabilityLabel!.toUpperCase(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelSmall
+                                          ?.copyWith(
+                                            color: availabilityColor,
+                                            fontWeight: FontWeight.w700,
+                                            letterSpacing: 1.5,
+                                          ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    const SizedBox(height: 8),
+                                  ],
                                   Text(
-                                    availabilityLabel!.toUpperCase(),
+                                    character.name,
                                     style: Theme.of(context)
                                         .textTheme
-                                        .labelSmall
+                                        .headlineMedium
                                         ?.copyWith(
-                                          color: availabilityColor,
-                                          fontWeight: FontWeight.w700,
-                                          letterSpacing: 1.5,
+                                          color: AppTheme.textPrimary,
+                                          fontWeight: FontWeight.w800,
+                                          height: 1.1,
+                                          letterSpacing: -0.5,
                                         ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  const SizedBox(height: 8),
                                 ],
-                                Text(
-                                  character.name,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headlineMedium
-                                      ?.copyWith(
-                                        color: AppTheme.textPrimary,
-                                        fontWeight: FontWeight.w800,
-                                        height: 1.1,
-                                        letterSpacing: -0.5,
-                                      ),
-                                ),
-                              ],
+                              ),
                             ),
-                          ),
-                          IconButton(
-                            onPressed: () async {
-                              await showDialog<void>(
-                                context: context,
-                                builder: (_) =>
-                                    CharacterEditorDialog(character: character),
-                              );
-                            },
-                            tooltip: l10n?.editCharacterButtonTooltip ??
-                                'Edit character',
-                            visualDensity: VisualDensity.compact,
-                            icon: const Icon(
-                              Icons.tune_rounded,
-                              color: AppTheme.textSecondary,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        sceneHookExcerpt,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: AppTheme.textSecondary,
-                              height: 1.5,
-                            ),
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextButton(
-                    key: ValueKey<String>(
-                        'character-new-conversation-${character.id}'),
-                    onPressed: isChatReady
-                        ? () async {
-                            final AppStateProvider appState =
-                                context.read<AppStateProvider>();
-                            final ChatSession session = await appState
-                                .startNewConversation(character.id);
-                            if (!context.mounted) return;
-                            final Uri target = Uri(
-                              path: '/chat/${character.id}',
-                              queryParameters: <String, String>{
-                                'session': session.id
+                            IconButton(
+                              onPressed: () async {
+                                await showDialog<void>(
+                                  context: context,
+                                  builder: (_) => CharacterEditorDialog(
+                                      character: character),
+                                );
                               },
-                            );
-                            context.push(target.toString());
-                          }
-                        : needsModelDownload
-                            ? () => context.push(
-                                  Uri(
-                                    path: '/model-setup',
-                                    queryParameters: <String, String>{
-                                      'returnTo': '/chat/${character.id}',
-                                    },
-                                  ).toString(),
-                                )
-                            : null,
-                    style: TextButton.styleFrom(
-                      foregroundColor: AppTheme.textPrimary,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                    ),
-                    child: Text(
-                      l10n?.newConversationButton ?? 'Start Story',
-                      style: const TextStyle(
-                          fontWeight: FontWeight.w600, letterSpacing: 0.5),
-                    ),
-                  ),
-                ),
-                Container(width: 1, height: 20, color: AppTheme.borderSubtle),
-                Expanded(
-                  child: TextButton(
-                    key: ValueKey<String>('character-history-${character.id}'),
-                    onPressed:
-                        isChatReady ? () => _showSessionHistory(context) : null,
-                    style: TextButton.styleFrom(
-                      foregroundColor: AppTheme.textSecondary,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                    ),
-                    child: Text(
-                      l10n?.sessionHistoryShortLabel ?? 'History',
+                              tooltip: l10n?.editCharacterButtonTooltip ??
+                                  'Edit character',
+                              visualDensity: VisualDensity.compact,
+                              icon: const Icon(
+                                Icons.tune_rounded,
+                                color: AppTheme.textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          sceneHookExcerpt,
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: AppTheme.textSecondary,
+                                    height: 1.5,
+                                  ),
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                Container(width: 1, height: 20, color: AppTheme.borderSubtle),
-                if (canDelete)
-                  Tooltip(
-                    message:
-                        l10n?.deleteCharacterTitle ?? 'Delete Character',
-                    child: IconButton(
-                      key: ValueKey<String>(
-                        'character-delete-${character.id}',
-                      ),
-                      onPressed: () => _confirmAndDelete(context),
-                      visualDensity: VisualDensity.compact,
-                      icon: const Icon(Icons.delete_outline_rounded),
-                      color: AppTheme.statusDanger,
-                    ),
-                  ),
-                if (!canDelete)
-                  Tooltip(
-                    message: l10n?.clearHistoryButton ?? 'Clear History',
-                    child: IconButton(
-                      key: ValueKey<String>(
-                        'character-clear-history-${character.id}',
-                      ),
-                      onPressed: isChatReady
-                          ? () => _confirmAndClearHistory(context)
-                          : null,
-                      visualDensity: VisualDensity.compact,
-                      icon: const Icon(Icons.delete_outline_rounded),
-                      color: AppTheme.textSecondary,
-                    ),
-                  ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextButton(
+                      key: ValueKey<String>(
+                          'character-new-conversation-${character.id}'),
+                      onPressed: isChatReady
+                          ? () async {
+                              final AppStateProvider appState =
+                                  context.read<AppStateProvider>();
+                              final ChatSession session = await appState
+                                  .startNewConversation(character.id);
+                              if (!context.mounted) return;
+                              final Uri target = Uri(
+                                path: '/chat/${character.id}',
+                                queryParameters: <String, String>{
+                                  'session': session.id
+                                },
+                              );
+                              context.push(target.toString());
+                            }
+                          : needsModelDownload
+                              ? () => context.push(
+                                    Uri(
+                                      path: '/model-setup',
+                                      queryParameters: <String, String>{
+                                        'returnTo': '/chat/${character.id}',
+                                      },
+                                    ).toString(),
+                                  )
+                              : null,
+                      style: TextButton.styleFrom(
+                        foregroundColor: AppTheme.textPrimary,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      child: Text(
+                        l10n?.newConversationButton ?? 'Start Story',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w600, letterSpacing: 0.5),
+                      ),
+                    ),
+                  ),
+                  Container(width: 1, height: 20, color: AppTheme.borderSubtle),
+                  Expanded(
+                    child: TextButton(
+                      key:
+                          ValueKey<String>('character-history-${character.id}'),
+                      onPressed: isChatReady
+                          ? () => _showSessionHistory(context)
+                          : null,
+                      style: TextButton.styleFrom(
+                        foregroundColor: AppTheme.textSecondary,
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      child: Text(
+                        l10n?.sessionHistoryShortLabel ?? 'History',
+                      ),
+                    ),
+                  ),
+                  Container(width: 1, height: 20, color: AppTheme.borderSubtle),
+                  if (canDelete)
+                    Tooltip(
+                      message: l10n?.deleteCharacterTitle ?? 'Delete Character',
+                      child: IconButton(
+                        key: ValueKey<String>(
+                          'character-delete-${character.id}',
+                        ),
+                        onPressed: () => _confirmAndDelete(context),
+                        visualDensity: VisualDensity.compact,
+                        icon: const Icon(Icons.delete_outline_rounded),
+                        color: AppTheme.statusDanger,
+                      ),
+                    ),
+                  if (!canDelete)
+                    Tooltip(
+                      message: l10n?.clearHistoryButton ?? 'Clear History',
+                      child: IconButton(
+                        key: ValueKey<String>(
+                          'character-clear-history-${character.id}',
+                        ),
+                        onPressed: isChatReady
+                            ? () => _confirmAndClearHistory(context)
+                            : null,
+                        visualDensity: VisualDensity.compact,
+                        icon: const Icon(Icons.delete_outline_rounded),
+                        color: AppTheme.textSecondary,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
-    ),
     );
   }
 }

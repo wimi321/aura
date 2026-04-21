@@ -26,24 +26,30 @@ class FileModelCatalogRepository implements ModelCatalogRepository {
       return const <ModelManifest>[];
     }
     final Object? decoded = jsonDecode(await _file.readAsString());
-    final List<Object?> list = decoded is List<Object?> ? decoded : const <Object?>[];
+    final List<Object?> list =
+        decoded is List<Object?> ? decoded : const <Object?>[];
     return list
         .whereType<Map<Object?, Object?>>()
-        .map((Map<Object?, Object?> item) => _fromJson(item.cast<String, Object?>()))
+        .map((Map<Object?, Object?> item) =>
+            _fromJson(item.cast<String, Object?>()))
         .toList(growable: false);
   }
 
   @override
   Future<void> remove(String modelId) async {
     final List<ModelManifest> models = await listModels();
-    final List<ModelManifest> retained = models.where((ModelManifest item) => item.id != modelId).toList(growable: false);
+    final List<ModelManifest> retained = models
+        .where((ModelManifest item) => item.id != modelId)
+        .toList(growable: false);
     await _write(retained);
   }
 
   @override
   Future<void> upsert(ModelManifest manifest) async {
-    final List<ModelManifest> models = (await listModels()).toList(growable: true);
-    final int index = models.indexWhere((ModelManifest item) => item.id == manifest.id);
+    final List<ModelManifest> models =
+        (await listModels()).toList(growable: true);
+    final int index =
+        models.indexWhere((ModelManifest item) => item.id == manifest.id);
     if (index >= 0) {
       models[index] = manifest;
     } else {
@@ -56,7 +62,9 @@ class FileModelCatalogRepository implements ModelCatalogRepository {
     await _file.parent.create(recursive: true);
     await _file.writeAsString(
       const JsonEncoder.withIndent('  ').convert(
-        manifests.map((ModelManifest manifest) => _toJson(manifest)).toList(growable: false),
+        manifests
+            .map((ModelManifest manifest) => _toJson(manifest))
+            .toList(growable: false),
       ),
     );
   }
@@ -73,7 +81,8 @@ class FileModelCatalogRepository implements ModelCatalogRepository {
       remoteUrl: json['remote_url']?.toString(),
       sha256: json['sha256']?.toString(),
       recommendedMinRamGb: (json['recommended_min_ram_gb'] as num?)?.toInt(),
-      metadata: (json['metadata'] as Map?)?.cast<String, Object?>() ?? const <String, Object?>{},
+      metadata: (json['metadata'] as Map?)?.cast<String, Object?>() ??
+          const <String, Object?>{},
     );
   }
 

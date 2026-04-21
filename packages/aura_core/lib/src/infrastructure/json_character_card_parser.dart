@@ -51,7 +51,8 @@ class JsonCharacterCardParser {
   CharacterCard _mapToCard(Map<String, Object?> map, {String? avatarPath}) {
     final Map<String, Object?> data = _readMap(map['data']);
     final Map<String, Object?> source = data.isNotEmpty ? data : map;
-    final Map<String, Object?> sourceExtensions = _readMap(source['extensions']);
+    final Map<String, Object?> sourceExtensions =
+        _readMap(source['extensions']);
     final String name = source['name']?.toString() ?? 'Unknown Character';
 
     return CharacterCard(
@@ -181,8 +182,7 @@ class JsonCharacterCardParser {
   }) {
     if (value is List) {
       return value
-          .map((Object? item) =>
-              _formatCardField(
+          .map((Object? item) => _formatCardField(
                 item,
                 characterName: characterName,
                 extensions: extensions,
@@ -193,16 +193,16 @@ class JsonCharacterCardParser {
     final String text = value?.toString() ?? '';
     final List<String> rawBlocks =
         RegExp(r'<START>', caseSensitive: false).hasMatch(text)
-        ? text
-            .split(RegExp(r'<START>', caseSensitive: false))
-            .map((String item) => item.trim())
-            .where((String item) => item.isNotEmpty)
-            .toList(growable: false)
-        : text
-            .split(RegExp(r'\n{2,}'))
-            .map((String item) => item.trim())
-            .where((String item) => item.isNotEmpty)
-            .toList(growable: false);
+            ? text
+                .split(RegExp(r'<START>', caseSensitive: false))
+                .map((String item) => item.trim())
+                .where((String item) => item.isNotEmpty)
+                .toList(growable: false)
+            : text
+                .split(RegExp(r'\n{2,}'))
+                .map((String item) => item.trim())
+                .where((String item) => item.isNotEmpty)
+                .toList(growable: false);
     return rawBlocks
         .map((String item) => _formatCardField(
               item,
@@ -231,8 +231,7 @@ class JsonCharacterCardParser {
     if (value is String) {
       return value
           .split(RegExp(r'\n{2,}'))
-          .map((String item) =>
-              _formatCardField(
+          .map((String item) => _formatCardField(
                 item,
                 characterName: characterName,
                 extensions: extensions,

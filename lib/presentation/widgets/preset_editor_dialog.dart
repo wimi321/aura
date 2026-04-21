@@ -34,10 +34,14 @@ class _PresetEditorDialogState extends State<PresetEditorDialog> {
     _nameController = TextEditingController(text: widget.preset.name);
     _promptController =
         TextEditingController(text: widget.preset.systemPromptTemplate);
-    _temperatureController = TextEditingController(text: widget.preset.generationConfig.temperature.toString());
-    _topPController = TextEditingController(text: widget.preset.generationConfig.topP.toString());
-    _topKController = TextEditingController(text: widget.preset.generationConfig.topK.toString());
-    _maxTokensController = TextEditingController(text: widget.preset.generationConfig.maxOutputTokens.toString());
+    _temperatureController = TextEditingController(
+        text: widget.preset.generationConfig.temperature.toString());
+    _topPController = TextEditingController(
+        text: widget.preset.generationConfig.topP.toString());
+    _topKController = TextEditingController(
+        text: widget.preset.generationConfig.topK.toString());
+    _maxTokensController = TextEditingController(
+        text: widget.preset.generationConfig.maxOutputTokens.toString());
   }
 
   @override
@@ -72,10 +76,14 @@ class _PresetEditorDialogState extends State<PresetEditorDialog> {
       name: _nameController.text.trim(),
       systemPromptTemplate: _promptController.text.trim(),
       generationConfig: GenerationConfig(
-        temperature: double.tryParse(_temperatureController.text.trim()) ?? widget.preset.generationConfig.temperature,
-        topP: double.tryParse(_topPController.text.trim()) ?? widget.preset.generationConfig.topP,
-        topK: int.tryParse(_topKController.text.trim()) ?? widget.preset.generationConfig.topK,
-        maxOutputTokens: int.tryParse(_maxTokensController.text.trim()) ?? widget.preset.generationConfig.maxOutputTokens,
+        temperature: double.tryParse(_temperatureController.text.trim()) ??
+            widget.preset.generationConfig.temperature,
+        topP: double.tryParse(_topPController.text.trim()) ??
+            widget.preset.generationConfig.topP,
+        topK: int.tryParse(_topKController.text.trim()) ??
+            widget.preset.generationConfig.topK,
+        maxOutputTokens: int.tryParse(_maxTokensController.text.trim()) ??
+            widget.preset.generationConfig.maxOutputTokens,
         repetitionPenalty: widget.preset.generationConfig.repetitionPenalty,
         stopSequences: widget.preset.generationConfig.stopSequences,
       ),
@@ -158,7 +166,8 @@ class _PresetEditorDialogState extends State<PresetEditorDialog> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
                     TextButton(
-                      onPressed: _saving ? null : () => Navigator.of(context).pop(),
+                      onPressed:
+                          _saving ? null : () => Navigator.of(context).pop(),
                       child: Text(l10n?.cancelButton ?? 'Cancel'),
                     ),
                     const SizedBox(width: 12),
@@ -180,7 +189,8 @@ class _PresetEditorDialogState extends State<PresetEditorDialog> {
     );
   }
 
-  Widget _field(String label, TextEditingController controller, {int maxLines = 1}) {
+  Widget _field(String label, TextEditingController controller,
+      {int maxLines = 1}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: TextField(

@@ -163,7 +163,8 @@ class CharacterCard {
     String? localeTag,
     bool includeExamples = true,
   }) {
-    final String resolvedCharacterName = name.trim().isEmpty ? 'Character' : name;
+    final String resolvedCharacterName =
+        name.trim().isEmpty ? 'Character' : name;
     final String formattedDescription = RoleplayTextFormatter.formatCardField(
       description,
       characterName: resolvedCharacterName,
@@ -256,7 +257,8 @@ class CharacterCard {
     String? userAlias,
     String? localeTag,
   }) {
-    final String resolvedCharacterName = name.trim().isEmpty ? 'Character' : name;
+    final String resolvedCharacterName =
+        name.trim().isEmpty ? 'Character' : name;
     final List<String> candidates = <String>[
       firstMessage,
       ...alternateGreetings,

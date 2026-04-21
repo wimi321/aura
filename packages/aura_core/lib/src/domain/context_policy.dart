@@ -19,7 +19,8 @@ class ContextWindowProfile {
     required List<ChatMessage> messages,
     required bool isLowMemoryDevice,
   }) {
-    final int usedTokens = messages.fold<int>(0, (int sum, ChatMessage message) => sum + message.estimatedTokenCount);
+    final int usedTokens = messages.fold<int>(
+        0, (int sum, ChatMessage message) => sum + message.estimatedTokenCount);
     final int window = resolveWindow(isLowMemoryDevice: isLowMemoryDevice);
     return usedTokens >= (window * summaryTriggerRatio).floor();
   }

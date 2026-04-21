@@ -185,6 +185,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get languageFieldLabel => 'Language';
 
   @override
+  String get followSystemLabel => 'Follow System';
+
+  @override
   String get chatNoActiveModel =>
       'Offline. No inference core is loaded for the story.';
 

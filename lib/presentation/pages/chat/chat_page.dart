@@ -67,8 +67,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
       duration: const Duration(seconds: 4),
     );
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted &&
-          !MediaQuery.of(context).disableAnimations) {
+      if (mounted && !MediaQuery.of(context).disableAnimations) {
         _ambientGlowController.repeat(reverse: true);
       }
       _bootstrapSession();
@@ -108,10 +107,12 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   }
 
   Future<void> _sendMessage() async {
+    final String text = _messageController.text.trim();
+    if (text.isEmpty) return;
     HapticFeedback.lightImpact();
     final String? whisper = _whisperInstruction;
     await _submitTurn(
-      text: _messageController.text.trim(),
+      text: text,
       clearComposer: true,
       whisperInstruction: whisper,
     );
@@ -202,8 +203,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                       'Whisper instruction (next turn only)...',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16),
-                    borderSide:
-                        const BorderSide(color: AppTheme.borderSubtle),
+                    borderSide: const BorderSide(color: AppTheme.borderSubtle),
                   ),
                 ),
               ),
@@ -1019,8 +1019,8 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     if (session == null || session.messages.isEmpty) {
       return;
     }
-    final Iterable<ChatMessage> userMessages = session.messages
-        .where((ChatMessage m) => m.role == ChatRole.user);
+    final Iterable<ChatMessage> userMessages =
+        session.messages.where((ChatMessage m) => m.role == ChatRole.user);
     if (userMessages.isEmpty) {
       return;
     }
@@ -1083,18 +1083,22 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                         controller: _scrollController,
                         padding: const EdgeInsets.only(
                             top: 24, bottom: 24, left: 16, right: 16),
-                        itemCount: messages.length + (_showRerollButton(messages) ? 1 : 0),
+                        itemCount: messages.length +
+                            (_showRerollButton(messages) ? 1 : 0),
                         itemBuilder: (BuildContext context, int index) {
                           // Reroll button after last message
-                          if (index == messages.length && _showRerollButton(messages)) {
+                          if (index == messages.length &&
+                              _showRerollButton(messages)) {
                             return Padding(
                               padding: const EdgeInsets.only(bottom: 16),
                               child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: IconButton(
-                                  key: const ValueKey<String>('chat-reroll-button'),
+                                  key: const ValueKey<String>(
+                                      'chat-reroll-button'),
                                   onPressed: _rerollLastMessage,
-                                  tooltip: l10n?.rerollButtonTooltip ?? 'Regenerate response',
+                                  tooltip: l10n?.rerollButtonTooltip ??
+                                      'Regenerate response',
                                   icon: const Icon(
                                     Icons.refresh_rounded,
                                     size: 20,
@@ -1155,8 +1159,8 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                                   onPressed: _retryLastMessage,
                                   icon: const Icon(Icons.refresh_rounded,
                                       size: 16),
-                                  label: Text(l10n?.errorRetryMessage ??
-                                      'Retry'),
+                                  label:
+                                      Text(l10n?.errorRetryMessage ?? 'Retry'),
                                   style: TextButton.styleFrom(
                                     foregroundColor: const Color(0xFFFF9B9B),
                                     padding: const EdgeInsets.symmetric(
@@ -1465,7 +1469,9 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
               size: 20,
               color: _whisperInstruction != null
                   ? AppTheme.brandCoral
-                  : (controlsLocked ? AppTheme.textMuted : AppTheme.textSecondary),
+                  : (controlsLocked
+                      ? AppTheme.textMuted
+                      : AppTheme.textSecondary),
             ),
           ),
           const SizedBox(width: 4),
@@ -1583,100 +1589,101 @@ class _MessageBubble extends StatelessWidget {
       return Semantics(
         label: '$characterName: $visibleContent',
         child: GestureDetector(
-        key: ValueKey<String>('chat-message-${message.id}'),
-        onLongPress: onLongPress,
-        behavior: HitTestBehavior.opaque,
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 32, right: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Icon(Icons.auto_awesome,
-                      size: 14, color: AppTheme.brandAura),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      (characterName.trim().isEmpty
-                              ? (l10n?.assistantLabel ?? 'CHARACTER')
-                              : characterName)
-                          .toUpperCase(),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: AppTheme.brandAura,
-                          letterSpacing: 1.2,
-                          fontWeight: FontWeight.w700),
+          key: ValueKey<String>('chat-message-${message.id}'),
+          onLongPress: onLongPress,
+          behavior: HitTestBehavior.opaque,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 32, right: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const Icon(Icons.auto_awesome,
+                        size: 14, color: AppTheme.brandAura),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        (characterName.trim().isEmpty
+                                ? (l10n?.assistantLabel ?? 'CHARACTER')
+                                : characterName)
+                            .toUpperCase(),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            color: AppTheme.brandAura,
+                            letterSpacing: 1.2,
+                            fontWeight: FontWeight.w700),
+                      ),
                     ),
-                  ),
-                  if (!isGenerating && timestamp != null)
-                    Text(
-                      timestamp,
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppTheme.textMuted,
-                            fontSize: 10,
-                          ),
-                    ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              if (visibleContent.isEmpty && isGenerating)
-                const _TypingIndicator()
-              else
-                Text(
-                  visibleContent,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      height: 1.7,
-                      fontSize: 16.5,
-                      color: AppTheme.textPrimary,
-                      letterSpacing: 0.2),
+                    if (!isGenerating && timestamp != null)
+                      Text(
+                        timestamp,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: AppTheme.textMuted,
+                              fontSize: 10,
+                            ),
+                      ),
+                  ],
                 ),
-            ],
+                const SizedBox(height: 12),
+                if (visibleContent.isEmpty && isGenerating)
+                  const _TypingIndicator()
+                else
+                  Text(
+                    visibleContent,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        height: 1.7,
+                        fontSize: 16.5,
+                        color: AppTheme.textPrimary,
+                        letterSpacing: 0.2),
+                  ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
     }
 
     // User Bubble
     return Semantics(
       label: 'You: $visibleContent',
       child: GestureDetector(
-      key: ValueKey<String>('chat-message-${message.id}'),
-      onLongPress: onLongPress,
-      behavior: HitTestBehavior.opaque,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 32, left: 32),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.03),
-                borderRadius: BorderRadius.circular(16),
+        key: ValueKey<String>('chat-message-${message.id}'),
+        onLongPress: onLongPress,
+        behavior: HitTestBehavior.opaque,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 32, left: 32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.03),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Text(
+                  visibleContent,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      height: 1.6, fontSize: 15, color: AppTheme.textSecondary),
+                ),
               ),
-              child: Text(
-                visibleContent,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    height: 1.6, fontSize: 15, color: AppTheme.textSecondary),
-              ),
-            ),
-            if (timestamp != null) ...[
-              const SizedBox(height: 4),
-              Text(
-                timestamp,
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: AppTheme.textMuted,
-                      fontSize: 10,
-                    ),
-              ),
+              if (timestamp != null) ...[
+                const SizedBox(height: 4),
+                Text(
+                  timestamp,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: AppTheme.textMuted,
+                        fontSize: 10,
+                      ),
+                ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
-    ),
     );
   }
 }

@@ -183,6 +183,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get languageFieldLabel => '言語';
 
   @override
+  String get followSystemLabel => 'システムに従う';
+
+  @override
   String get chatNoActiveModel => '有効なモデルがまだ読み込まれていません。';
 
   @override

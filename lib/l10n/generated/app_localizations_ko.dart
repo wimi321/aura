@@ -183,6 +183,9 @@ class AppLocalizationsKo extends AppLocalizations {
   String get languageFieldLabel => '언어';
 
   @override
+  String get followSystemLabel => '시스템 설정 따르기';
+
+  @override
   String get chatNoActiveModel => '아직 활성 모델이 로드되지 않았습니다.';
 
   @override

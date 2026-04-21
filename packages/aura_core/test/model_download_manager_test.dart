@@ -20,7 +20,8 @@ void main() {
       multimodal: true,
     );
 
-    final List<ModelDownloadSnapshot> snapshots = await manager.downloadAndRegister(manifest).toList();
+    final List<ModelDownloadSnapshot> snapshots =
+        await manager.downloadAndRegister(manifest).toList();
     final ModelManifest? stored = await catalog.getById('gemma-e2b');
 
     expect(snapshots.last.status, DownloadStatus.completed);

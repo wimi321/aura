@@ -103,7 +103,9 @@ class ChatOrchestrator {
             extensions: card.extensions,
             applyPromptRegex: true,
           );
-          return content.isEmpty ? null : DepthInsertion(content: content, depth: 0);
+          return content.isEmpty
+              ? null
+              : DepthInsertion(content: content, depth: 0);
         })
         .whereType<DepthInsertion>()
         .toList(growable: false);
@@ -222,8 +224,7 @@ class ChatOrchestrator {
       localeTag: localeTag,
       cardExtensions: card.extensions,
     );
-    final StringBuffer system = StringBuffer()
-      ..writeln(mergedBasePrompt);
+    final StringBuffer system = StringBuffer()..writeln(mergedBasePrompt);
 
     if (beforeCharLore.isNotEmpty) {
       system.writeln();
@@ -672,9 +673,8 @@ class ChatOrchestrator {
   String _buildScanText(ChatTurnInput input, int? scanDepth) {
     final int depth = scanDepth ?? 2;
     final StringBuffer buffer = StringBuffer();
-    final int start = input.history.length > depth
-        ? input.history.length - depth
-        : 0;
+    final int start =
+        input.history.length > depth ? input.history.length - depth : 0;
     for (int i = start; i < input.history.length; i++) {
       buffer.writeln(input.history[i].content);
     }

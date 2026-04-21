@@ -432,6 +432,12 @@ abstract class AppLocalizations {
   /// **'Language'**
   String get languageFieldLabel;
 
+  /// No description provided for @followSystemLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow System'**
+  String get followSystemLabel;
+
   /// No description provided for @chatNoActiveModel.
   ///
   /// In en, this message translates to:

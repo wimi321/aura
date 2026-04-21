@@ -39,6 +39,10 @@ class AuraEngine {
 
   ModelManager get modelManager => _modelManager;
 
+  Future<void> dispose() async {
+    await _modelManager.dispose();
+  }
+
   Future<InferenceRuntimeStatus> runtimeStatus() {
     return _gateway.getRuntimeStatus();
   }
@@ -346,9 +350,8 @@ class AuraEngine {
       }
     } catch (e) {
       final String partial = assembled.toString().trim();
-      final String content = partial.isNotEmpty
-          ? partial
-          : '[Generation failed: $e]';
+      final String content =
+          partial.isNotEmpty ? partial : '[Generation failed: $e]';
       final ChatMessage errorMessage = ChatMessage(
         id: _messageId('assistant'),
         role: ChatRole.assistant,

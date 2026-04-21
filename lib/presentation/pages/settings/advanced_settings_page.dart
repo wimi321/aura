@@ -639,8 +639,6 @@ String _localizedSettingsStateLabel(
   AppModelState state,
   AppLocalizations? l10n,
 ) {
-  final String code =
-      Localizations.localeOf(context).languageCode.toLowerCase();
   final String label = switch (state) {
     AppModelState.idle => l10n?.modelStateIdle ?? 'Idle',
     AppModelState.initializing ||
@@ -650,25 +648,16 @@ String _localizedSettingsStateLabel(
     AppModelState.ready => l10n?.readyText ?? 'Ready',
     AppModelState.error => l10n?.modelStateError ?? 'Error',
   };
-  return l10n?.statusLabel(label) ??
-      (code == 'zh' ? '状态 $label' : 'Status $label');
+  return l10n?.statusLabel(label) ?? 'Status $label';
 }
 
 String _localizedCoreSummary(BuildContext context, ModelManifest manifest) {
-  final String code =
-      Localizations.localeOf(context).languageCode.toLowerCase();
+  final AppLocalizations? l10n = AppLocalizations.of(context);
   final String size = formatBytes(manifest.sizeBytes);
   final String memory = '${manifest.recommendedMinRamGb}GB+';
-  if (code == 'zh') {
-    return '$size · 建议内存 $memory';
-  }
-  if (code == 'ja') {
-    return '$size · 推奨メモリ $memory';
-  }
-  if (code == 'ko') {
-    return '$size · 권장 메모리 $memory';
-  }
-  return '$size · Recommended RAM $memory';
+  final String ramHint =
+      l10n?.modelSetupRamHint(memory) ?? 'Recommended RAM $memory';
+  return '$size · $ramHint';
 }
 
 String _localizedCoreMarketingSummary(
@@ -713,33 +702,17 @@ String _localizedDownloadSummary(
   int receivedBytes,
   int totalBytes,
 ) {
-  final String code =
-      Localizations.localeOf(context).languageCode.toLowerCase();
+  final AppLocalizations? l10n = AppLocalizations.of(context);
   final String received = formatBytes(receivedBytes);
   final String total = formatBytes(totalBytes);
-  if (code == 'zh') {
-    return '已下载 $received / $total';
-  }
-  if (code == 'ja') {
-    return 'ダウンロード済み $received / $total';
-  }
-  if (code == 'ko') {
-    return '다운로드됨 $received / $total';
-  }
-  return 'Downloaded $received / $total';
+  return l10n?.modelSetupDownloadProgress(received, total) ??
+      'Downloaded $received / $total';
 }
 
 Map<String, String> _localizedLanguageLabels(BuildContext context) {
-  final String code =
-      Localizations.localeOf(context).languageCode.toLowerCase();
-  final String followSystem = switch (code) {
-    'zh' => '跟随系统',
-    'ja' => 'システムに従う',
-    'ko' => '시스템 설정 따르기',
-    _ => 'Follow System',
-  };
+  final AppLocalizations? l10n = AppLocalizations.of(context);
   return <String, String>{
-    'system': followSystem,
+    'system': l10n?.followSystemLabel ?? 'Follow System',
     'en': 'English',
     'zh': '简体中文',
     'ja': '日本語',

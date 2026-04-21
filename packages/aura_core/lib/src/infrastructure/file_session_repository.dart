@@ -47,7 +47,8 @@ class FileSessionRepository implements SessionRepository {
         sessions.add(ChatSession.fromJson(decoded.cast<String, Object?>()));
       }
     }
-    sessions.sort((ChatSession a, ChatSession b) => b.updatedAt.compareTo(a.updatedAt));
+    sessions.sort(
+        (ChatSession a, ChatSession b) => b.updatedAt.compareTo(a.updatedAt));
     return sessions;
   }
 
@@ -55,7 +56,8 @@ class FileSessionRepository implements SessionRepository {
   Future<void> put(ChatSession session) async {
     await _rootDirectory.create(recursive: true);
     final File file = _fileFor(session.id);
-    await file.writeAsString(const JsonEncoder.withIndent('  ').convert(session.toJson()));
+    await file.writeAsString(
+        const JsonEncoder.withIndent('  ').convert(session.toJson()));
   }
 
   File _fileFor(String sessionId) {

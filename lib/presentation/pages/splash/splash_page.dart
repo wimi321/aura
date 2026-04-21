@@ -16,6 +16,7 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   late AnimationController _pulseController;
   late AnimationController _rotationController;
+  bool _hasNavigated = false;
 
   @override
   void initState() {
@@ -51,14 +52,14 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
 
   String _stageLabel(AppStateProvider appState, AppLocalizations? l10n) {
     return switch (appState.modelState) {
-      AppModelState.idle || AppModelState.initializing =>
+      AppModelState.idle ||
+      AppModelState.initializing =>
         l10n?.splashPreparingRuntime ?? 'Preparing runtime...',
-      AppModelState.loading || AppModelState.switching =>
+      AppModelState.loading ||
+      AppModelState.switching =>
         l10n?.splashLoadingCore ?? 'Loading story core...',
-      AppModelState.ready =>
-        l10n?.readyText ?? 'Ready',
-      AppModelState.error =>
-        l10n?.modelStateError ?? 'Error',
+      AppModelState.ready => l10n?.readyText ?? 'Ready',
+      AppModelState.error => l10n?.modelStateError ?? 'Error',
     };
   }
 
@@ -69,12 +70,16 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
 
     _ensureAnimations(context);
 
-    if (appState.startupResolved &&
+    if (!_hasNavigated &&
+        appState.startupResolved &&
         appState.modelState != AppModelState.error) {
+      _hasNavigated = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        context.go(
-          appState.hasInstalledModels ? '/characters' : '/model-setup',
-        );
+        if (mounted) {
+          context.go(
+            appState.hasInstalledModels ? '/characters' : '/model-setup',
+          );
+        }
       });
     }
 
@@ -144,7 +149,6 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
               },
             ),
           ),
-
           Positioned(
             bottom: 80,
             left: 0,
@@ -197,8 +201,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                           onPressed: () async {
                             await appState.recoverActiveModel();
                           },
-                          child:
-                              Text(l10n?.splashTryAgain ?? 'Try Again'),
+                          child: Text(l10n?.splashTryAgain ?? 'Try Again'),
                         ),
                       ],
                     ),
@@ -215,8 +218,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
                       width: 120,
                       child: LinearProgressIndicator(
                         value: null,
-                        backgroundColor:
-                            AppTheme.borderSubtle,
+                        backgroundColor: AppTheme.borderSubtle,
                         color: AppTheme.brandAura.withValues(alpha: 0.6),
                         borderRadius: BorderRadius.circular(2),
                         minHeight: 2,

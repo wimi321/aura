@@ -65,6 +65,7 @@
   "interfaceReplyLanguageTitle": "인터페이스 및 답변 언어",
   "interfaceReplyLanguageDescription": "기본적으로 시스템 언어를 따릅니다. 여기서 고정하면, 대화 중 명시적으로 바꾸지 않는 한 답변도 그 언어를 따릅니다.",
   "languageFieldLabel": "언어",
+  "followSystemLabel": "시스템 설정 따르기",
   "chatNoActiveModel": "아직 활성 모델이 로드되지 않았습니다.",
   "whisperSheetTitle": "속삭임 지시",
   "whisperSheetDescription": "다음 답변에만 영향을 주며, 이 지시는 화면의 대화에는 표시되지 않습니다.",

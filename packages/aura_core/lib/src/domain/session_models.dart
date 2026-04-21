@@ -25,10 +25,12 @@ class SessionSummary {
   factory SessionSummary.fromJson(Map<String, Object?> json) {
     return SessionSummary(
       content: json['content']?.toString() ?? '',
-      sourceMessageIds: ((json['source_message_ids'] as List?) ?? const <Object>[])
-          .map((Object? item) => item.toString())
-          .toList(growable: false),
-      createdAt: DateTime.tryParse(json['created_at']?.toString() ?? '') ?? DateTime.fromMillisecondsSinceEpoch(0),
+      sourceMessageIds:
+          ((json['source_message_ids'] as List?) ?? const <Object>[])
+              .map((Object? item) => item.toString())
+              .toList(growable: false),
+      createdAt: DateTime.tryParse(json['created_at']?.toString() ?? '') ??
+          DateTime.fromMillisecondsSinceEpoch(0),
     );
   }
 }
@@ -75,7 +77,9 @@ class ChatSession {
       'updated_at': updatedAt.toIso8601String(),
       'summary': summary?.toJson(),
       'metadata': metadata,
-      'messages': messages.map((ChatMessage message) => message.toJson()).toList(growable: false),
+      'messages': messages
+          .map((ChatMessage message) => message.toJson())
+          .toList(growable: false),
     };
   }
 
@@ -83,16 +87,21 @@ class ChatSession {
     return ChatSession(
       id: json['id']?.toString() ?? '',
       characterId: json['character_id']?.toString() ?? '',
-      updatedAt: DateTime.tryParse(json['updated_at']?.toString() ?? '') ?? DateTime.fromMillisecondsSinceEpoch(0),
+      updatedAt: DateTime.tryParse(json['updated_at']?.toString() ?? '') ??
+          DateTime.fromMillisecondsSinceEpoch(0),
       summary: json['summary'] is Map<String, Object?>
           ? SessionSummary.fromJson(json['summary']! as Map<String, Object?>)
           : json['summary'] is Map<Object?, Object?>
-              ? SessionSummary.fromJson((json['summary']! as Map<Object?, Object?>).cast<String, Object?>())
+              ? SessionSummary.fromJson(
+                  (json['summary']! as Map<Object?, Object?>)
+                      .cast<String, Object?>())
               : null,
-      metadata: (json['metadata'] as Map?)?.cast<String, Object?>() ?? const <String, Object?>{},
+      metadata: (json['metadata'] as Map?)?.cast<String, Object?>() ??
+          const <String, Object?>{},
       messages: ((json['messages'] as List?) ?? const <Object>[])
           .whereType<Map<Object?, Object?>>()
-          .map((Map<Object?, Object?> item) => ChatMessage.fromJson(item.cast<String, Object?>()))
+          .map((Map<Object?, Object?> item) =>
+              ChatMessage.fromJson(item.cast<String, Object?>()))
           .toList(growable: false),
     );
   }

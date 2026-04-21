@@ -2,7 +2,15 @@ import 'package:meta/meta.dart';
 
 import 'model_manifest.dart';
 
-enum DownloadStatus { idle, queued, downloading, paused, completed, failed, cancelled }
+enum DownloadStatus {
+  idle,
+  queued,
+  downloading,
+  paused,
+  completed,
+  failed,
+  cancelled
+}
 
 @immutable
 class ModelDownloadSnapshot {

@@ -17,7 +17,8 @@ class EmotionTagFilter {
 
   EmotionTagFilterResult parse(String rawText) {
     final List<EmotionSignal> emotions = <EmotionSignal>[];
-    final String visible = rawText.replaceAllMapped(_emotionTagPattern, (Match match) {
+    final String visible =
+        rawText.replaceAllMapped(_emotionTagPattern, (Match match) {
       final String? label = match.group(1);
       if (label != null) {
         emotions.add(

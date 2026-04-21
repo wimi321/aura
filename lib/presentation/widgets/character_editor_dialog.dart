@@ -101,39 +101,53 @@ class _CharacterEditorDialogState extends State<CharacterEditorDialog> {
   }
 
   Future<void> _save() async {
+    final String trimmedName = _nameController.text.trim();
+    if (trimmedName.isEmpty) {
+      return;
+    }
+
     setState(() {
       _saving = true;
       _lorebookError = null;
     });
 
-    final Lorebook? lorebook = _buildLorebookDraft();
-    final CharacterCard next = _draftCharacter.copyWith(
-      name: _nameController.text.trim(),
-      description: _descriptionController.text.trim(),
-      personality: _personalityController.text.trim(),
-      scenario: _scenarioController.text.trim(),
-      firstMessage: _firstMessageController.text.trim(),
-      exampleDialogues: _splitParagraphs(_examplesController.text),
-      alternateGreetings: _splitParagraphs(_alternateGreetingsController.text),
-      creatorNotes: _nullIfEmpty(_creatorNotesController.text),
-      mainPromptOverride: _nullIfEmpty(_mainPromptController.text),
-      postHistoryInstructions:
-          _nullIfEmpty(_postHistoryInstructionsController.text),
-      lorebook: lorebook,
-      clearLorebook: lorebook == null,
-      extensions: <String, Object?>{
-        ..._draftCharacter.extensions,
-        'edited': true,
-        'user_customized': true,
-      },
-    );
-    final CharacterCard stored =
-        await context.read<AppStateProvider>().saveCharacter(next);
-    if (!mounted) {
-      return;
+    try {
+      final Lorebook? lorebook = _buildLorebookDraft();
+      final CharacterCard next = _draftCharacter.copyWith(
+        name: trimmedName,
+        description: _descriptionController.text.trim(),
+        personality: _personalityController.text.trim(),
+        scenario: _scenarioController.text.trim(),
+        firstMessage: _firstMessageController.text.trim(),
+        exampleDialogues: _splitParagraphs(_examplesController.text),
+        alternateGreetings:
+            _splitParagraphs(_alternateGreetingsController.text),
+        creatorNotes: _nullIfEmpty(_creatorNotesController.text),
+        mainPromptOverride: _nullIfEmpty(_mainPromptController.text),
+        postHistoryInstructions:
+            _nullIfEmpty(_postHistoryInstructionsController.text),
+        lorebook: lorebook,
+        clearLorebook: lorebook == null,
+        extensions: <String, Object?>{
+          ..._draftCharacter.extensions,
+          'edited': true,
+          'user_customized': true,
+        },
+      );
+      final CharacterCard stored =
+          await context.read<AppStateProvider>().saveCharacter(next);
+      if (!mounted) {
+        return;
+      }
+      widget.onSaved?.call(stored);
+      Navigator.of(context).pop(true);
+    } catch (_) {
+      if (mounted) {
+        setState(() {
+          _saving = false;
+        });
+      }
     }
-    widget.onSaved?.call(stored);
-    Navigator.of(context).pop(true);
   }
 
   Future<void> _importLorebook() async {
@@ -458,8 +472,7 @@ class _CharacterEditorDialogState extends State<CharacterEditorDialog> {
                                   hasAvatar
                                       ? (l10n?.characterPortraitImportedHint ??
                                           'This role card already includes its original portrait art.')
-                                      : (l10n
-                                              ?.characterPortraitAutoImportHint ??
+                                      : (l10n?.characterPortraitAutoImportHint ??
                                           'If you import a Tavern PNG card, Aura carries the art over automatically. The built-in cinematic cover is only used when no image exists.'),
                                   style: Theme.of(context)
                                       .textTheme
@@ -476,8 +489,7 @@ class _CharacterEditorDialogState extends State<CharacterEditorDialog> {
                 ),
                 const SizedBox(height: 16),
                 _SectionCard(
-                  title:
-                      l10n?.characterCoreFieldsTitle ?? 'Core Card Fields',
+                  title: l10n?.characterCoreFieldsTitle ?? 'Core Card Fields',
                   subtitle: l10n?.characterCoreFieldsDescription ??
                       'These fields define the role summary, scene setup, and opening momentum.',
                   child: Column(
@@ -656,9 +668,9 @@ class _CharacterEditorDialogState extends State<CharacterEditorDialog> {
                                 'Collapsed by default so giant worldbooks do not flood the whole workbench.')
                             : (l10n?.lorebookEntriesCollapsedHint ??
                                 'Tap to reveal and manage every entry.'),
-                        entryCountLabel:
-                            l10n?.lorebookEntryCount(_draftLorebookEntries.length) ??
-                                '${_draftLorebookEntries.length} entries',
+                        entryCountLabel: l10n?.lorebookEntryCount(
+                                _draftLorebookEntries.length) ??
+                            '${_draftLorebookEntries.length} entries',
                         onToggle: () {
                           setState(() {
                             _lorebookEntriesExpanded =
@@ -1222,9 +1234,8 @@ class _LorebookEntryEditorDialogState
                 decoration: InputDecoration(
                   labelText: l10n?.lorebookEntrySecondaryKeywordsLabel ??
                       'Secondary Keywords',
-                  helperText:
-                      l10n?.lorebookEntrySecondaryKeywordsHelper ??
-                          'Optional, comma-separated.',
+                  helperText: l10n?.lorebookEntrySecondaryKeywordsHelper ??
+                      'Optional, comma-separated.',
                 ),
               ),
               const SizedBox(height: 12),
@@ -1232,8 +1243,7 @@ class _LorebookEntryEditorDialogState
                 controller: _contentController,
                 maxLines: 6,
                 decoration: InputDecoration(
-                  labelText:
-                      l10n?.lorebookEntryContentLabel ?? 'Entry Content',
+                  labelText: l10n?.lorebookEntryContentLabel ?? 'Entry Content',
                 ),
               ),
               const SizedBox(height: 12),
@@ -1249,8 +1259,7 @@ class _LorebookEntryEditorDialogState
                 controller: _priorityController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  labelText:
-                      l10n?.lorebookEntryPriorityLabel ?? 'Priority',
+                  labelText: l10n?.lorebookEntryPriorityLabel ?? 'Priority',
                 ),
               ),
               const SizedBox(height: 12),

@@ -17,7 +17,8 @@ class MemorySessionRepository implements SessionRepository {
   @override
   Future<List<ChatSession>> list() async {
     final List<ChatSession> sessions = _sessions.values.toList(growable: false);
-    sessions.sort((ChatSession a, ChatSession b) => b.updatedAt.compareTo(a.updatedAt));
+    sessions.sort(
+        (ChatSession a, ChatSession b) => b.updatedAt.compareTo(a.updatedAt));
     return sessions;
   }
 

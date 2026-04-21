@@ -8,7 +8,8 @@ import '../domain/expression_pack.dart';
 class ZipExpressionPackParser {
   const ZipExpressionPackParser();
 
-  ExpressionPack parseBytes(Uint8List bytes, {String packId = 'expression-pack'}) {
+  ExpressionPack parseBytes(Uint8List bytes,
+      {String packId = 'expression-pack'}) {
     final Archive archive = ZipDecoder().decodeBytes(bytes);
     final List<ExpressionLayer> layers = <ExpressionLayer>[];
     String? coverAssetName;
@@ -29,10 +30,12 @@ class ZipExpressionPackParser {
             bytes: content,
           ),
         );
-        if (coverAssetName == null && (label == 'neutral' || label == 'default')) {
+        if (coverAssetName == null &&
+            (label == 'neutral' || label == 'default')) {
           coverAssetName = file.name;
         }
-      } else if (normalizedName.endsWith('manifest.json') || normalizedName.endsWith('metadata.json')) {
+      } else if (normalizedName.endsWith('manifest.json') ||
+          normalizedName.endsWith('metadata.json')) {
         final String raw = utf8.decode(_asBytes(file.content));
         final Object? decoded = jsonDecode(raw);
         if (decoded is Map<String, Object?>) {
@@ -43,12 +46,14 @@ class ZipExpressionPackParser {
       }
     }
 
-    layers.sort((ExpressionLayer a, ExpressionLayer b) => a.label.compareTo(b.label));
+    layers.sort(
+        (ExpressionLayer a, ExpressionLayer b) => a.label.compareTo(b.label));
 
     return ExpressionPack(
       id: packId,
       layers: layers,
-      coverAssetName: coverAssetName ?? (layers.isEmpty ? null : layers.first.assetName),
+      coverAssetName:
+          coverAssetName ?? (layers.isEmpty ? null : layers.first.assetName),
       metadata: metadata,
     );
   }
@@ -61,14 +66,17 @@ class ZipExpressionPackParser {
   }
 
   String _deriveLabel(String fileName) {
-    final String baseName = fileName.split('/').last.split('.').first.trim().toLowerCase();
+    final String baseName =
+        fileName.split('/').last.split('.').first.trim().toLowerCase();
     if (baseName.isEmpty) {
       return 'default';
     }
     if (baseName.contains('neutral') || baseName.contains('default')) {
       return 'neutral';
     }
-    if (baseName.contains('joy') || baseName.contains('happy') || baseName.contains('smile')) {
+    if (baseName.contains('joy') ||
+        baseName.contains('happy') ||
+        baseName.contains('smile')) {
       return 'joy';
     }
     if (baseName.contains('blush') || baseName.contains('shy')) {
@@ -90,6 +98,7 @@ class ZipExpressionPackParser {
     if (content is List<int>) {
       return List<int>.from(content);
     }
-    throw FormatException('Unsupported ZIP entry content type: ${content.runtimeType}');
+    throw FormatException(
+        'Unsupported ZIP entry content type: ${content.runtimeType}');
   }
 }

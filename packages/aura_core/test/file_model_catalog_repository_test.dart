@@ -5,7 +5,8 @@ import 'package:test/test.dart';
 
 void main() {
   test('upserts and reads model manifests', () async {
-    final Directory tempDir = await Directory.systemTemp.createTemp('aura_model_catalog');
+    final Directory tempDir =
+        await Directory.systemTemp.createTemp('aura_model_catalog');
     addTearDown(() => tempDir.delete(recursive: true));
 
     final FileModelCatalogRepository repository = FileModelCatalogRepository(
