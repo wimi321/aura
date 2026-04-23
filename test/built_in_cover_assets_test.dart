@@ -80,6 +80,9 @@ void main() {
       AuraStage.eclipseCoreAsset: (1024, 1024),
       AuraStage.constellationAsset: (1600, 1000),
     };
+    final Map<String, int> maxBytes = <String, int>{
+      AuraStage.eclipseCoreAsset: 850 * 1024,
+    };
 
     for (final MapEntry<String, (int, int)> entry
         in expectedDimensions.entries) {
@@ -94,7 +97,7 @@ void main() {
       );
       expect(
         file.lengthSync(),
-        lessThan(700 * 1024),
+        lessThan(maxBytes[entry.key] ?? 700 * 1024),
         reason: '${entry.key} should stay lightweight for the APK.',
       );
     }

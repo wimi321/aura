@@ -3,6 +3,17 @@
 All notable changes to Aura are documented here.  
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.2.4] — 2026-04-24
+
+### Added
+- Generated Eclipse Core app icon source artwork and reproducible brand asset pipeline
+- Platform validation for Android, iOS, macOS, README, and launch logo assets
+
+### Changed
+- Rebuilt Android launcher icons, iOS AppIcon, macOS AppIcon, README logo, and iOS launch mark from the same generated source
+- Updated the iOS native launch screen background to match Aura's dark startup color
+- Kept app icon foreground artwork inside the adaptive-icon safe zone for launcher masks
+
 ## [0.2.3] — 2026-04-24
 
 ### Added
@@ -83,6 +94,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 - Hardware delegate auto-selection (CoreML / GPU / CPU)
 - Context window management with heuristic summarization
 
+[0.2.4]: https://github.com/wimi321/aura/releases/tag/v0.2.4
 [0.2.3]: https://github.com/wimi321/aura/releases/tag/v0.2.3
 [0.2.2]: https://github.com/wimi321/aura/releases/tag/v0.2.2
 [0.2.0]: https://github.com/wimi321/aura/releases/tag/v0.2.0

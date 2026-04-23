@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="tooling/branding/aura_android_icon_master.png" alt="Aura icon" width="140" />
+  <img src="docs/readme/aura-icon.png" alt="Aura icon" width="140" />
 </p>
 
 <h1 align="center">Aura</h1>
