@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:image/image.dart' as img;
 
 import 'package:aura_app/backend/models/default_assets.dart';
+import 'package:aura_app/presentation/widgets/aura_stage.dart';
 
 void main() {
   test('all built-in story cards have local cover assets', () {
@@ -68,6 +69,33 @@ void main() {
         character.lorebook?.entries,
         isNotEmpty,
         reason: 'Missing lorebook entries for ${character.id}',
+      );
+    }
+  });
+
+  test('app-wide atmosphere assets are present and mobile-sized', () {
+    final Map<String, (int, int)> expectedDimensions = <String, (int, int)>{
+      AuraStage.atmosphereAsset: (1440, 2560),
+      AuraStage.deepSpaceAsset: (1440, 2560),
+      AuraStage.eclipseCoreAsset: (1024, 1024),
+      AuraStage.constellationAsset: (1600, 1000),
+    };
+
+    for (final MapEntry<String, (int, int)> entry
+        in expectedDimensions.entries) {
+      final File file = File(entry.key);
+      expect(file.existsSync(), isTrue, reason: 'Missing ${entry.key}');
+      final img.Image? image = img.decodeImage(file.readAsBytesSync());
+      expect(image, isNotNull, reason: 'Could not decode ${entry.key}');
+      expect(
+        (image!.width, image.height),
+        entry.value,
+        reason: 'Unexpected dimensions for ${entry.key}',
+      );
+      expect(
+        file.lengthSync(),
+        lessThan(700 * 1024),
+        reason: '${entry.key} should stay lightweight for the APK.',
       );
     }
   });

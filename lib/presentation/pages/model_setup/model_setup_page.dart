@@ -8,6 +8,7 @@ import 'package:aura_core/aura_core.dart';
 import '../../../application/providers/app_state_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../utils/format_bytes.dart';
+import '../../widgets/aura_stage.dart';
 
 class ModelSetupPage extends StatelessWidget {
   const ModelSetupPage({super.key, this.returnTo});
@@ -30,113 +31,120 @@ class ModelSetupPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppTheme.bgBase,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 24, 24, 28),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              if (canGoBack)
-                IconButton(
-                  onPressed: () => context.pop(),
-                  icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                  color: AppTheme.textPrimary,
-                  tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-                  padding: EdgeInsets.zero,
-                  constraints: const BoxConstraints(),
+      body: AuraStage(
+        showConstellation: true,
+        eclipseAlignment: Alignment.topRight,
+        atmosphereOpacity: 0.86,
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(24, 24, 24, 28),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                if (canGoBack)
+                  IconButton(
+                    onPressed: () => context.pop(),
+                    icon: const Icon(Icons.arrow_back_ios_new_rounded),
+                    color: AppTheme.textPrimary,
+                    tooltip:
+                        MaterialLocalizations.of(context).backButtonTooltip,
+                    padding: EdgeInsets.zero,
+                    constraints: const BoxConstraints(),
+                  ),
+                if (canGoBack) const SizedBox(height: 20),
+                Text(
+                  l10n?.firstRunModelTitle ?? 'Choose your first story core',
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.w800,
+                        color: AppTheme.textPrimary,
+                      ),
                 ),
-              if (canGoBack) const SizedBox(height: 20),
-              Text(
-                l10n?.firstRunModelTitle ?? 'Choose your first story core',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.w800,
-                      color: AppTheme.textPrimary,
-                    ),
-              ),
-              const SizedBox(height: 12),
-              Text(
-                l10n?.firstRunModelSubtitle ??
-                    'Aura needs one local story core before the first scene can begin. E2B starts faster. E4B gives you stronger quality.',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: AppTheme.textSecondary,
-                      height: 1.55,
-                    ),
-              ),
-              if ((appState.errorMessage ?? '').isNotEmpty) ...<Widget>[
-                const SizedBox(height: 20),
-                _ErrorBanner(
-                    message:
-                        _localizedModelError(context, appState.errorMessage!)),
-              ],
-              const SizedBox(height: 28),
-              Expanded(
-                child: LayoutBuilder(
-                  builder: (BuildContext context, BoxConstraints constraints) {
-                    final bool useWideLayout = constraints.maxWidth >= 860;
-                    final List<Widget> cards = <Widget>[
-                      if (e2b != null)
-                        _SetupModelCard(
-                          manifest: e2b,
-                          badgeLabel: l10n?.firstRunModelRecommendedBadge ??
-                              'Recommended',
-                          badgeColor: AppTheme.brandAura,
-                          headline:
-                              l10n?.firstRunE2bHeadline ?? 'Faster first start',
-                          summary: l10n?.firstRunE2bSummary ??
-                              'Best for a first install. Smaller download, quicker setup, and smooth story entry.',
-                          qualityChip:
-                              l10n?.modelSetupE2bSpeedChip ?? 'Fast inference',
-                          onPressed: () => _activateOrDownload(
-                            context,
-                            appState,
-                            e2b,
+                const SizedBox(height: 12),
+                Text(
+                  l10n?.firstRunModelSubtitle ??
+                      'Aura needs one local story core before the first scene can begin. E2B starts faster. E4B gives you stronger quality.',
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: AppTheme.textSecondary,
+                        height: 1.55,
+                      ),
+                ),
+                if ((appState.errorMessage ?? '').isNotEmpty) ...<Widget>[
+                  const SizedBox(height: 20),
+                  _ErrorBanner(
+                      message: _localizedModelError(
+                          context, appState.errorMessage!)),
+                ],
+                const SizedBox(height: 28),
+                Expanded(
+                  child: LayoutBuilder(
+                    builder:
+                        (BuildContext context, BoxConstraints constraints) {
+                      final bool useWideLayout = constraints.maxWidth >= 860;
+                      final List<Widget> cards = <Widget>[
+                        if (e2b != null)
+                          _SetupModelCard(
+                            manifest: e2b,
+                            badgeLabel: l10n?.firstRunModelRecommendedBadge ??
+                                'Recommended',
+                            badgeColor: AppTheme.brandAura,
+                            headline: l10n?.firstRunE2bHeadline ??
+                                'Faster first start',
+                            summary: l10n?.firstRunE2bSummary ??
+                                'Best for a first install. Smaller download, quicker setup, and smooth story entry.',
+                            qualityChip: l10n?.modelSetupE2bSpeedChip ??
+                                'Fast inference',
+                            onPressed: () => _activateOrDownload(
+                              context,
+                              appState,
+                              e2b,
+                            ),
                           ),
-                        ),
-                      if (e4b != null)
-                        _SetupModelCard(
-                          manifest: e4b,
-                          badgeLabel: l10n?.firstRunModelQualityBadge ??
-                              'Higher quality',
-                          badgeColor: AppTheme.brandCoral,
-                          headline: l10n?.firstRunE4bHeadline ??
-                              'Stronger scene detail',
-                          summary: l10n?.firstRunE4bSummary ??
-                              'Bigger download, but stronger writing quality, richer detail, and steadier scene control.',
-                          qualityChip: l10n?.modelSetupE4bQualityChip ??
-                              'Richer vocabulary, longer scenes',
-                          onPressed: () => _activateOrDownload(
-                            context,
-                            appState,
-                            e4b,
+                        if (e4b != null)
+                          _SetupModelCard(
+                            manifest: e4b,
+                            badgeLabel: l10n?.firstRunModelQualityBadge ??
+                                'Higher quality',
+                            badgeColor: AppTheme.brandCoral,
+                            headline: l10n?.firstRunE4bHeadline ??
+                                'Stronger scene detail',
+                            summary: l10n?.firstRunE4bSummary ??
+                                'Bigger download, but stronger writing quality, richer detail, and steadier scene control.',
+                            qualityChip: l10n?.modelSetupE4bQualityChip ??
+                                'Richer vocabulary, longer scenes',
+                            onPressed: () => _activateOrDownload(
+                              context,
+                              appState,
+                              e4b,
+                            ),
                           ),
-                        ),
-                    ];
+                      ];
 
-                    if (useWideLayout) {
-                      return Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          for (int index = 0;
-                              index < cards.length;
-                              index += 1) ...<Widget>[
-                            Expanded(child: cards[index]),
-                            if (index != cards.length - 1)
-                              const SizedBox(width: 20),
+                      if (useWideLayout) {
+                        return Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            for (int index = 0;
+                                index < cards.length;
+                                index += 1) ...<Widget>[
+                              Expanded(child: cards[index]),
+                              if (index != cards.length - 1)
+                                const SizedBox(width: 20),
+                            ],
                           ],
-                        ],
-                      );
-                    }
+                        );
+                      }
 
-                    return ListView.separated(
-                      itemCount: cards.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 18),
-                      itemBuilder: (BuildContext context, int index) =>
-                          cards[index],
-                    );
-                  },
+                      return ListView.separated(
+                        itemCount: cards.length,
+                        separatorBuilder: (_, __) => const SizedBox(height: 18),
+                        itemBuilder: (BuildContext context, int index) =>
+                            cards[index],
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -269,9 +277,19 @@ class _SetupModelCardState extends State<_SetupModelCard> {
         : 0;
 
     return Container(
+      clipBehavior: Clip.antiAlias,
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: AppTheme.bgCard,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: <Color>[
+            widget.badgeColor.withValues(alpha: 0.13),
+            AppTheme.bgCard.withValues(alpha: 0.96),
+            const Color(0xFF05090D),
+          ],
+          stops: const <double>[0.0, 0.36, 1.0],
+        ),
         borderRadius: BorderRadius.circular(28),
         border: Border.all(
           color: isActive
@@ -286,152 +304,169 @@ class _SetupModelCardState extends State<_SetupModelCard> {
           ),
         ],
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              _Badge(label: widget.badgeLabel, color: widget.badgeColor),
-              const Spacer(),
-              if (isInstalled && !isActive)
-                _Badge(
-                  label: l10n?.downloadedTag ?? 'Downloaded',
-                  color: AppTheme.mist,
-                ),
-              if (isActive)
-                _Badge(
-                  label: l10n?.activeBadge ?? 'ACTIVE',
-                  color: AppTheme.brandAura,
-                ),
-            ],
-          ),
-          const SizedBox(height: 18),
-          Text(
-            widget.manifest.name,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  color: AppTheme.textPrimary,
-                  fontWeight: FontWeight.w800,
-                ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            widget.headline,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: AppTheme.textPrimary,
-                  fontWeight: FontWeight.w700,
-                ),
-          ),
-          const SizedBox(height: 10),
-          Text(
-            widget.summary,
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppTheme.textSecondary,
-                  height: 1.55,
-                ),
-          ),
-          const SizedBox(height: 18),
-          Wrap(
-            spacing: 10,
-            runSpacing: 10,
-            children: <Widget>[
-              _InfoChip(
-                icon: Icons.download_rounded,
-                label: formatBytes(widget.manifest.sizeBytes),
-              ),
-              _InfoChip(
-                icon: Icons.memory_rounded,
-                label: _localizedRamHint(context, widget.manifest),
-              ),
-              if (widget.qualityChip != null)
-                _InfoChip(
-                  icon: Icons.auto_awesome_outlined,
-                  label: widget.qualityChip!,
-                ),
-            ],
-          ),
-          if (isDownloading) ...<Widget>[
-            const SizedBox(height: 24),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(999),
-              child: LinearProgressIndicator(
-                value: appState.downloadProgress,
-                minHeight: 8,
-                backgroundColor: AppTheme.bgElevated,
-                color: widget.badgeColor,
+          Positioned(
+            right: -100,
+            top: -120,
+            width: 360,
+            child: Opacity(
+              opacity: 0.20,
+              child: Image.asset(
+                AuraStage.constellationAsset,
+                filterQuality: FilterQuality.medium,
               ),
             ),
-            const SizedBox(height: 10),
-            Row(
-              children: <Widget>[
-                Text(
-                  '$percent%',
-                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: widget.badgeColor,
-                        fontWeight: FontWeight.w700,
-                      ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    _buildDownloadDetail(context, appState),
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppTheme.textSecondary,
-                        ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            ),
-          ],
-          const SizedBox(height: 24),
-          Row(
+          ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Expanded(
-                child: FilledButton(
-                  onPressed: canTapPrimary ? widget.onPressed : null,
-                  style: FilledButton.styleFrom(
-                    backgroundColor:
-                        isActive ? AppTheme.bgElevated : widget.badgeColor,
-                    foregroundColor:
-                        isActive ? AppTheme.textMuted : AppTheme.ink,
-                    disabledBackgroundColor: AppTheme.bgElevated,
-                    disabledForegroundColor: AppTheme.textMuted,
-                    minimumSize: const Size.fromHeight(52),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18),
+              Row(
+                children: <Widget>[
+                  _Badge(label: widget.badgeLabel, color: widget.badgeColor),
+                  const Spacer(),
+                  if (isInstalled && !isActive)
+                    _Badge(
+                      label: l10n?.downloadedTag ?? 'Downloaded',
+                      color: AppTheme.mist,
                     ),
+                  if (isActive)
+                    _Badge(
+                      label: l10n?.activeBadge ?? 'ACTIVE',
+                      color: AppTheme.brandAura,
+                    ),
+                ],
+              ),
+              const SizedBox(height: 18),
+              Text(
+                widget.manifest.name,
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      color: AppTheme.textPrimary,
+                      fontWeight: FontWeight.w800,
+                    ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                widget.headline,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      color: AppTheme.textPrimary,
+                      fontWeight: FontWeight.w700,
+                    ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                widget.summary,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppTheme.textSecondary,
+                      height: 1.55,
+                    ),
+              ),
+              const SizedBox(height: 18),
+              Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: <Widget>[
+                  _InfoChip(
+                    icon: Icons.download_rounded,
+                    label: formatBytes(widget.manifest.sizeBytes),
                   ),
-                  child: Text(
-                    isDownloading
-                        ? (l10n?.modelDownloadPreparingButton ??
-                            'Downloading...')
-                        : isActive
-                            ? (l10n?.alreadyActiveButton ?? 'Already Active')
-                            : isInstalled
-                                ? (l10n?.activateEngineButton ??
-                                    'Activate Core')
-                                : (l10n?.downloadInstallButton ??
-                                    'Download & Install'),
-                    style: const TextStyle(fontWeight: FontWeight.w700),
+                  _InfoChip(
+                    icon: Icons.memory_rounded,
+                    label: _localizedRamHint(context, widget.manifest),
                   ),
-                ),
+                  if (widget.qualityChip != null)
+                    _InfoChip(
+                      icon: Icons.auto_awesome_outlined,
+                      label: widget.qualityChip!,
+                    ),
+                ],
               ),
               if (isDownloading) ...<Widget>[
-                const SizedBox(width: 12),
-                OutlinedButton(
-                  onPressed: appState.cancelModelDownload,
-                  style: OutlinedButton.styleFrom(
-                    minimumSize: const Size(88, 52),
-                    foregroundColor: AppTheme.textPrimary,
-                    side: const BorderSide(color: AppTheme.borderStrong),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18),
-                    ),
+                const SizedBox(height: 24),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(999),
+                  child: LinearProgressIndicator(
+                    value: appState.downloadProgress,
+                    minHeight: 8,
+                    backgroundColor: AppTheme.bgElevated,
+                    color: widget.badgeColor,
                   ),
-                  child: Text(l10n?.cancelButton ?? 'Cancel'),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: <Widget>[
+                    Text(
+                      '$percent%',
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                            color: widget.badgeColor,
+                            fontWeight: FontWeight.w700,
+                          ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        _buildDownloadDetail(context, appState),
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: AppTheme.textSecondary,
+                            ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
                 ),
               ],
+              const SizedBox(height: 24),
+              Row(
+                children: <Widget>[
+                  Expanded(
+                    child: FilledButton(
+                      onPressed: canTapPrimary ? widget.onPressed : null,
+                      style: FilledButton.styleFrom(
+                        backgroundColor:
+                            isActive ? AppTheme.bgElevated : widget.badgeColor,
+                        foregroundColor:
+                            isActive ? AppTheme.textMuted : AppTheme.ink,
+                        disabledBackgroundColor: AppTheme.bgElevated,
+                        disabledForegroundColor: AppTheme.textMuted,
+                        minimumSize: const Size.fromHeight(52),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                      ),
+                      child: Text(
+                        isDownloading
+                            ? (l10n?.modelDownloadPreparingButton ??
+                                'Downloading...')
+                            : isActive
+                                ? (l10n?.alreadyActiveButton ??
+                                    'Already Active')
+                                : isInstalled
+                                    ? (l10n?.activateEngineButton ??
+                                        'Activate Core')
+                                    : (l10n?.downloadInstallButton ??
+                                        'Download & Install'),
+                        style: const TextStyle(fontWeight: FontWeight.w700),
+                      ),
+                    ),
+                  ),
+                  if (isDownloading) ...<Widget>[
+                    const SizedBox(width: 12),
+                    OutlinedButton(
+                      onPressed: appState.cancelModelDownload,
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: const Size(88, 52),
+                        foregroundColor: AppTheme.textPrimary,
+                        side: const BorderSide(color: AppTheme.borderStrong),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18),
+                        ),
+                      ),
+                      child: Text(l10n?.cancelButton ?? 'Cancel'),
+                    ),
+                  ],
+                ],
+              ),
             ],
           ),
         ],

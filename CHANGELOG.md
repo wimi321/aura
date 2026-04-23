@@ -3,6 +3,17 @@
 All notable changes to Aura are documented here.  
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.2.3] — 2026-04-24
+
+### Added
+- Generated Eclipse Core atmosphere artwork for the app-wide visual stage
+- Reusable AuraStage background widget shared across launch, library, setup, and reading surfaces
+
+### Changed
+- Upgraded the launch experience with the generated eclipse-core artwork and smoother brand continuity
+- Refined the story library, first-run model chooser, and chat scene backgrounds with a unified cinematic depth layer
+- Kept the Android release installer small while adding the new UI artwork assets
+
 ## [0.2.2] — 2026-04-24
 
 ### Added
@@ -72,6 +83,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 - Hardware delegate auto-selection (CoreML / GPU / CPU)
 - Context window management with heuristic summarization
 
+[0.2.3]: https://github.com/wimi321/aura/releases/tag/v0.2.3
 [0.2.2]: https://github.com/wimi321/aura/releases/tag/v0.2.2
 [0.2.0]: https://github.com/wimi321/aura/releases/tag/v0.2.0
 [0.1.1]: https://github.com/wimi321/aura/releases/tag/v0.1.1

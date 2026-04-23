@@ -8,6 +8,7 @@ import '../../../application/providers/app_state_provider.dart';
 import '../../../core/theme/app_theme.dart';
 import '../../widgets/character_editor_dialog.dart';
 import '../../widgets/character_cover_art.dart';
+import '../../widgets/aura_stage.dart';
 import '../../widgets/import_preview_dialog.dart';
 import '../../widgets/session_history_sheet.dart';
 
@@ -47,93 +48,97 @@ class _CharacterListPageState extends State<CharacterListPage> {
 
     return Scaffold(
       backgroundColor: AppTheme.bgBase,
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(24, 24, 24, 120),
-          children: [
-            _buildHeader(context),
-            const SizedBox(height: 36),
-            _StatusPill(appState: appState),
-            const SizedBox(height: 48),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  l10n?.characters ?? 'Story Library',
-                  style: Theme.of(context).textTheme.headlineSmall,
-                ),
-                FilledButton.tonal(
-                  key: const ValueKey<String>('character-import-button'),
-                  onPressed: () => _showImportDialog(context),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: AppTheme.bgElevated,
-                    foregroundColor: AppTheme.textPrimary,
+      body: AuraStage(
+        eclipseAlignment: Alignment.topRight,
+        child: SafeArea(
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(24, 24, 24, 120),
+            children: [
+              _buildHeader(context),
+              const SizedBox(height: 36),
+              _StatusPill(appState: appState),
+              const SizedBox(height: 48),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    l10n?.characters ?? 'Story Library',
+                    style: Theme.of(context).textTheme.headlineSmall,
                   ),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.add_circle_outline, size: 16),
-                      const SizedBox(width: 8),
-                      Text(l10n?.importCharacter ?? 'Import'),
-                    ],
+                  FilledButton.tonal(
+                    key: const ValueKey<String>('character-import-button'),
+                    onPressed: () => _showImportDialog(context),
+                    style: FilledButton.styleFrom(
+                      backgroundColor: AppTheme.bgElevated,
+                      foregroundColor: AppTheme.textPrimary,
+                    ),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.add_circle_outline, size: 16),
+                        const SizedBox(width: 8),
+                        Text(l10n?.importCharacter ?? 'Import'),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              if (allCharacters.length > 5) ...[
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _searchController,
+                  onChanged: (String value) =>
+                      setState(() => _searchQuery = value.trim()),
+                  decoration: InputDecoration(
+                    hintText:
+                        l10n?.searchCharactersHint ?? 'Search characters...',
+                    prefixIcon: const Icon(Icons.search_rounded,
+                        size: 20, color: AppTheme.textMuted),
+                    suffixIcon: _searchQuery.isNotEmpty
+                        ? IconButton(
+                            onPressed: () {
+                              _searchController.clear();
+                              setState(() => _searchQuery = '');
+                            },
+                            icon: const Icon(Icons.close,
+                                size: 18, color: AppTheme.textMuted),
+                          )
+                        : null,
+                    isDense: true,
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
+                  ),
+                ),
+              ],
+              const SizedBox(height: 20),
+              if (allCharacters.isEmpty)
+                _buildEmptyState(context, l10n)
+              else if (characters.isEmpty && _searchQuery.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 48),
+                  child: Center(
+                    child: Text(
+                      l10n?.searchNoResults ??
+                          'No characters match your search.',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(color: AppTheme.textMuted),
+                    ),
                   ),
                 )
-              ],
-            ),
-            if (allCharacters.length > 5) ...[
-              const SizedBox(height: 16),
-              TextField(
-                controller: _searchController,
-                onChanged: (String value) =>
-                    setState(() => _searchQuery = value.trim()),
-                decoration: InputDecoration(
-                  hintText:
-                      l10n?.searchCharactersHint ?? 'Search characters...',
-                  prefixIcon: const Icon(Icons.search_rounded,
-                      size: 20, color: AppTheme.textMuted),
-                  suffixIcon: _searchQuery.isNotEmpty
-                      ? IconButton(
-                          onPressed: () {
-                            _searchController.clear();
-                            setState(() => _searchQuery = '');
-                          },
-                          icon: const Icon(Icons.close,
-                              size: 18, color: AppTheme.textMuted),
-                        )
-                      : null,
-                  isDense: true,
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                ),
+              else
+                for (final CharacterCard character in characters) ...[
+                  _PremiumCharacterCard(character: character),
+                  const SizedBox(height: 24),
+                ],
+              const SizedBox(height: 48),
+              _buildModelCenterCard(
+                context,
+                activeModel,
+                needsModelDownload: needsModelDownload,
               ),
             ],
-            const SizedBox(height: 20),
-            if (allCharacters.isEmpty)
-              _buildEmptyState(context, l10n)
-            else if (characters.isEmpty && _searchQuery.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 48),
-                child: Center(
-                  child: Text(
-                    l10n?.searchNoResults ?? 'No characters match your search.',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(color: AppTheme.textMuted),
-                  ),
-                ),
-              )
-            else
-              for (final CharacterCard character in characters) ...[
-                _PremiumCharacterCard(character: character),
-                const SizedBox(height: 24),
-              ],
-            const SizedBox(height: 48),
-            _buildModelCenterCard(
-              context,
-              activeModel,
-              needsModelDownload: needsModelDownload,
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -583,6 +588,18 @@ class _PremiumCharacterCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           color: AppTheme.bgCard,
           border: Border.all(color: AppTheme.borderSubtle),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.36),
+              blurRadius: 36,
+              offset: const Offset(0, 18),
+            ),
+            BoxShadow(
+              color: AppTheme.brandAura.withValues(alpha: 0.05),
+              blurRadius: 42,
+              offset: const Offset(-10, -14),
+            ),
+          ],
         ),
         child: Column(
           children: [

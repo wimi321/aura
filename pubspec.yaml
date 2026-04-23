@@ -1,7 +1,7 @@
 name: aura_app
 description: "Aura: Local AI Roleplay Studio"
 publish_to: 'none'
-version: 0.2.2+4
+version: 0.2.3+5
 homepage: https://github.com/wimi321/aura
 repository: https://github.com/wimi321/aura
 
@@ -42,3 +42,4 @@ flutter:
   assets:
     - assets/images/
     - assets/images/characters/
+    - assets/images/ui/

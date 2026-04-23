@@ -47,6 +47,7 @@ assets/models/
 /android/build/
 /.artifacts/
 /output/
+/dist/
 /models/
 /tmp/
 /group.com.apple.tipsnext*/

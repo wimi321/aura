@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 import '../../../application/providers/app_state_provider.dart';
 import '../../../core/theme/app_theme.dart';
+import '../../widgets/aura_stage.dart';
 import '../../widgets/character_cover_art.dart';
 import '../../widgets/session_history_sheet.dart';
 
@@ -1042,191 +1043,193 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
     return Scaffold(
       backgroundColor: AppTheme.bgBase,
-      body: Stack(
-        children: [
-          // Cinematic background cover
-          Positioned.fill(
-            child: Opacity(
-              opacity: 0.15, // Keep it subtle so text is readable
-              child: CharacterCoverArt(
-                character: _character,
-                height: MediaQuery.of(context).size.height,
-                borderRadius: BorderRadius.zero,
-              ),
-            ),
-          ),
-          Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    AppTheme.bgBase.withValues(alpha: 0.0),
-                    AppTheme.bgBase.withValues(alpha: 0.6),
-                    AppTheme.bgBase.withValues(alpha: 0.95),
-                    AppTheme.bgBase,
-                  ],
-                  stops: const [0.0, 0.35, 0.6, 1.0],
+      body: AuraStage(
+        showEclipse: false,
+        atmosphereOpacity: 0.44,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Opacity(
+                opacity: 0.20,
+                child: CharacterCoverArt(
+                  character: _character,
+                  height: MediaQuery.of(context).size.height,
+                  borderRadius: BorderRadius.zero,
                 ),
               ),
             ),
-          ),
-
-          Column(
-            children: [
-              _buildGlassAppBar(context, appState),
-              Expanded(
-                child: _isBootstrapping
-                    ? const Center(child: CircularProgressIndicator())
-                    : ListView.builder(
-                        controller: _scrollController,
-                        padding: const EdgeInsets.only(
-                            top: 24, bottom: 24, left: 16, right: 16),
-                        itemCount: messages.length +
-                            (_showRerollButton(messages) ? 1 : 0),
-                        itemBuilder: (BuildContext context, int index) {
-                          // Reroll button after last message
-                          if (index == messages.length &&
-                              _showRerollButton(messages)) {
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 16),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: IconButton(
-                                  key: const ValueKey<String>(
-                                      'chat-reroll-button'),
-                                  onPressed: _rerollLastMessage,
-                                  tooltip: l10n?.rerollButtonTooltip ??
-                                      'Regenerate response',
-                                  icon: const Icon(
-                                    Icons.refresh_rounded,
-                                    size: 20,
-                                    color: AppTheme.textSecondary,
-                                  ),
-                                ),
-                              ),
-                            );
-                          }
-                          final ChatMessage message = messages[index];
-                          // Do not render empty assistant messages unless it's the last one (currently generating)
-                          if (message.content.isEmpty &&
-                              message.role == ChatRole.assistant &&
-                              index != messages.length - 1) {
-                            return const SizedBox.shrink();
-                          }
-                          return _MessageBubble(
-                            message: message,
-                            characterName: _character.name,
-                            characterExtensions: _character.extensions,
-                            isGenerating:
-                                _isSending && index == messages.length - 1,
-                            onLongPress:
-                                _isSending || message.content.trim().isEmpty
-                                    ? null
-                                    : () => _showMessageActions(message),
-                          );
-                        },
-                      ),
+            Positioned.fill(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      AppTheme.bgBase.withValues(alpha: 0.0),
+                      AppTheme.bgBase.withValues(alpha: 0.6),
+                      AppTheme.bgBase.withValues(alpha: 0.95),
+                      AppTheme.bgBase,
+                    ],
+                    stops: const [0.0, 0.35, 0.6, 1.0],
+                  ),
+                ),
               ),
-              if (_error != null)
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: const Color(0x33FF6B6B),
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: const Color(0x55FF6B6B)),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(_error!,
-                            style: const TextStyle(
-                                color: Color(0xFFFF9B9B), fontSize: 13)),
-                        if (_errorType == _ChatErrorType.timeout ||
-                            _errorType == _ChatErrorType.recoveryFailed) ...[
-                          const SizedBox(height: 8),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              if (_errorType == _ChatErrorType.timeout)
-                                TextButton.icon(
-                                  onPressed: _retryLastMessage,
-                                  icon: const Icon(Icons.refresh_rounded,
-                                      size: 16),
-                                  label:
-                                      Text(l10n?.errorRetryMessage ?? 'Retry'),
-                                  style: TextButton.styleFrom(
-                                    foregroundColor: const Color(0xFFFF9B9B),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8),
-                                    minimumSize: Size.zero,
-                                    tapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
+            ),
+            Column(
+              children: [
+                _buildGlassAppBar(context, appState),
+                Expanded(
+                  child: _isBootstrapping
+                      ? const Center(child: CircularProgressIndicator())
+                      : ListView.builder(
+                          controller: _scrollController,
+                          padding: const EdgeInsets.only(
+                              top: 24, bottom: 24, left: 16, right: 16),
+                          itemCount: messages.length +
+                              (_showRerollButton(messages) ? 1 : 0),
+                          itemBuilder: (BuildContext context, int index) {
+                            // Reroll button after last message
+                            if (index == messages.length &&
+                                _showRerollButton(messages)) {
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 16),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: IconButton(
+                                    key: const ValueKey<String>(
+                                        'chat-reroll-button'),
+                                    onPressed: _rerollLastMessage,
+                                    tooltip: l10n?.rerollButtonTooltip ??
+                                        'Regenerate response',
+                                    icon: const Icon(
+                                      Icons.refresh_rounded,
+                                      size: 20,
+                                      color: AppTheme.textSecondary,
+                                    ),
                                   ),
                                 ),
-                              if (_errorType == _ChatErrorType.recoveryFailed)
-                                TextButton.icon(
-                                  onPressed: () => context.go('/settings'),
-                                  icon: const Icon(Icons.settings_outlined,
-                                      size: 16),
-                                  label: Text(l10n?.errorGoToSettings ??
-                                      'Go to Settings'),
-                                  style: TextButton.styleFrom(
-                                    foregroundColor: const Color(0xFFFF9B9B),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8),
-                                    minimumSize: Size.zero,
-                                    tapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
+                              );
+                            }
+                            final ChatMessage message = messages[index];
+                            // Do not render empty assistant messages unless it's the last one (currently generating)
+                            if (message.content.isEmpty &&
+                                message.role == ChatRole.assistant &&
+                                index != messages.length - 1) {
+                              return const SizedBox.shrink();
+                            }
+                            return _MessageBubble(
+                              message: message,
+                              characterName: _character.name,
+                              characterExtensions: _character.extensions,
+                              isGenerating:
+                                  _isSending && index == messages.length - 1,
+                              onLongPress:
+                                  _isSending || message.content.trim().isEmpty
+                                      ? null
+                                      : () => _showMessageActions(message),
+                            );
+                          },
+                        ),
+                ),
+                if (_error != null)
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: const Color(0x33FF6B6B),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: const Color(0x55FF6B6B)),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(_error!,
+                              style: const TextStyle(
+                                  color: Color(0xFFFF9B9B), fontSize: 13)),
+                          if (_errorType == _ChatErrorType.timeout ||
+                              _errorType == _ChatErrorType.recoveryFailed) ...[
+                            const SizedBox(height: 8),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (_errorType == _ChatErrorType.timeout)
+                                  TextButton.icon(
+                                    onPressed: _retryLastMessage,
+                                    icon: const Icon(Icons.refresh_rounded,
+                                        size: 16),
+                                    label: Text(
+                                        l10n?.errorRetryMessage ?? 'Retry'),
+                                    style: TextButton.styleFrom(
+                                      foregroundColor: const Color(0xFFFF9B9B),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8),
+                                      minimumSize: Size.zero,
+                                      tapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                    ),
                                   ),
-                                ),
-                            ],
-                          ),
+                                if (_errorType == _ChatErrorType.recoveryFailed)
+                                  TextButton.icon(
+                                    onPressed: () => context.go('/settings'),
+                                    icon: const Icon(Icons.settings_outlined,
+                                        size: 16),
+                                    label: Text(l10n?.errorGoToSettings ??
+                                        'Go to Settings'),
+                                    style: TextButton.styleFrom(
+                                      foregroundColor: const Color(0xFFFF9B9B),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8),
+                                      minimumSize: Size.zero,
+                                      tapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ],
                         ],
+                      ),
+                    ),
+                  ),
+                if (_whisperInstruction != null)
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.auto_awesome,
+                            size: 12, color: AppTheme.brandCoral),
+                        const SizedBox(width: 6),
+                        Expanded(
+                          child: Text(
+                            '${l10n?.nextWhisperLabel ?? 'Next whisper'}: $_whisperInstruction',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: AppTheme.brandCoral,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () => setState(() {
+                            _whisperInstruction = null;
+                          }),
+                          child: const Icon(Icons.close,
+                              size: 14, color: AppTheme.brandCoral),
+                        ),
                       ],
                     ),
                   ),
-                ),
-              if (_whisperInstruction != null)
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.auto_awesome,
-                          size: 12, color: AppTheme.brandCoral),
-                      const SizedBox(width: 6),
-                      Expanded(
-                        child: Text(
-                          '${l10n?.nextWhisperLabel ?? 'Next whisper'}: $_whisperInstruction',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            color: AppTheme.brandCoral,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () => setState(() {
-                          _whisperInstruction = null;
-                        }),
-                        child: const Icon(Icons.close,
-                            size: 14, color: AppTheme.brandCoral),
-                      ),
-                    ],
-                  ),
-                ),
-              _buildInputArea(context, appState),
-            ],
-          ),
-        ],
+                _buildInputArea(context, appState),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1437,7 +1440,8 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
           bottom: MediaQuery.of(context).padding.bottom + 16,
           top: 12),
       decoration: BoxDecoration(
-        color: AppTheme.bgBase,
+        color: AppTheme.bgBase.withValues(alpha: 0.90),
+        border: const Border(top: BorderSide(color: AppTheme.borderSubtle)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.4),
