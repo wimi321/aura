@@ -24,4 +24,22 @@ if [[ ! -d "$FRAMEWORK_DIR" ]]; then
   ./tooling/ios/build_litert_native_xcframework.sh
 fi
 
-flutter build ios --simulator --no-codesign
+if flutter build ios --simulator --no-codesign; then
+  exit 0
+fi
+
+echo "Flutter iOS simulator wrapper failed; retrying with xcodebuild fallback..."
+(
+  cd ios
+  xcodebuild \
+    -workspace Runner.xcworkspace \
+    -scheme Runner \
+    -configuration Debug \
+    -sdk iphonesimulator \
+    -destination 'generic/platform=iOS Simulator' \
+    CODE_SIGNING_ALLOWED=NO \
+    CODE_SIGNING_REQUIRED=NO \
+    CODE_SIGNING_IDENTITY='' \
+    COMPILER_INDEX_STORE_ENABLE=NO \
+    build
+)

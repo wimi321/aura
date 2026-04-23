@@ -1,7 +1,7 @@
 name: aura_app
 description: "Aura: Local AI Roleplay Studio"
 publish_to: 'none'
-version: 0.2.0+3
+version: 0.2.2+4
 homepage: https://github.com/wimi321/aura
 repository: https://github.com/wimi321/aura
 

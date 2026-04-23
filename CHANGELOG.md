@@ -3,6 +3,22 @@
 All notable changes to Aura are documented here.  
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.2.2] — 2026-04-24
+
+### Added
+- Release validation for the small Android installer path without bundled model weights
+- Extra regression coverage for model download fallback, model manager cleanup, roleplay text formatting, and emotion tag filtering
+
+### Changed
+- Android release packaging now prioritizes the arm64-v8a APK for a smaller public download, reducing the installer to about 103 MB
+- First-run model setup keeps E2B as the recommended fast-start core and E4B as the higher-quality option
+- README and Chinese README now reflect the current small-installer release flow
+
+### Fixed
+- Stabilized first-run model activation after choosing and downloading a story core
+- Hardened model download retry and mirror fallback behavior for flaky networks
+- Ensured local inference resources are released cleanly between scene sessions
+
 ## [0.2.0] — 2026-04-19
 
 ### Added
@@ -56,6 +72,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 - Hardware delegate auto-selection (CoreML / GPU / CPU)
 - Context window management with heuristic summarization
 
+[0.2.2]: https://github.com/wimi321/aura/releases/tag/v0.2.2
 [0.2.0]: https://github.com/wimi321/aura/releases/tag/v0.2.0
 [0.1.1]: https://github.com/wimi321/aura/releases/tag/v0.1.1
 [0.1.0]: https://github.com/wimi321/aura/releases/tag/v0.1.0

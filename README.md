@@ -101,7 +101,7 @@ Aura takes a different path:
 4. Start a built-in story or import your own Tavern card
 5. **From now on, everything works offline**
 
-> **APK size**: ~155 MB — the model downloads separately on first launch, then you never need internet again.
+> **APK size**: ~103 MB for the Android arm64 release — the model downloads separately on first launch, then you never need internet again.
 
 ### Build from Source
 
@@ -206,10 +206,10 @@ Aura automatically strips wrapper tags, removes hidden blocks, and normalizes fo
 - [x] Premium OLED dark theme
 - [x] Message copy, timestamps, haptic feedback
 - [x] Accessibility (Semantics + reduce-motion)
+- [x] Model download recovery for flaky networks
 - [ ] Wider Tavern card format compatibility
 - [ ] More built-in story genres
 - [ ] Tablet-optimized layouts
-- [ ] Model download recovery for flaky networks
 - [ ] Community card sharing
 
 ---
@@ -242,8 +242,8 @@ Yes. After the initial model download, Aura works completely offline. You can us
 </details>
 
 <details>
-<summary><strong>Why is the APK ~155 MB?</strong></summary>
-The APK contains the Flutter app and LiteRT-LM runtime but not the model weights. Models (~2.5–3.6 GB) download on first launch so the installer stays shareable.
+<summary><strong>Why is the APK ~103 MB?</strong></summary>
+The arm64 APK contains the Flutter app and LiteRT-LM runtime but not the model weights. Models (~2.5–3.6 GB) download on first launch so the installer stays shareable.
 </details>
 
 ---

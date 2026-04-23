@@ -1,7 +1,7 @@
 import Foundation
 import FlutterMacOS
 
-final class AuraLiteRTBridge: NSObject, FlutterStreamHandler {
+final class AuraLiteRTBridge: NSObject {
   private let methodChannelName = "aura/litert"
   private let textStreamChannelName = "aura/litert/text_stream"
   private let audioStreamChannelName = "aura/litert/audio_stream"
