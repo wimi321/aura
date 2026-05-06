@@ -3,6 +3,20 @@
 All notable changes to Aura are documented here.  
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.2.5] — 2026-05-07
+
+### Added
+- Generated premium poster sources for the newest built-in story cards
+- Reproducible tooling to apply generated story covers and keep poster PNGs release-sized
+- Tavern PNG parser coverage for compressed `zTXt` character metadata chunks
+
+### Changed
+- Upgraded eight built-in story covers with stronger cinematic scene artwork
+- Optimized all built-in story poster PNGs for mobile package size without changing the 1600x2400 poster format
+
+### Validated
+- Verified SillyTavern's official `default_Seraphina.png` and `Eldoria.json` samples parse with embedded/standalone worldbook data
+
 ## [0.2.4] — 2026-04-24
 
 ### Added
@@ -94,6 +108,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 - Hardware delegate auto-selection (CoreML / GPU / CPU)
 - Context window management with heuristic summarization
 
+[0.2.5]: https://github.com/wimi321/aura/releases/tag/v0.2.5
 [0.2.4]: https://github.com/wimi321/aura/releases/tag/v0.2.4
 [0.2.3]: https://github.com/wimi321/aura/releases/tag/v0.2.3
 [0.2.2]: https://github.com/wimi321/aura/releases/tag/v0.2.2

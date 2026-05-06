@@ -101,7 +101,7 @@ Aura 走了一条完全不同的路：
 4. 选一个内置剧情，或导入你自己的 Tavern 角色卡
 5. **从此以后，完全离线可用**
 
-> **APK 大小**：Android arm64 发布包约 103 MB — 模型在首次启动时单独下载，之后再也不需要联网。
+> **APK 大小**：Android arm64 发布包约 63 MB — 模型在首次启动时单独下载，之后再也不需要联网。
 
 ### 从源码构建
 
@@ -241,7 +241,7 @@ Aura 自动清理包裹标签、隐藏块，并规范化导入卡片的格式。
 </details>
 
 <details>
-<summary><strong>为什么 APK 约 103 MB？</strong></summary>
+<summary><strong>为什么 APK 约 63 MB？</strong></summary>
 Android arm64 APK 包含 Flutter 应用和 LiteRT-LM 运行时，但不含模型权重。模型（约 2.5–3.6 GB）在首次启动时下载，这样安装包才方便分享。
 </details>
 

@@ -47,6 +47,29 @@ void main() {
     );
   });
 
+  test('built-in story cover assets stay lightweight for release builds', () {
+    final List<CharacterCard> builtInCharacters = <CharacterCard>[
+      ...allBuiltInCharacterLibrary,
+      ...allBuiltInCharacterLibraryZh,
+    ];
+
+    final List<String> oversizedAssets = <String>{}.toList();
+    for (final CharacterCard character in builtInCharacters) {
+      final File file = File('assets/images/characters/${character.id}.png');
+      if (file.lengthSync() > 1300 * 1024) {
+        oversizedAssets.add(
+          '${character.id}:${(file.lengthSync() / 1024).round()}KB',
+        );
+      }
+    }
+
+    expect(
+      oversizedAssets,
+      isEmpty,
+      reason: 'Story cover PNGs should stay mobile-sized: $oversizedAssets',
+    );
+  });
+
   test('all visible built-in story cards ship with scene-first roleplay notes',
       () {
     final List<CharacterCard> visibleCharacters = <CharacterCard>[

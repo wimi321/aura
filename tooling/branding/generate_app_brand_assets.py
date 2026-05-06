@@ -13,7 +13,7 @@ import json
 import math
 from pathlib import Path
 
-from PIL import Image, ImageFilter
+from PIL import Image, ImageEnhance, ImageFilter
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -86,6 +86,14 @@ def _transparent_mark(master: Image.Image, size: int) -> Image.Image:
     return mark
 
 
+def _brand_master(source: Image.Image) -> Image.Image:
+    master = _cover_square(source, 1024, zoom=1.32)
+    master = ImageEnhance.Brightness(master).enhance(1.08)
+    master = ImageEnhance.Contrast(master).enhance(1.06)
+    master = ImageEnhance.Color(master).enhance(1.08)
+    return master
+
+
 def _save_png(image: Image.Image, path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     image.save(path, optimize=True)
@@ -149,7 +157,7 @@ def main() -> None:
         raise SystemExit(f"Missing source artwork: {SOURCE}")
 
     source = Image.open(SOURCE)
-    master = _cover_square(source, 1024, zoom=1.18)
+    master = _brand_master(source)
     mark = _transparent_mark(master, 1024)
 
     _save_png(master, MASTER_ICON)
