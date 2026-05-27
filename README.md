@@ -112,6 +112,12 @@ flutter pub get
 flutter run
 ```
 
+Release validation for the Android arm64 package:
+
+```bash
+./scripts/validate_release_android_arm64.sh
+```
+
 See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed build instructions including iOS.
 
 ---

@@ -14,7 +14,7 @@ import '../../core/platform/file_selector_type_groups.dart';
 import '../../core/theme/app_theme.dart';
 import 'character_editor_dialog.dart';
 
-enum _ImportSource { photos, files }
+enum _ImportSource { photos, files, worldbook, create }
 
 class ImportPreviewDialog extends StatefulWidget {
   const ImportPreviewDialog({
@@ -102,6 +102,10 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
   }
 
   Future<void> _pickAndParseFromSource(_ImportSource source) async {
+    if (source == _ImportSource.create) {
+      await _createCharacter();
+      return;
+    }
     if (_busy || _pickingFile) {
       return;
     }
@@ -151,6 +155,37 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
       _pickingFile = false;
       _busy = true;
     });
+    if (source == _ImportSource.worldbook) {
+      try {
+        final LorebookImportPreview lorebookPreview =
+            await lorebookPreviewLoader(sourceFile);
+        if (!mounted) {
+          return;
+        }
+        setState(() {
+          _preview = null;
+          _lorebookPreview = lorebookPreview;
+          _selectedLorebookTargetCharacterId ??=
+              appState.availableCharacters.isEmpty
+                  ? null
+                  : appState.availableCharacters.first.id;
+          _busy = false;
+          _error = null;
+        });
+        return;
+      } catch (error) {
+        if (!mounted) {
+          return;
+        }
+        setState(() {
+          _busy = false;
+          _preview = null;
+          _lorebookPreview = null;
+          _error = _friendlyErrorMessage(error);
+        });
+        return;
+      }
+    }
     try {
       final CharacterImportPreview preview = await previewLoader(sourceFile);
       if (!mounted) {
@@ -212,10 +247,13 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
   }
 
   Future<_ImportSource?> _chooseImportSource() async {
-    if (!_supportsPhotoImport) {
-      return _ImportSource.files;
-    }
     final AppLocalizations? l10n = AppLocalizations.of(context);
+    final bool isZh = Localizations.localeOf(context)
+        .toLanguageTag()
+        .toLowerCase()
+        .startsWith(
+          'zh',
+        );
     return showModalBottomSheet<_ImportSource>(
       context: context,
       backgroundColor: AppTheme.cardElevated,
@@ -249,16 +287,19 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  _buildImportSourceTile(
-                    context: sheetContext,
-                    key: const ValueKey<String>('import-source-photos'),
-                    icon: Icons.photo_library_rounded,
-                    title: l10n?.importFromPhotosTitle ?? 'Import From Photos',
-                    subtitle: l10n?.importFromPhotosSubtitle ??
-                        'Pick a Tavern PNG card that is already in your photo library.',
-                    source: _ImportSource.photos,
-                  ),
-                  const SizedBox(height: 10),
+                  if (_supportsPhotoImport) ...<Widget>[
+                    _buildImportSourceTile(
+                      context: sheetContext,
+                      key: const ValueKey<String>('import-source-photos'),
+                      icon: Icons.photo_library_rounded,
+                      title:
+                          l10n?.importFromPhotosTitle ?? 'Import From Photos',
+                      subtitle: l10n?.importFromPhotosSubtitle ??
+                          'Pick a Tavern PNG card that is already in your photo library.',
+                      source: _ImportSource.photos,
+                    ),
+                    const SizedBox(height: 10),
+                  ],
                   _buildImportSourceTile(
                     context: sheetContext,
                     key: const ValueKey<String>('import-source-files'),
@@ -267,6 +308,28 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
                     subtitle: l10n?.importFromFilesSubtitle ??
                         'Pick a Tavern PNG card, JSON card, or standalone worldbook from Files.',
                     source: _ImportSource.files,
+                  ),
+                  const SizedBox(height: 10),
+                  _buildImportSourceTile(
+                    context: sheetContext,
+                    key: const ValueKey<String>('import-source-worldbook'),
+                    icon: Icons.menu_book_rounded,
+                    title: isZh ? '导入世界书' : 'Import Worldbook',
+                    subtitle: isZh
+                        ? '选择独立世界书 JSON，并把它挂到已有剧情卡下面。'
+                        : 'Pick a standalone worldbook JSON and attach it to an existing story card.',
+                    source: _ImportSource.worldbook,
+                  ),
+                  const SizedBox(height: 10),
+                  _buildImportSourceTile(
+                    context: sheetContext,
+                    key: const ValueKey<String>('import-source-create'),
+                    icon: Icons.draw_rounded,
+                    title: l10n?.createCharacterButton ?? 'Create Character',
+                    subtitle: isZh
+                        ? '不导入文件，直接自己写一张新的剧情卡。'
+                        : 'Start from a blank story card instead of importing a file.',
+                    source: _ImportSource.create,
                   ),
                 ],
               ),
@@ -346,6 +409,14 @@ class _ImportPreviewDialogState extends State<ImportPreviewDialog> {
               acceptedTypeGroups: characterCardImportTypeGroups,
             ));
         return picked == null ? null : File(picked.path);
+      case _ImportSource.worldbook:
+        final XFile? picked = await (widget.pickFile?.call() ??
+            openFile(
+              acceptedTypeGroups: lorebookImportTypeGroups,
+            ));
+        return picked == null ? null : File(picked.path);
+      case _ImportSource.create:
+        return null;
     }
   }
 

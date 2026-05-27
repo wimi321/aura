@@ -112,6 +112,12 @@ flutter pub get
 flutter run
 ```
 
+Android arm64 发布包验证：
+
+```bash
+./scripts/validate_release_android_arm64.sh
+```
+
 详细构建指南（含 iOS）请参阅 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
 ---

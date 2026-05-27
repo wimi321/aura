@@ -200,5 +200,82 @@ void main() {
 
       expect(appState.availableCharacters.first.id, targetCharacterId);
     });
+
+    test('failed model downloads are marked for retry with friendly copy',
+        () async {
+      final FileModelCatalogRepository catalogRepository =
+          FileModelCatalogRepository(
+              File('${tempDir.path}/retry_catalog.json'));
+      final ModelManifest retryManifest = downloadableE4bModelManifest.copyWith(
+        localPath: '${tempDir.path}/models/retry-model.litertlm',
+        remoteUrl: 'https://example.invalid/retry-model.litertlm',
+      );
+      final FakeInferenceGateway gateway = FakeInferenceGateway();
+      final AuraEngine retryEngine = AuraEngine(
+        gateway: gateway,
+        sessionRepository: MemorySessionRepository(),
+        orchestrator: ChatOrchestrator(
+          defaultPreset: const Preset.defaultRoleplay(),
+          contextWindowProfile: const ContextWindowProfile(
+            maxTokens: 2048,
+            summaryTriggerRatio: 0.55,
+            lowMemoryMaxTokens: 1024,
+          ),
+        ),
+        summarizer: const HeuristicSummarizer(),
+      );
+      final AppStateProvider retryState = AppStateProvider(
+        retryEngine,
+        catalogRepository: catalogRepository,
+        downloadManager: ModelDownloadManager(
+          downloader: const _FailingModelDownloader(),
+          catalogRepository: catalogRepository,
+        ),
+        curatedModels: <ModelManifest>[retryManifest],
+        preferencesStore:
+            AppPreferencesStore(File('${tempDir.path}/retry_prefs.json')),
+        characterLibraryStore: CharacterLibraryStore(
+          catalogFile: File('${tempDir.path}/retry_characters.json'),
+          assetDirectory: Directory('${tempDir.path}/retry_character_assets'),
+        ),
+        presetLibraryStore:
+            PresetLibraryStore(File('${tempDir.path}/retry_presets.json')),
+      );
+      addTearDown(retryState.dispose);
+
+      await retryState.refreshModels();
+      await retryState.downloadModel(retryManifest);
+
+      expect(retryState.failedDownloadModelId, retryManifest.id);
+      expect(
+        retryState.errorMessage,
+        'Download interrupted. Check your connection and try again.',
+      );
+      expect(retryState.downloadingModelId, isNull);
+    });
   });
+}
+
+class _FailingModelDownloader implements ModelDownloader {
+  const _FailingModelDownloader();
+
+  @override
+  Future<void> cancel(String modelId) async {}
+
+  @override
+  Stream<ModelDownloadSnapshot> download(ModelManifest manifest) async* {
+    yield ModelDownloadSnapshot(
+      model: manifest,
+      status: DownloadStatus.queued,
+      receivedBytes: 0,
+      totalBytes: manifest.sizeBytes,
+    );
+    yield ModelDownloadSnapshot(
+      model: manifest,
+      status: DownloadStatus.downloading,
+      receivedBytes: 1024,
+      totalBytes: manifest.sizeBytes,
+    );
+    throw const SocketException('network disconnected');
+  }
 }

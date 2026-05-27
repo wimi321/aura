@@ -126,8 +126,13 @@ void main() {
           find.widgetWithText(FilledButton, 'Choose Image or File');
       await tester.ensureVisible(chooseCardButton);
       await tester.tap(chooseCardButton);
-      await tester.pump();
+      await tester.pumpAndSettle();
 
+      expect(find.text('Choose Import Source'), findsOneWidget);
+      expect(pickCount, 0);
+
+      await tester.tap(find.text('Import From Files'));
+      await tester.pump();
       expect(pickCount, 1);
     });
 
@@ -181,6 +186,11 @@ void main() {
       expect(find.text('Choose Import Source'), findsOneWidget);
       expect(find.text('Import From Photos'), findsOneWidget);
       expect(find.text('Import From Files'), findsOneWidget);
+      expect(find.text('Import Worldbook'), findsOneWidget);
+      expect(
+        find.byKey(const ValueKey<String>('import-source-create')),
+        findsOneWidget,
+      );
 
       await tester.tap(find.text('Import From Photos'));
       await tester.pump();
@@ -234,6 +244,9 @@ void main() {
           find.widgetWithText(FilledButton, 'Choose Image or File');
       await tester.ensureVisible(chooseCardButton);
       await tester.tap(chooseCardButton);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Import From Files'));
       await tester.pump();
 
       expect(previewCallCount, 0);
@@ -357,6 +370,8 @@ void main() {
           find.widgetWithText(FilledButton, 'Choose Image or File');
       await tester.ensureVisible(chooseCardButton);
       await tester.tap(chooseCardButton);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Import From Files'));
       await tester.pump();
       await tester.runAsync(() async {
         await Future<void>.delayed(const Duration(milliseconds: 100));
@@ -417,6 +432,8 @@ void main() {
           find.widgetWithText(FilledButton, 'Choose Image or File');
       await tester.ensureVisible(chooseCardButton);
       await tester.tap(chooseCardButton);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Import Worldbook'));
       await tester.pump();
       await _pumpUntilVisible(tester, find.text('Liyue Lore'));
 

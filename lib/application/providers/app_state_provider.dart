@@ -56,6 +56,7 @@ class AppStateProvider extends ChangeNotifier {
   String? _errorMessage;
   String? _downloadingModelId;
   String? _cancelledDownloadId;
+  String? _failedDownloadModelId;
   double _downloadProgress = 0;
   int _downloadReceivedBytes = 0;
   int _downloadTotalBytes = 0;
@@ -79,6 +80,7 @@ class AppStateProvider extends ChangeNotifier {
   List<ModelManifest> get availableModels => _availableModels;
   ModelManifest? get activeModel => engine.modelManager.activeModel;
   String? get downloadingModelId => _downloadingModelId;
+  String? get failedDownloadModelId => _failedDownloadModelId;
   double get downloadProgress => _downloadProgress;
   int get downloadReceivedBytes => _downloadReceivedBytes;
   int get downloadTotalBytes => _downloadTotalBytes;
@@ -759,6 +761,7 @@ class AppStateProvider extends ChangeNotifier {
 
     _errorMessage = null;
     _cancelledDownloadId = null;
+    _failedDownloadModelId = null;
     _downloadingModelId = manifest.id;
     _downloadProgress = 0;
     _downloadReceivedBytes = 0;
@@ -775,20 +778,26 @@ class AppStateProvider extends ChangeNotifier {
             snapshot.errorMessage != null &&
             _cancelledDownloadId != manifest.id) {
           _errorMessage = _presentableError(snapshot.errorMessage!);
+          _failedDownloadModelId = manifest.id;
         }
         _notifyListenersSafely();
       }
 
       await refreshModels();
-      await _attemptModelSwitch(manifest);
+      final bool switched = await _attemptModelSwitch(manifest);
+      if (switched) {
+        _failedDownloadModelId = null;
+      }
     } catch (error) {
       if (_cancelledDownloadId != manifest.id) {
         _errorMessage = _presentableError(error);
+        _failedDownloadModelId = manifest.id;
       }
       _notifyListenersSafely();
     } finally {
       if (_cancelledDownloadId == manifest.id) {
         _errorMessage = null;
+        _failedDownloadModelId = null;
       }
       _cancelledDownloadId = null;
       _downloadingModelId = null;

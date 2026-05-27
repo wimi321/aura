@@ -15,6 +15,31 @@ void main() {
       server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
       server.listen((HttpRequest request) async {
         requestPaths.add(request.uri.path);
+        if (request.uri.path == '/restart') {
+          final List<int> bytes = <int>[9, 8, 7, 6, 5];
+          request.response.statusCode = HttpStatus.ok;
+          request.response.contentLength = bytes.length;
+          request.response.add(bytes);
+          await request.response.close();
+          return;
+        }
+        if (request.uri.path == '/range') {
+          final String? range = request.headers.value(HttpHeaders.rangeHeader);
+          final List<int> bytes =
+              range == 'bytes=2-' ? <int>[7, 6, 5] : <int>[9, 8, 7, 6, 5];
+          request.response.statusCode =
+              range == null ? HttpStatus.ok : HttpStatus.partialContent;
+          if (range != null) {
+            request.response.headers.set(
+              HttpHeaders.contentRangeHeader,
+              'bytes 2-4/5',
+            );
+          }
+          request.response.contentLength = bytes.length;
+          request.response.add(bytes);
+          await request.response.close();
+          return;
+        }
         if (request.uri.path == '/primary') {
           request.response.statusCode = HttpStatus.serviceUnavailable;
           await request.response.close();
@@ -76,6 +101,64 @@ void main() {
       expect(snapshots.first.status, DownloadStatus.queued);
       expect(snapshots.last.status, DownloadStatus.completed);
       expect(await targetFile.readAsBytes(), <int>[1, 2, 3, 4, 5]);
+    });
+
+    test('resumes partial downloads when the server honors range requests',
+        () async {
+      final Directory partialDirectory = Directory('${tempDir.path}/partials');
+      await partialDirectory.create(recursive: true);
+      await File('${partialDirectory.path}/model.bin.part')
+          .writeAsBytes(<int>[9, 8]);
+      final File targetFile = File('${tempDir.path}/models/model.bin');
+      final HttpResumableModelDownloader downloader =
+          HttpResumableModelDownloader(tempDirectory: partialDirectory);
+      final ModelManifest manifest = ModelManifest(
+        id: 'model',
+        name: 'Model',
+        version: '1',
+        fileName: 'model.bin',
+        localPath: targetFile.path,
+        sizeBytes: 5,
+        multimodal: false,
+        remoteUrl: serverUri('/range').toString(),
+      );
+
+      final List<ModelDownloadSnapshot> snapshots =
+          await downloader.download(manifest).toList();
+
+      expect(requestPaths, <String>['/range']);
+      expect(snapshots.first.receivedBytes, 2);
+      expect(snapshots.last.status, DownloadStatus.completed);
+      expect(await targetFile.readAsBytes(), <int>[9, 8, 7, 6, 5]);
+    });
+
+    test('restarts partial downloads when the server ignores range requests',
+        () async {
+      final Directory partialDirectory = Directory('${tempDir.path}/partials');
+      await partialDirectory.create(recursive: true);
+      await File('${partialDirectory.path}/model.bin.part')
+          .writeAsBytes(<int>[1, 2]);
+      final File targetFile = File('${tempDir.path}/models/model.bin');
+      final HttpResumableModelDownloader downloader =
+          HttpResumableModelDownloader(tempDirectory: partialDirectory);
+      final ModelManifest manifest = ModelManifest(
+        id: 'model',
+        name: 'Model',
+        version: '1',
+        fileName: 'model.bin',
+        localPath: targetFile.path,
+        sizeBytes: 5,
+        multimodal: false,
+        remoteUrl: serverUri('/restart').toString(),
+      );
+
+      final List<ModelDownloadSnapshot> snapshots =
+          await downloader.download(manifest).toList();
+
+      expect(requestPaths, <String>['/restart']);
+      expect(snapshots.first.receivedBytes, 2);
+      expect(snapshots.last.status, DownloadStatus.completed);
+      expect(await targetFile.readAsBytes(), <int>[9, 8, 7, 6, 5]);
     });
   });
 }

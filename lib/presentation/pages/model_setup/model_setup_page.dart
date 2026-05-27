@@ -260,6 +260,8 @@ class _SetupModelCardState extends State<_SetupModelCard> {
     final bool isInstalled = appState.isInstalled(widget.manifest);
     final bool isActive = appState.isActive(widget.manifest);
     final bool isDownloading = appState.isDownloading(widget.manifest);
+    final bool downloadFailed =
+        appState.failedDownloadModelId == widget.manifest.id && !isInstalled;
     final bool anotherDownloadInProgress =
         appState.downloadingModelId != null &&
             appState.downloadingModelId != widget.manifest.id;
@@ -382,6 +384,12 @@ class _SetupModelCardState extends State<_SetupModelCard> {
                     ),
                 ],
               ),
+              if (!isInstalled) ...<Widget>[
+                const SizedBox(height: 14),
+                _DownloadPrepNote(
+                  text: _downloadPrepCopy(context, widget.manifest),
+                ),
+              ],
               if (isDownloading) ...<Widget>[
                 const SizedBox(height: 24),
                 ClipRRect(
@@ -444,8 +452,10 @@ class _SetupModelCardState extends State<_SetupModelCard> {
                                 : isInstalled
                                     ? (l10n?.activateEngineButton ??
                                         'Activate Core')
-                                    : (l10n?.downloadInstallButton ??
-                                        'Download & Install'),
+                                    : downloadFailed
+                                        ? _retryDownloadLabel(context)
+                                        : (l10n?.downloadInstallButton ??
+                                            'Download & Install'),
                         style: const TextStyle(fontWeight: FontWeight.w700),
                       ),
                     ),
@@ -487,6 +497,45 @@ class _SetupModelCardState extends State<_SetupModelCard> {
       }
     }
     return buf.toString();
+  }
+}
+
+class _DownloadPrepNote extends StatelessWidget {
+  const _DownloadPrepNote({required this.text});
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(
+        color: AppTheme.bgElevated.withValues(alpha: 0.72),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppTheme.borderSubtle),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const Icon(
+            Icons.storage_rounded,
+            size: 18,
+            color: AppTheme.textSecondary,
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              text,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: AppTheme.textSecondary,
+                    height: 1.4,
+                  ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -590,6 +639,25 @@ String _localizedRamHint(BuildContext context, ModelManifest manifest) {
   final AppLocalizations? l10n = AppLocalizations.of(context);
   final String memory = '${manifest.recommendedMinRamGb ?? 0}GB+';
   return l10n?.modelSetupRamHint(memory) ?? 'Recommended RAM $memory';
+}
+
+String _downloadPrepCopy(BuildContext context, ModelManifest manifest) {
+  final String locale =
+      Localizations.localeOf(context).toLanguageTag().toLowerCase();
+  final String size = formatBytes(manifest.sizeBytes);
+  if (locale.startsWith('zh')) {
+    return '下载前请预留至少 $size 的可用空间。下载中断后可直接重试，Aura 会尽量接着未完成的部分继续。';
+  }
+  return 'Keep at least $size free before downloading. If the download is interrupted, tap retry and Aura will continue whenever possible.';
+}
+
+String _retryDownloadLabel(BuildContext context) {
+  final String locale =
+      Localizations.localeOf(context).toLanguageTag().toLowerCase();
+  if (locale.startsWith('zh')) {
+    return '重试下载';
+  }
+  return 'Retry Download';
 }
 
 String _localizedModelError(BuildContext context, String message) {

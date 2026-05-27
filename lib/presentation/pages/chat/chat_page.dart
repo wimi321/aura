@@ -1290,6 +1290,19 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
                   ],
                 ),
               ),
+              IconButton(
+                key: const ValueKey<String>('chat-history-button'),
+                tooltip: l10n?.sessionHistoryShortLabel ?? 'History',
+                onPressed: disableOverflow
+                    ? null
+                    : () => unawaited(_openSessionHistory()),
+                icon: Icon(
+                  Icons.history_rounded,
+                  color: disableOverflow
+                      ? AppTheme.textMuted
+                      : AppTheme.textSecondary,
+                ),
+              ),
               PopupMenuButton<_ChatMenuAction>(
                 key: const ValueKey<String>('chat-overflow-button'),
                 enabled: !disableOverflow,

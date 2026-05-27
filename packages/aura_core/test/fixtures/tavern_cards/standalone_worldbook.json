@@ -1,0 +1,20 @@
+{
+  "name": "Fixture Worldbook",
+  "description": "Standalone lorebook used for import compatibility tests.",
+  "scan_depth": 4,
+  "token_budget": 512,
+  "entries": {
+    "rain-rule": {
+      "key": ["rain", "classroom"],
+      "content": "When rain appears, the scene should narrow into small gestures and unsaid feelings.",
+      "order": 12,
+      "position": 1
+    },
+    "station-rule": {
+      "key": ["station", "ticket"],
+      "content": "Station tickets remember loops even when passengers do not.",
+      "constant": true,
+      "order": 3
+    }
+  }
+}

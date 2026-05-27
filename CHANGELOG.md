@@ -3,6 +3,19 @@
 All notable changes to Aura are documented here.  
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## [0.2.6] — 2026-05-27
+
+### Added
+- Release validation script for Android arm64 builds, checksum output, and core regression checks
+- Tavern compatibility fixture matrix for JSON V2/V3 cards, PNG text variants, embedded worldbooks, and standalone worldbooks
+
+### Changed
+- Made first-run model setup clearer about local storage needs and retrying interrupted downloads
+- Split the import entry point into clearer paths for photo PNG cards, file cards, standalone worldbooks, and manual story-card creation
+
+### Fixed
+- Prevented resumed downloads from corrupting files when a server ignores HTTP range requests and restarts from byte zero
+
 ## [0.2.5] — 2026-05-07
 
 ### Added
@@ -108,6 +121,7 @@ Format follows [Keep a Changelog](https://keepachangelog.com/).
 - Hardware delegate auto-selection (CoreML / GPU / CPU)
 - Context window management with heuristic summarization
 
+[0.2.6]: https://github.com/wimi321/aura/releases/tag/v0.2.6
 [0.2.5]: https://github.com/wimi321/aura/releases/tag/v0.2.5
 [0.2.4]: https://github.com/wimi321/aura/releases/tag/v0.2.4
 [0.2.3]: https://github.com/wimi321/aura/releases/tag/v0.2.3

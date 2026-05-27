@@ -114,6 +114,14 @@ class HttpResumableModelDownloader implements ModelDownloader {
         uri: uri,
       );
     }
+    if (existingBytes > 0 && response.statusCode == HttpStatus.ok) {
+      // Some hosts ignore Range and restart from byte 0. In that case, appending
+      // would corrupt the model by duplicating the already downloaded prefix.
+      existingBytes = 0;
+      if (await partialFile.exists()) {
+        await partialFile.delete();
+      }
+    }
 
     final IOSink sink = partialFile.openWrite(
       mode: existingBytes > 0 ? FileMode.append : FileMode.writeOnly,

@@ -137,6 +137,23 @@ void main() {
       await tester.pump();
     });
 
+    testWidgets('top bar exposes a direct session history button',
+        (WidgetTester tester) async {
+      await tester.pumpWidget(
+        _buildTestApp(
+          appState: appState,
+          child: ChatPage(characterId: builtInCharacterLibrary.first.id),
+        ),
+      );
+      await tester.pump();
+      await _waitForChatReady(tester);
+
+      expect(
+        find.byKey(const ValueKey<String>('chat-history-button')),
+        findsOneWidget,
+      );
+    });
+
     testWidgets('stop button cancels generation and allows sending again',
         (WidgetTester tester) async {
       await tester.pumpWidget(
