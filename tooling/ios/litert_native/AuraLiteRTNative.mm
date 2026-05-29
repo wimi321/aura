@@ -20,7 +20,7 @@
 
 namespace {
 
-extern "C" void AuraLiteRTNativeForceLinkEngineImpl(void);
+extern "C" void AuraLiteRTNativeForceLinkEngineAdvancedImpl(void);
 
 constexpr char kRuntimeName[] = "litert-lm";
 constexpr char kCancelledError[] = "AURA_GENERATION_CANCELLED";
@@ -178,7 +178,7 @@ NSError *MissingRegisteredEngineError(void) {
 - (instancetype)init {
   self = [super init];
   if (self) {
-    AuraLiteRTNativeForceLinkEngineImpl();
+    AuraLiteRTNativeForceLinkEngineAdvancedImpl();
     _stateQueue = dispatch_queue_create("app.aura.story.litert.state", DISPATCH_QUEUE_SERIAL);
     _workerQueue = dispatch_queue_create("app.aura.story.litert.worker", DISPATCH_QUEUE_CONCURRENT);
     _backendAttempts = BuildBackendAttempts(@"gpu", @[ @"cpu" ]);

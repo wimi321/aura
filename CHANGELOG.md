@@ -3,6 +3,11 @@
 All notable changes to Aura are documented here.  
 Format follows [Keep a Changelog](https://keepachangelog.com/).
 
+## Unreleased
+
+### Fixed
+- Fixed iOS native LiteRT runtime force-linking so physical-device builds link against the registered advanced engine implementation.
+
 ## [0.2.6] — 2026-05-27
 
 ### Added
