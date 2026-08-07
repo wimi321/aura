@@ -22,7 +22,7 @@ dependencies:
   file_selector: ^1.0.3
   aura_core:
     path: packages/aura_core
-  image_picker: ^1.2.1
+  image_picker: ^1.2.2
 
 dev_dependencies:
   flutter_test:
